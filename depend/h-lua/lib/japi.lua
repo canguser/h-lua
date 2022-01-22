@@ -65,7 +65,7 @@ hjapi.exec = function(method, params)
         return false
     end
     if (type(JassJapi[method]) ~= "function") then
-        hjapi.echo(method .. " function does not exist, please check the WE environment! You should make friends with 5382557(QQ)")
+        hjapi.echo(method .. " function does not exist!")
         return false
     end
     hjapi.formatter(method, params)
