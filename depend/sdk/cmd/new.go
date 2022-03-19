@@ -9,6 +9,9 @@ import (
 
 func New(sdkData lib.SdkData) {
 	projectName := ProjectName(sdkData)
+	if projectName == "" {
+		lib.Panic("不可使用空名称")
+	}
 	if ProjectExist(sdkData) {
 		lib.Panic("已存在同名项目，你可以输入“test " + projectName + "”命令直接测试，或者请使用其他名称")
 	}

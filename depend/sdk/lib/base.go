@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -53,18 +52,20 @@ func GetModTime(path string) int64 {
 }
 
 func ExeRunningQty(names []string) int {
-	buf := bytes.Buffer{}
-	cmd := exec.Command("wmic", "process", "get", "name,executablepath")
-	cmd.Stdout = &buf
-	cmd.Run()
+	cmd := exec.Command("cmd", "/C", "tasklist")
+	output, _ := cmd.Output()
+	n := strings.Index(string(output), "System")
+	if n == -1 {
+		return 0
+	}
 	qty := 0
-	for _, n := range names {
-		cmd2 := exec.Command("findstr", n)
-		cmd2.Stdin = &buf
-		data, _ := cmd2.CombinedOutput()
-		if len(data) != 0 {
-			qty = strings.Count(string(data), n)
-			break
+	sd := string(output)[n:]
+	fields := strings.Fields(sd)
+	for _, v := range fields {
+		for _, n := range names {
+			if v == n {
+				qty += 1
+			}
 		}
 	}
 	return qty

@@ -1,10 +1,15 @@
 package cmd
 
 import (
+	"fmt"
 	"sdk/lib"
 )
 
 func ProjectExist(sdkData lib.SdkData) bool {
+	fmt.Println(len(sdkData.Args))
+	if len(sdkData.Args) < 3 {
+		return false
+	}
 	projectName := sdkData.Args[2]
 	if projectName[:1] == "_" {
 		lib.Panic("项目名不合法(下划线“_”开始的名称已被禁用)")
