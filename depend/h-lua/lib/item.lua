@@ -1,8 +1,3 @@
---[[
-    每个英雄最大支持使用6件物品
-    支持满背包合成
-    物品存在重量，背包有负重，超过负重即使存在合成关系，也会被暂时禁止合成
-]]
 ---@class hitem 物品
 hitem = {}
 
@@ -63,76 +58,7 @@ end
 hitem.free = function(whichItem)
     hitemPool.free(whichItem)
     hevent.free(whichItem)
-    local holder = hitem.getHolder(whichItem)
-    if (holder ~= nil) then
-        hitem.subProperty(holder, hitem.getId(whichItem), hitem.getCharges(whichItem))
-    end
     hcache.free(whichItem)
-end
-
---- 设置物品的持有单位
----@protected
----@param whichItem userdata
----@param holder userdata
-hitem.setHolder = function(whichItem, holder)
-    hcache.set(whichItem, CONST_CACHE.ITEM_HOLDER, holder)
-    hitem.setLastHolder(whichItem, holder)
-end
-
---- 获取物品的当前持有单位
----@param whichItem userdata
----@return userdata|nil
-hitem.getHolder = function(whichItem)
-    return hcache.get(whichItem, CONST_CACHE.ITEM_HOLDER)
-end
-
---- 设置物品的最后持有单位
----@protected
----@param whichItem userdata
----@param holder userdata
-hitem.setLastHolder = function(whichItem, holder)
-    if (holder ~= nil and hitem.getLastHolder(whichItem) == nil) then
-        hcache.set(whichItem, CONST_CACHE.ITEM_HOLDER_LAST, holder)
-    end
-end
-
---- 获取物品的最后持有单位
----@param whichItem userdata
----@return userdata|nil
-hitem.getLastHolder = function(whichItem)
-    return hcache.get(whichItem, CONST_CACHE.ITEM_HOLDER_LAST)
-end
-
---- 把物品给回的最后持有单位
----@param whichItem userdata
----@return userdata|nil
-hitem.backToLastHolder = function(whichItem)
-    local lastHolder = hitem.getLastHolder(whichItem)
-    cj.UnitAddItem(lastHolder, whichItem)
-    htextTag.style(htextTag.create2Unit(lastHolder, "物品回来了", 8.00, "ffffff", 1, 1.1, 50.00), "scale", 0, 0.05)
-end
-
---- 判断单位对于某件物品来说是否强取豪夺
----@param whichItem userdata
----@param robber userdata
----@return boolean
-hitem.isRobber = function(whichItem, robber)
-    if (whichItem == nil or robber == nil) then
-        return false
-    end
-    local lastHolder = hitem.getLastHolder(whichItem)
-    if (lastHolder == nil) then
-        return false
-    end
-    local owner = hunit.getOwner(robber)
-    if (hplayer.isIsolated(owner) == false) then
-        return false
-    end
-    local lastOwner = hunit.getOwner(lastHolder)
-    if (lastOwner == owner) then
-        return false
-    end
-    return true
 end
 
 --- match done
@@ -214,45 +140,6 @@ hitem.getName = function(itOrId)
     return n
 end
 
---- 判断一个物品是否影子物品的明面物品
----@param itOrId userdata|string|number
----@return boolean
-hitem.isShadowFront = function(itOrId)
-    local id = hitem.getId(itOrId)
-    local iv = hslk.i2v(id)
-    if (iv == nil) then
-        return false
-    end
-    return (iv._shadow_id ~= nil and iv._type == "common")
-end
-
---- 判断一个物品是否影子物品的暗面物品
----@param itOrId userdata|string|number
----@return boolean
-hitem.isShadowBack = function(itOrId)
-    local id = hitem.getId(itOrId)
-    local iv = hslk.i2v(id)
-    if (iv == nil) then
-        return false
-    end
-    return (iv._shadow_id ~= nil and iv._type == "shadow")
-end
-
---- 获取一个物品的影子ID
----@param itOrId userdata|string|number
----@return string
-hitem.shadowID = function(itOrId)
-    local id = hitem.getId(itOrId)
-    local iv = hslk.i2v(id)
-    if (iv == nil) then
-        print_err("hitem.shadowID")
-    end
-    if (iv._shadow_id == nil) then
-        print_err("hitem.shadowID not shadow item")
-    end
-    return iv._shadow_id
-end
-
 -- 获取物品的图标路径
 ---@param itOrId userdata|string|number
 ---@return string
@@ -316,32 +203,6 @@ hitem.getIsSellAble = function(itOrId)
     return "1" == hslk.i2v(hitem.getId(itOrId), "slk", "sellable")
 end
 
---- 获取物品的最大叠加数(默认是1个,本框架以使用次数作为数量使用)
----@param itOrId userdata|string|number
----@return number
-hitem.getOverlie = function(itOrId)
-    return hslk.i2v(hitem.getId(itOrId), "_overlie") or 1
-end
-
---- 获取物品的重量（默认为0）
----@param itOrId userdata|string|number
----@return number
-hitem.getWeight = function(itOrId, charges)
-    local id = hitem.getId(itOrId)
-    local _weight = hslk.i2v(id, "_weight") or 0
-    _weight = math.round(_weight, 3)
-    if (_weight > 0) then
-        if (charges == nil and type(itOrId) == "userdata") then
-            -- 如果没有传次数，并且传入的是物品对象，会直接获取物品的次数，请注意
-            charges = hitem.getCharges(itOrId)
-        elseif (charges == nil) then
-            charges = 1
-        end
-        return _weight * charges
-    else
-        return 0
-    end
-end
 --- 获取物品的属性加成
 ---@param itOrId userdata|string|number
 ---@return table
@@ -367,12 +228,7 @@ hitem.getCharges = function(it)
     if (it == nil) then
         return 0
     end
-    local c = cj.GetItemCharges(it)
-    if (c < 1 and false == hitem.getIsPerishable(it)) then
-        c = 1
-        cj.SetItemCharges(it, 1)
-    end
-    return c
+    return cj.GetItemCharges(it)
 end
 
 --- 设置物品的使用次数
@@ -382,25 +238,6 @@ hitem.setCharges = function(it, charges)
     if (it ~= nil and charges >= 0) then
         cj.SetItemCharges(it, charges)
     end
-end
-
---- 获取某单位身上某种物品的使用总次数
----@param itemId string|number
----@param whichUnit userdata
----@return number
-hitem.getTotalCharges = function(itemId, whichUnit)
-    local charges = 0
-    local it
-    if (type(itemId) == "string") then
-        itemId = string.char2id(itemId)
-    end
-    for i = 0, 5, 1 do
-        it = cj.UnitItemInSlot(whichUnit, i)
-        if (it ~= nil and cj.GetItemTypeId(it) == itemId) then
-            charges = charges + hitem.getCharges(it)
-        end
-    end
-    return charges
 end
 
 --- 获取某单位身上空格物品栏数量
@@ -440,266 +277,16 @@ hitem.addProperty = function(whichUnit, itId, charges)
     if (whichUnit == nil or itId == nil or charges < 1) then
         return
     end
-    hattribute.set(whichUnit, 0, { weight_current = "+" .. hitem.getWeight(itId, charges) })
     hattribute.caleAttribute(CONST_DAMAGE_SRC.item, true, whichUnit, hitem.getAttribute(itId), charges)
-    for _ = 1, charges, 1 do
-        hring.insert(whichUnit, itId)
-    end
 end
+
 --- 削减单位获得物品后的属性
 ---@protected
 hitem.subProperty = function(whichUnit, itId, charges)
     if (whichUnit == nil or itId == nil or charges < 1) then
         return
     end
-    hattribute.set(whichUnit, 0, { weight_current = "-" .. hitem.getWeight(itId, charges) })
     hattribute.caleAttribute(CONST_DAMAGE_SRC.item, false, whichUnit, hitem.getAttribute(itId), charges)
-    for _ = 1, charges, 1 do
-        hring.remove(whichUnit, itId)
-    end
-end
-
---- 单位合成物品
----@public
----@param whichUnit userdata 目标单位
----@param items nil|userdata|table<userdata> 空|物品|物品数组
-hitem.synthesis = function(whichUnit, items)
-    if (whichUnit == nil) then
-        return
-    end
-    items = items or {}
-    if (type(items) == "userdata") then
-        items = { items }
-    end
-    -- 合成流程
-    local tempSlot = Array()
-    local tempProfit = {}
-    hitem.forEach(whichUnit, function(slotItem)
-        if (slotItem ~= nil) then
-            local itId = hitem.getId(slotItem)
-            local charges = hitem.getCharges(slotItem)
-            if (tempSlot.keyExists(itId)) then
-                tempSlot.set(itId, tempSlot.get(itId) + charges)
-            else
-                tempSlot.set(itId, charges)
-            end
-        end
-    end)
-    if (#items > 0) then
-        for _, it in ipairs(items) do
-            if (hitem.isRobber(it, whichUnit) == false) then
-                local itId = hitem.getId(it)
-                local charges = hitem.getCharges(it)
-                if (hitem.isShadowBack(itId)) then
-                    itId = hitem.shadowID(itId)
-                end
-                if (tempSlot.keyExists(itId)) then
-                    tempSlot.set(itId, tempSlot.get(itId) + charges)
-                else
-                    tempSlot.set(itId, charges)
-                end
-                hitem.del(it)
-            else
-                hitem.backToLastHolder(it)
-            end
-        end
-    end
-    local matchStack = 1
-    while (matchStack > 0) do
-        matchStack = 0
-        tempSlot.forEach(function(itId, _)
-            if (HSLK_SYNTHESIS.fragment[itId] ~= nil) then
-                for _, need in ipairs(HSLK_SYNTHESIS.fragmentNeeds[itId]) do
-                    if ((tempSlot.get(itId) or 0) >= tonumber(need)) then
-                        local maybeProfits = HSLK_SYNTHESIS.fragment[itId][need]
-                        if (maybeProfits ~= nil) then
-                            for _, mp in ipairs(maybeProfits) do
-                                local profitId = mp.profit
-                                local profitIndex = mp.index
-                                local whichProfit = HSLK_SYNTHESIS.profit[profitId][profitIndex]
-                                local needFragments = whichProfit.fragment
-                                local match = true
-                                for _, frag in ipairs(needFragments) do
-                                    if ((tempSlot.get(frag[1]) or 0) < frag[2]) then
-                                        match = false
-                                        break
-                                    end
-                                end
-                                if (match) then
-                                    matchStack = matchStack + 1
-                                    for _, frag in ipairs(needFragments) do
-                                        tempSlot.set(frag[1], tempSlot.get(frag[1]) - frag[2])
-                                    end
-                                    if (tempSlot.keyExists(profitId)) then
-                                        tempSlot.set(profitId, tempSlot.get(profitId) + whichProfit.qty)
-                                    else
-                                        tempSlot.set(profitId, whichProfit.qty)
-                                        tempProfit[profitId] = true
-                                    end
-                                end
-                            end
-                        else
-                            print_err("Synthesis Unexpected Error")
-                            print("ITEM ID:", itId)
-                            print("ITEM NEED:", need)
-                            print_r(HSLK_SYNTHESIS.fragment)
-                        end
-                    end
-                end
-            end
-        end)
-    end
-    local itemSlot = {}
-    tempSlot.forEach(function(itId, qty)
-        if (qty <= 0) then
-            tempSlot.splice(itId)
-        else
-            local overlie = hitem.getOverlie(itId)
-            while (qty > 0) do
-                table.insert(itemSlot, { id = itId, charges = math.min(overlie, qty) })
-                qty = qty - overlie
-            end
-        end
-    end)
-    -- 处理结果,先删后加
-    local add = {}
-    for i = 1, 6, 1 do
-        local sIt = itemSlot[i]
-        local sCharge = 0
-        if (sIt ~= nil) then
-            sCharge = sIt.charges
-        end
-        local it = cj.UnitItemInSlot(whichUnit, i - 1)
-        local itId = hitem.getId(it)
-        local charges = hitem.getCharges(it)
-        if (it ~= nil) then
-            if (sCharge <= 0) then
-                hitem.del(it, 0)
-            elseif (itId == itemSlot[i].id) then
-                local diff = sCharge - charges
-                if (diff > 0) then
-                    cj.SetItemCharges(it, charges + diff)
-                    hitem.addProperty(whichUnit, itId, diff)
-                elseif (diff < 0) then
-                    cj.SetItemCharges(it, charges + diff)
-                    hitem.subProperty(whichUnit, itId, math.abs(diff))
-                end
-            else
-                hitem.del(it, 0)
-                table.insert(add, i)
-            end
-        else
-            table.insert(add, i)
-        end
-    end
-    for _, i in ipairs(add) do
-        local sIt = itemSlot[i]
-        local sCharge = 0
-        if (sIt ~= nil) then
-            sCharge = sIt.charges
-        end
-        if (sCharge > 0) then
-            local newIt = cj.CreateItem(string.char2id(itemSlot[i].id), hunit.x(whichUnit), hunit.y(whichUnit))
-            if (tempProfit[itemSlot[i].id] == true) then
-                hevent.triggerEvent(whichUnit, CONST_EVENT.itemSynthesis, { triggerUnit = whichUnit, triggerItem = newIt }) -- 触发合成事件
-            end
-            cj.SetItemCharges(newIt, sCharge)
-            cj.UnitAddItem(whichUnit, newIt)
-        end
-    end
-    if (#itemSlot > 6) then
-        for i = 7, #itemSlot, 1 do
-            -- 判断如果是真实物品并且有影子，转为影子物品
-            local sItId = itemSlot[i].id
-            if (hitem.isShadowFront(sItId)) then
-                sItId = hitem.shadowID(sItId)
-            end
-            local newIt = cj.CreateItem(string.char2id(sItId), hunit.x(whichUnit), hunit.y(whichUnit))
-            cj.SetItemCharges(newIt, itemSlot[i].charges)
-            hitemPool.insert(CONST_CACHE.ITEM_POOL_PICK, newIt)
-        end
-    end
-end
-
---- 拆分物品
---- 物品的xy指的是物品创建时的坐标
---- 当物品在单位身上时，物品的位置并不跟随单位移动，而是创建时候的位置，需要注意
----@public
----@param whichItem userdata 目标物品
----@param separateType string | "'single'" | "'formula'"
----@param whichUnit userdata 触发单位（可选）当拥有持有单位时，拆分的物品会在单位坐标处
----@return nil|string 错误时会返回一个字符串，反馈错误
-hitem.separate = function(whichItem, separateType, formulaIndex, whichUnit)
-    if (whichItem == nil) then
-        return "物品不存在"
-    end
-    whichUnit = whichUnit or nil
-    local x = 0
-    local y = 0
-    if (whichUnit ~= nil and cj.IsItemOwned(whichItem)) then
-        x = cj.GetUnitX(whichUnit)
-        y = cj.GetUnitY(whichUnit)
-    else
-        x = cj.GetItemX(whichItem)
-        y = cj.GetItemY(whichItem)
-    end
-    local id = hitem.getId(whichItem)
-    local charges = hitem.getCharges(whichItem)
-    separateType = separateType or "single"
-    formulaIndex = formulaIndex or 1 -- 默认获取第一条公式拆分
-    if (charges <= 1) then
-        -- 如果数目小于2，自动切换成公式模式
-        separateType = "formula"
-    end
-    if (separateType == "single") then
-        for _ = 1, charges, 1 do
-            hitem.create({ id = id, charges = 1, x = x, y = y })
-        end
-    elseif (separateType == "formula") then
-        if (hitem.isShadowBack(id)) then
-            id = hitem.shadowID(id)
-        end
-        if (HSLK_SYNTHESIS.profit[id] == nil) then
-            return "物品不存在公式，无法拆分"
-        end
-        local profit = HSLK_SYNTHESIS.profit[id][formulaIndex] or nil
-        if (profit == nil) then
-            return "物品找不到公式，无法拆分"
-        end
-        for _ = 1, charges, 1 do
-            for _, frag in ipairs(profit.fragment) do
-                local flagId = frag[1]
-                if (#profit.fragment == 1) then
-                    for _ = 1, frag[2], 1 do
-                        hitem.create({ id = flagId, charges = 1, x = x, y = y })
-                    end
-                else
-                    local qty = frag[2]
-                    local hs = hslk.i2v(flagId)
-                    if (hs ~= nil) then
-                        local overlie = hs._overlie or 1
-                        while (qty > 0) do
-                            if (overlie >= qty) then
-                                hitem.create({ id = flagId, charges = qty, x = x, y = y })
-                                qty = 0
-                            else
-                                qty = qty - overlie
-                                hitem.create({ id = flagId, charges = overlie, x = x, y = y })
-                            end
-                        end
-                    else
-                        hitem.create({ id = flagId, charges = qty, x = x, y = y })
-                    end
-                end
-            end
-        end
-    end
-    hevent.triggerEvent(whichItem, CONST_EVENT.itemSeparate, {
-        triggerItem = whichItem,
-        type = separateType,
-        targetUnit = whichUnit,
-    })
-    hitem.del(whichItem, 0)
 end
 
 --[[
@@ -747,10 +334,6 @@ hitem.create = function(options)
     local it
     -- 如果不是创建给单位，又或者单位已经不存在了，直接返回
     if (options.whichUnit == nil or his.deleted(options.whichUnit) or his.dead(options.whichUnit)) then
-        -- 如果是shadow物品的明面物品，转成暗面物品再创建
-        if (hitem.isShadowFront(id)) then
-            id = string.char2id(hitem.shadowID(id))
-        end
         -- 掉在地上
         it = cj.CreateItem(id, x, y)
         cj.SetItemCharges(it, charges)
@@ -764,65 +347,7 @@ hitem.create = function(options)
     else
         -- 单位流程
         it = cj.CreateItem(id, x, y)
-        if (hitem.getIsPowerUp(id)) then
-            -- 如果是powerUp类型，直接给予单位，后续流程交予[hevent_default_actions.item.pickup]事件
-            -- 因为shadow物品的暗面物品一定是powerup，所以无需额外处理
-            cj.SetItemCharges(it, charges)
-            cj.UnitAddItem(options.whichUnit, it)
-        elseif (hitem.getEmptySlot(options.whichUnit) > 0) then
-            -- 没有满格,单位直接获得，后续流程交予[hevent_default_actions.item.pickup]事件
-            cj.SetItemCharges(it, charges)
-            cj.UnitAddItem(options.whichUnit, it)
-        elseif (hitem.isShadowFront(id)) then
-            -- 满格了，如果是shadow的明面物品；转shadow再给与单位，后续流程交予[hevent_default_actions.item.pickup]事件
-            id = string.char2id(hitem.shadowID(id))
-            hitem.del(it)
-            -- 掉在地上
-            it = cj.CreateItem(id, x, y)
-            cj.SetItemCharges(it, charges)
-            hitemPool.insert(CONST_CACHE.ITEM_POOL_PICK, it)
-        else
-            -- 满格了，如果是一般物品；掉在地上
-            cj.SetItemCharges(it, charges)
-            hitemPool.insert(CONST_CACHE.ITEM_POOL_PICK, it)
-        end
-    end
-    return it
-end
-
---- 创建[瞬逝物]物品
---- 是以单位模拟的物品，进入范围瞬间消失并生效
---- 可以增加玩家的反馈刺激感
---- [type]金币,木材,黄色书,绿色书,紫色书,蓝色书,红色书,神符,浮雕,蛋",碎片,问号,荧光草Dota2赏金符,Dota2伤害符,Dota2恢复符,Dota2极速符,Dota2幻象符,Dota2隐身符
----@param fleetingType number HL_ID.item_fleeting[n]
----@param x number 坐标X
----@param y number 坐标Y
----@param during number 持续时间（可选，默认30秒）
----@param yourFunc onEnterUnitRange | "function(evtData) end"
----@return userdata item-unit
-hitem.fleeting = function(fleetingType, x, y, during, yourFunc)
-    if (fleetingType == nil) then
-        print_err("hitem fleeting -type")
-        return
-    end
-    if (x == nil or y == nil) then
-        return
-    end
-    during = during or 30
-    if (during < 0) then
-        return
-    end
-    local it = hunit.create({
-        register = false,
-        whichPlayer = hplayer.player_passive,
-        id = fleetingType,
-        x = x,
-        y = y,
-        during = during,
-    })
-    hcache.alloc(it)
-    if (type(yourFunc) == "function") then
-        hevent.onEnterUnitRange(it, 127, yourFunc)
+        cj.UnitAddItem(options.whichUnit, it)
     end
     return it
 end
@@ -910,20 +435,15 @@ hitem.pickRect = function(u, x, y, w, h)
     end
     local items = {}
     hitemPool.forEach(CONST_CACHE.ITEM_POOL_PICK, function(enumItem)
-        if (hitem.isRobber(enumItem, u) == false) then
-            local xi = cj.GetItemX(enumItem)
-            local yi = cj.GetItemY(enumItem)
-            local d = math.getDistanceBetweenXY(x, y, xi, yi)
-            local deg = math.getDegBetweenXY(x, y, xi, yi)
-            local distance = math.getMaxDistanceInRect(w, h, deg)
-            if (d <= distance) then
-                table.insert(items, enumItem)
-            end
+        local xi = cj.GetItemX(enumItem)
+        local yi = cj.GetItemY(enumItem)
+        local d = math.getDistanceBetweenXY(x, y, xi, yi)
+        local deg = math.getDegBetweenXY(x, y, xi, yi)
+        local distance = math.getMaxDistanceInRect(w, h, deg)
+        if (d <= distance) then
+            table.insert(items, enumItem)
         end
     end)
-    if (#items > 0) then
-        hitem.synthesis(u, items)
-    end
 end
 
 -- 一键拾取圆(x,y)半径(r)
@@ -937,16 +457,11 @@ hitem.pickRound = function(u, x, y, r)
     end
     local items = {}
     hitemPool.forEach(CONST_CACHE.ITEM_POOL_PICK, function(enumItem)
-        if (hitem.isRobber(enumItem, u) == false) then
-            local xi = cj.GetItemX(enumItem)
-            local yi = cj.GetItemY(enumItem)
-            local d = math.getDistanceBetweenXY(x, y, xi, yi)
-            if (d <= r) then
-                table.insert(items, enumItem)
-            end
+        local xi = cj.GetItemX(enumItem)
+        local yi = cj.GetItemY(enumItem)
+        local d = math.getDistanceBetweenXY(x, y, xi, yi)
+        if (d <= r) then
+            table.insert(items, enumItem)
         end
     end)
-    if (#items > 0) then
-        hitem.synthesis(u, items)
-    end
 end

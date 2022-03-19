@@ -128,32 +128,6 @@ hevent.triggerData = function(triggerData)
     return triggerData
 end
 
---- 处理hslk事件（私有通用）
----@protected
-hevent.hslk = function(key, triggerData)
-    if (key == CONST_EVENT.skillStudy) then
-        local _onSkillStudy = hslk.i2v(triggerData.learnedSkill, "_onSkillStudy")
-        if (type(_onSkillStudy) == "function") then
-            _onSkillStudy(triggerData)
-        end
-    elseif (key == CONST_EVENT.skillEffect) then
-        local _onSkillEffect = hslk.i2v(triggerData.triggerSkill, "_onSkillEffect")
-        if (type(_onSkillEffect) == "function") then
-            _onSkillEffect(triggerData)
-        end
-    elseif (key == CONST_EVENT.itemUsed) then
-        local _onItemUsed = hslk.i2v(hitem.getId(triggerData.triggerItem), "_onItemUsed")
-        if (_onItemUsed ~= nil and type(_onItemUsed) == "function") then
-            _onItemUsed(triggerData)
-        end
-    elseif (key == CONST_EVENT.itemGet) then
-        local _onItemGet = hslk.i2v(hitem.getId(triggerData.triggerItem), "_onItemGet")
-        if (type(_onItemGet) == "function") then
-            _onItemGet(triggerData)
-        end
-    end
-end
-
 --- 触发事件（私有通用）
 ---@protected
 hevent.triggerEvent = function(handle, key, triggerData)
@@ -169,12 +143,6 @@ hevent.triggerEvent = function(handle, key, triggerData)
             callFunc(triggerData)
         end
     end
-    -- 判断xtras执行与否
-    if (hattribute.hasXtras(handle, key)) then
-        hattribute.xtras(handle, key, triggerData)
-    end
-    -- hslk
-    hevent.hslk(key, triggerData)
 end
 
 --- 删除事件（需要event_id）
@@ -416,42 +384,6 @@ hevent.onItemDestroy = function(whichItem, callFunc)
         cj.TriggerRegisterDeathEvent(tgr, whichItem)
     end)
     return hevent.registerEvent(whichItem, CONST_EVENT.itemDestroy, callFunc)
-end
-
---- 物品被拆分
----@alias onItemSeparate fun(evtData: {whichItem:"被拆分的物品",type:"拆分类型:single(单类多个)|formula(公式)",targetUnit:"绑定单位"}):void
----@param whichItem userdata
----@param callFunc onItemSeparate | "function(evtData) end"
----@return any
-hevent.onItemSeparate = function(whichItem, callFunc)
-    return hevent.registerEvent(whichItem, CONST_EVENT.itemSeparate, callFunc)
-end
-
---- 物品被合成
----@alias onItemSynthesis fun(evtData: {triggerUnit:"触发单位",triggerItem:"合成物品"}):void
----@param whichUnit userdata
----@param callFunc onItemSynthesis | "function(evtData) end"
----@return any
-hevent.onItemSynthesis = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.itemSynthesis, callFunc)
-end
-
---- 物品超重
----@alias onItemOverWeight fun(evtData: {triggerUnit:"触发单位",triggerItem:"得到的物品",value:"超出的重量(kg)"}):void
----@param whichUnit userdata
----@param callFunc onItemOverWeight | "function(evtData) end"
----@return any
-hevent.onItemOverWeight = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.itemOverWeight, callFunc)
-end
-
---- 单位满格
----@alias onItemOverSlot fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发的物品"}):void
----@param whichUnit userdata
----@param callFunc onItemOverSlot | "function(evtData) end"
----@return any
-hevent.onItemOverSlot = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.itemOverSlot, callFunc)
 end
 
 --- 造成伤害

@@ -1,44 +1,15 @@
 --- F6 物编
 --- 固定配置项
 local F6_CONF = {
-    courierSkill = {
-        -- 信使技能-名称、热键、图标位置、冷却
-        blink = {
-            Name = "信使-闪烁",
-            Ubertip = "闪烁到任何地方", Art = "ReplaceableTextures\\CommandButtons\\BTNBlink.blp",
-            Hotkey = 'Q', Buttonpos_1 = 0, Buttonpos_2 = 2, Cool1 = 10
-        },
-        rangePickUp = {
-            Name = "信使-拾取",
-            Ubertip = "将附近地上的物品拾取到身上", Art = "ReplaceableTextures\\CommandButtons\\BTNPickUpItem.blp",
-            Hotkey = 'W', Buttonpos_1 = 1, Buttonpos_2 = 2, Cool1 = 5
-        },
-        separate = {
-            Name = "信使-拆分物品",
-            Ubertip = "将合成或重叠的物品拆分成零件", Art = "ReplaceableTextures\\CommandButtons\\BTNRepair.blp",
-            Hotkey = 'E', Buttonpos_1 = 2, Buttonpos_2 = 2, Cool1 = 5
-        },
-        deliver = {
-            Name = "信使-传递",
-            Ubertip = "将所有物品依照顺序传送给英雄，当你的英雄没有空余物品位置，物品会返回给信使", Art = "ReplaceableTextures\\CommandButtons\\BTNLoadPeon.blp",
-            Hotkey = 'R', Buttonpos_1 = 3, Buttonpos_2 = 2, Cool1 = 5
-        },
-    },
     -- 描述文本颜色,可配置 hcolor 里拥有的颜色函数，也可以配置 hex 6位颜色码
     color = {
         hotKey = "ffcc00", -- 热键
         itemCoolDown = "ccffff", -- 物品冷却时间
         itemAttr = "b0f26e", -- 物品属性
-        itemOverlie = "ff59ff", -- 物品叠加
-        itemWeight = "ee82ee", -- 物品重量
         itemRemarks = "969696", -- 物品备注
-        itemFragment = hcolor.orange, -- 物品零部件
-        itemProfit = "ffd88c", -- 物品合成品
-        itemRing = "99ccff", -- 物品光环
         abilityCoolDown = "ccffff", -- 技能冷却时间
         abilityAttr = "b0f26e", -- 技能属性
         abilityRemarks = "969696", -- 技能备注
-        abilityRing = "99ccff", --技能光环
         abilityResearch0 = "FFFFE0", --学习说明0
         abilityResearch1 = "FFD700", --学习说明1
         heroWeapon = "ff3939", -- 英雄攻击武器类型
@@ -133,21 +104,6 @@ F6S.a = {
                 table.insert(ux[i], hcolor.mixed(CONST_UBERTIP_ATTR(v._attr[i], "|n"), F6_CONF.color.abilityAttr))
             end
         end
-        if (v._ring ~= nil) then
-            if (#v._ring == 0) then
-                v._ring = { v._ring }
-            end
-            local lastRing = v._ring[#v._ring]
-            for i = (#v._ring + 1), v.levels, 1 do
-                v._ring[i] = lastRing
-            end
-            for i = 1, v.levels, 1 do
-                local d = CONST_UBERTIP_RING_ABILITY(v._ring[i])
-                if (#d > 0) then
-                    table.insert(ux[i], hcolor.mixed(string.implode("|n", d), F6_CONF.color.abilityRing))
-                end
-            end
-        end
         if (v._remarks ~= nil and v._remarks ~= "") then
             for i = 1, v.levels, 1 do
                 table.insert(ux[i], hcolor.mixed(v._remarks, F6_CONF.color.abilityRemarks))
@@ -183,17 +139,6 @@ F6S.a = {
                     extent[i] = extent[i] .. CONST_UBERTIP_RESEARCH_ATTR(v._attr[i] or v._attr[#v._attr])
                 end
             end
-            if (v._ring ~= nil) then
-                local d
-                if (#v._ring == 0) then
-                    d = CONST_UBERTIP_RESEARCH_RING_ABILITY(v._ring)
-                else
-                    d = CONST_UBERTIP_RESEARCH_RING_ABILITY(v._ring[i] or v._ring[#v._ring])
-                end
-                if (#d > 0) then
-                    extent[i] = extent[i] .. "," .. string.implode("", d)
-                end
-            end
         end
         if (#cd > 0) then
             table.insert(rbt, hcolor.mixed(CONST_UBERTIP_I18N.cd .. CONST_UBERTIP_I18N.colon .. string.implode("/", cd) .. CONST_UBERTIP_I18N.sec, F6_CONF.color.abilityCoolDown))
@@ -217,18 +162,6 @@ F6S.i = {
                 F6S.txt(v, "Description", CONST_UBERTIP_ATTR(v._attr, ","), ';')
             end
         end,
-        _overlie = function(v)
-            if (v._overlie ~= nil and v._overlie > 0) then
-                local o = tostring(math.floor(v._overlie))
-                F6S.txt(v, "Description", CONST_UBERTIP_I18N.overlie .. CONST_UBERTIP_I18N.colon .. o, ';')
-            end
-        end,
-        _weight = function(v)
-            if (v._weight ~= nil) then
-                local w = tostring(math.round(v._weight))
-                F6S.txt(v, "Description", CONST_UBERTIP_I18N.weight .. CONST_UBERTIP_I18N.colon .. w .. CONST_UBERTIP_I18N.kg, ';')
-            end
-        end,
         _remarks = function(v)
             if (v._remarks ~= nil and v._remarks ~= "") then
                 F6S.txt(v, "Description", v._remarks, ';')
@@ -241,40 +174,9 @@ F6S.i = {
                 F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_I18N.cd .. CONST_UBERTIP_I18N.colon .. v._cooldown .. CONST_UBERTIP_I18N.sec, F6_CONF.color.itemCoolDown))
             end
         end,
-        _ring = function(v)
-            if (v._ring ~= nil) then
-                if (v._ring.attr ~= nil and v._ring.radius ~= nil and (type(v._ring.target) == 'table' and #v._ring.target > 0)) then
-                    F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_RING_ITEM(v._ring), F6_CONF.color.itemRing))
-                end
-            end
-        end,
         _attr = function(v)
             if (v._attr ~= nil) then
                 F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_ATTR(v._attr, "|n", nil), F6_CONF.color.itemAttr))
-            end
-        end,
-        _fragment = function(v)
-            local txt = CONST_UBERTIP_SYNTHESIS_FRAGMENT(v)
-            if (txt) then
-                F6S.txt(v, "Ubertip", hcolor.mixed(txt, F6_CONF.color.itemFragment))
-            end
-        end,
-        _profit = function(v)
-            local txt = CONST_UBERTIP_SYNTHESIS_PROFIT(v)
-            if (txt) then
-                F6S.txt(v, "Ubertip", hcolor.mixed(txt, F6_CONF.color.itemProfit))
-            end
-        end,
-        _overlie = function(v)
-            if (v._overlie ~= nil and v._overlie > 0) then
-                local o = tostring(math.floor(v._overlie))
-                F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_I18N.overlie .. CONST_UBERTIP_I18N.colon .. o, F6_CONF.color.itemOverlie))
-            end
-        end,
-        _weight = function(v)
-            if (v._weight ~= nil) then
-                local w = tostring(math.round(v._weight))
-                F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_I18N.weight .. CONST_UBERTIP_I18N.colon .. w .. CONST_UBERTIP_I18N.kg, F6_CONF.color.itemWeight))
             end
         end,
         _remarks = function(v)
@@ -288,35 +190,6 @@ F6S.u = {}
 
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
-
-local F6_RING_SINGLE = function(_r)
-    _r.effect = _r.effect or nil
-    _r.effectTarget = _r.effectTarget or "Abilities\\Spells\\Other\\GeneralAuraTarget\\GeneralAuraTarget.mdl"
-    _r.attach = _r.attach or "origin"
-    _r.attachTarget = _r.attachTarget or "origin"
-    _r.radius = _r.radius or 600
-    -- target请参考物编的目标允许
-    local target
-    if (type(_r.target) == 'table' and #_r.target > 0) then
-        target = _r.target
-    elseif (type(_r.target) == 'string' and string.len(_r.target) > 0) then
-        target = string.explode(',', _r.target)
-    else
-        target = { 'air', 'ground', 'friend', 'self', 'vuln', 'invu' }
-    end
-    _r.target = target
-end
-local F6_RING = function(_v)
-    if (type(_v._ring) == "table") then
-        if (#_v._ring == 0) then
-            F6_RING_SINGLE(_v._ring)
-        else
-            for i = 1, #_v._ring, 1 do
-                F6_RING_SINGLE(_v._ring[i])
-            end
-        end
-    end
-end
 
 local F6_HERO = function(_v)
     _v.Primary = _v.Primary or "STR"
@@ -369,8 +242,6 @@ F6V_A = function(_v)
     if (_v.Name == nil) then
         if (_v._type == "empty") then
             _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_passive)
-        elseif (_v._type == "ring") then
-            _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_ring)
         else
             _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_skill)
         end
@@ -378,8 +249,6 @@ F6V_A = function(_v)
     if (_v.levels == nil) then
         _v.levels = 1
     end
-    -- 处理 _ring光环
-    F6_RING(_v)
     if (_v.Hotkey ~= nil) then
         _v.Buttonpos_1 = _v.Buttonpos_1 or CONST_HOTKEY_ABILITY_KV[_v.Hotkey].Buttonpos_1 or 0
         _v.Buttonpos_2 = _v.Buttonpos_2 or CONST_HOTKEY_ABILITY_KV[_v.Hotkey].Buttonpos_2 or 0
@@ -527,116 +396,6 @@ F6V_U = function(_v)
     return _v
 end
 
-local courier_skill_ids
-F6V_COURIER_SKILL = function()
-    if (courier_skill_ids == nil) then
-        courier_skill_ids = { "AInv", "Avul" }
-        local Name = F6_CONF.courierSkill.blink.Name
-        local tmp = {
-            _parent = "AEbl",
-            _type = "courier",
-            Name = Name,
-            Ubertip = F6_CONF.courierSkill.blink.Ubertip,
-            Hotkey = F6_CONF.courierSkill.blink.Hotkey,
-            Buttonpos_1 = F6_CONF.courierSkill.blink.Buttonpos_1,
-            Buttonpos_2 = F6_CONF.courierSkill.blink.Buttonpos_2,
-            hero = 0,
-            levels = 1,
-            Art = F6_CONF.courierSkill.blink.Art,
-            SpecialArt = "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl",
-            Areaeffectart = "Abilities\\Spells\\NightElf\\Blink\\BlinkTarget.mdl",
-            race = "other",
-            DataA = { 99999 },
-            DataB = { 0 },
-            Cool = { F6_CONF.courierSkill.blink.Cool1 },
-            Cost = { 0 },
-        }
-        table.insert(courier_skill_ids, hslk_ability(tmp)._id)
-        Name = F6_CONF.courierSkill.rangePickUp.Name
-        tmp = {
-            _parent = "ANcl",
-            _type = "courier",
-            Name = Name,
-            Tip = Name .. "(" .. hcolor.mixed(F6_CONF.courierSkill.rangePickUp.Hotkey, F6_CONF.color.hotKey) .. ")",
-            Order = "manaburn",
-            Hotkey = F6_CONF.courierSkill.rangePickUp.Hotkey,
-            Ubertip = F6_CONF.courierSkill.rangePickUp.Ubertip,
-            Buttonpos_1 = F6_CONF.courierSkill.rangePickUp.Buttonpos_1,
-            Buttonpos_2 = F6_CONF.courierSkill.rangePickUp.Buttonpos_2,
-            hero = 0,
-            levels = 1,
-            Art = F6_CONF.courierSkill.rangePickUp.Art,
-            CasterArt = "",
-            EffectArt = "",
-            TargetArt = "",
-            race = "other",
-            DataA = { 0 },
-            DataB = { 0 },
-            DataC = { 1 },
-            DataD = { 0.01 },
-            DataF = { "manaburn" },
-            Cool = { F6_CONF.courierSkill.rangePickUp.Cool1 },
-            Cost = { 0 },
-        }
-        table.insert(courier_skill_ids, hslk_ability(tmp)._id)
-        Name = F6_CONF.courierSkill.separate.Name
-        tmp = {
-            _parent = "ANtm",
-            _type = "courier",
-            Name = Name,
-            Tip = Name .. "(" .. hcolor.mixed(F6_CONF.courierSkill.separate.Hotkey, F6_CONF.color.hotKey) .. ")",
-            Ubertip = F6_CONF.courierSkill.separate.Ubertip,
-            Art = F6_CONF.courierSkill.separate.Art,
-            Hotkey = F6_CONF.courierSkill.separate.Hotkey,
-            Buttonpos_1 = F6_CONF.courierSkill.separate.Buttonpos_1,
-            Buttonpos_2 = F6_CONF.courierSkill.separate.Buttonpos_2,
-            Missileart = "",
-            Missilespeed = 99999,
-            Missilearc = 0.00,
-            Animnames = "",
-            hero = 0,
-            race = "other",
-            DataD = { 0 },
-            DataA = { 0 },
-            BuffID = { "" },
-            Cool = { F6_CONF.courierSkill.separate.Cool1 },
-            targs = { "item,nonhero" },
-            Cost = { 0 },
-            Rng = { 200.00 },
-        }
-        table.insert(courier_skill_ids, hslk_ability(tmp)._id)
-        Name = F6_CONF.courierSkill.deliver.Name
-        tmp = {
-            _parent = "ANcl",
-            _type = "courier",
-            Name = Name,
-            Tip = Name .. "(" .. hcolor.mixed(F6_CONF.courierSkill.deliver.Hotkey, F6_CONF.color.hotKey) .. ")",
-            Order = "polymorph",
-            Hotkey = F6_CONF.courierSkill.deliver.Hotkey,
-            Ubertip = F6_CONF.courierSkill.deliver.Ubertip,
-            Buttonpos_1 = F6_CONF.courierSkill.deliver.Buttonpos_1,
-            Buttonpos_2 = F6_CONF.courierSkill.deliver.Buttonpos_2,
-            hero = 0,
-            levels = 1,
-            Art = F6_CONF.courierSkill.deliver.Art,
-            CasterArt = "",
-            EffectArt = "",
-            TargetArt = "",
-            race = "other",
-            DataA = { 0 },
-            DataB = { 0 },
-            DataC = { 1 },
-            DataD = { 0.01 },
-            DataF = { "polymorph" },
-            Cool = { F6_CONF.courierSkill.deliver.Cool1 },
-            Cost = { 0 },
-        }
-        table.insert(courier_skill_ids, hslk_ability(tmp)._id)
-        courier_skill_ids = string.implode(",", courier_skill_ids)
-    end
-    return courier_skill_ids
-end
-
 F6V_I_CD = function(_v)
     if (_v._cooldown < 0) then
         _v._cooldown = 0
@@ -769,26 +528,14 @@ F6V_I = function(_v)
     if (type(_v._shadow) ~= 'boolean') then
         _v._shadow = false
     end
-    -- 处理 _ring光环
-    F6_RING(_v)
     -- 处理文本
     F6S.i.description._attr(_v)
-    F6S.i.description._overlie(_v)
-    F6S.i.description._weight(_v)
     F6S.i.description._remarks(_v)
     F6S.i.ubertip._cooldown(_v)
-    F6S.i.ubertip._ring(_v)
     F6S.i.ubertip._attr(_v)
-    F6S.i.ubertip._fragment(_v)
-    F6S.i.ubertip._profit(_v)
-    F6S.i.ubertip._overlie(_v)
-    F6S.i.ubertip._weight(_v)
     F6S.i.ubertip._remarks(_v)
     if (_v.uses == nil) then
         _v.uses = 1
-    end
-    if (_v._overlie == nil or _v._overlie < _v.uses) then
-        _v._overlie = _v.uses
     end
     if (_v.goldcost == nil) then
         _v.goldcost = 1000000

@@ -7,8 +7,6 @@ hattributeSetter = {
         str = "str_green",
         agi = "agi_green",
         int = "int_green",
-        sight_day = "sight",
-        sight_night = "sight",
     },
 }
 
@@ -53,13 +51,6 @@ hattributeSetter.relyRegister = function(whichUnit)
         cj.UnitRemoveAbility(whichUnit, HL_ID.defend.add[v])
         cj.UnitAddAbility(whichUnit, HL_ID.defend.sub[v])
         cj.UnitRemoveAbility(whichUnit, HL_ID.defend.sub[v])
-    end
-    for _, v in ipairs(HL_ID.sight_gradient) do
-        -- 视野
-        cj.UnitAddAbility(whichUnit, HL_ID.sight.add[v])
-        cj.UnitRemoveAbility(whichUnit, HL_ID.sight.add[v])
-        cj.UnitAddAbility(whichUnit, HL_ID.sight.sub[v])
-        cj.UnitRemoveAbility(whichUnit, HL_ID.sight.sub[v])
     end
 end
 
@@ -236,38 +227,6 @@ hattributeSetter.setUnitDefendGreen = function(whichUnit, futureVal)
                 cj.SetUnitAbilityLevel(whichUnit, HL_ID.defend.sub[max], level + 1)
             end
             max = math.floor(max / 10)
-        end
-    end
-end
-
---- hSlk形式的设置视野
----@private
-hattributeSetter.setUnitSight = function(whichUnit, futureVal)
-    for _, gradient in ipairs(HL_ID.sight_gradient) do
-        cj.UnitRemoveAbility(whichUnit, HL_ID.sight.add[gradient])
-        cj.UnitRemoveAbility(whichUnit, HL_ID.sight.sub[gradient])
-    end
-    local tempVal = math.floor(math.abs(futureVal))
-    local sight_gradient = table.clone(HL_ID.sight_gradient)
-    if (tempVal ~= 0) then
-        while (true) do
-            local found = false
-            for _, v in ipairs(sight_gradient) do
-                if (tempVal >= v) then
-                    tempVal = math.floor(tempVal - v)
-                    table.delete(sight_gradient, v)
-                    if (futureVal > 0) then
-                        cj.UnitAddAbility(whichUnit, HL_ID.sight.add[v])
-                    else
-                        cj.UnitAddAbility(whichUnit, HL_ID.sight.sub[v])
-                    end
-                    found = true
-                    break
-                end
-            end
-            if (found == false) then
-                break
-            end
         end
     end
 end

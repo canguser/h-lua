@@ -41,7 +41,6 @@ ATTR_CONFIGURATOR({
     { "attack_green", "附加攻击", 0 },
     { "attack_range", "攻击范围", 0 },
     { "attack_range_acquire", "主动攻击范围", 0 },
-    { "sight", "视野范围", 0 },
     { "str", "力量", 0 },
     { "agi", "敏捷", 0 },
     { "int", "智力", 0 },
@@ -61,9 +60,6 @@ ATTR_CONFIGURATOR({
     { "hemophagia_skill", "技能吸血", 0 }, --(%)
     { "siphon", "吸魔", 0 }, --(%)
     { "siphon_skill", "技能吸魔", 0 }, --(%)
-    { "invincible", "无敌", 0 }, --(%)
-    { "weight", "负重", 0 },
-    { "weight_current", "当前负重", 0 },
     { "damage_extent", "伤害增幅", 0 }, --(%)
     { "damage_reduction", "减伤", 0 }, --(固定)
     { "damage_decrease", "减伤", 0 }, --(%)
@@ -90,8 +86,6 @@ ATTR_CONFIGURATOR({
     { "bomb_oppose", "爆破抵抗", 0 },
     { "lightning_chain_oppose", "闪电链抵抗", 0 },
     { "crack_fly_oppose", "击飞抵抗", 0 },
-    --
-    { "xtras", "附加特效", {} },
     --
     { "knocking", "额外暴击", 0 },
     { "split", "分裂", 0 },

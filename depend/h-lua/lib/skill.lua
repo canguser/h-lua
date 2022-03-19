@@ -21,7 +21,6 @@ hskill.addProperty = function(whichUnit, abilityId, level)
         end
         hattribute.caleAttribute(CONST_DAMAGE_SRC.skill, true, whichUnit, attr, 1)
     end
-    hring.insert(whichUnit, abilityId, level)
 end
 --- 削减单位获得技能后的属性
 ---@protected
@@ -34,7 +33,6 @@ hskill.subProperty = function(whichUnit, abilityId, level)
         end
         hattribute.caleAttribute(CONST_DAMAGE_SRC.skill, false, whichUnit, attr, 1)
     end
-    hring.remove(whichUnit, abilityId, level)
 end
 
 --- 获取技能名称

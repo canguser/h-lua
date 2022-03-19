@@ -575,67 +575,6 @@ hevent_default_actions = {
             itId = string.id2char(itId)
             local u = cj.GetTriggerUnit()
             local charges = hitem.getCharges(it)
-            -- 反向检测丢弃物品事件
-            local holder = hitem.getHolder(it)
-            if (nil ~= holder and holder ~= u) then
-                hevent.triggerEvent(holder, CONST_EVENT.itemDrop, { triggerUnit = holder, triggerItem = it, targetUnit = u })
-            end
-            -- 判断玩家是否不能获取他人物品
-            local lastHolder = hitem.getLastHolder(it)
-            if (hitem.isRobber(it, u)) then
-                -- 得到了别人先获得过的物品，不准拿
-                htextTag.style(
-                    htextTag.create2Unit(u, "不是你的不要捡", 8.00, "e04240", 1, 1.1, 50.00),
-                    "scale", 0, 0.05
-                )
-                hitem.backToLastHolder(it)
-                return
-            end
-            -- 判断超重
-            local newWeight = hattribute.get(u, "weight_current") + hitem.getWeight(itId, charges)
-            if (newWeight > hattribute.get(u, "weight")) then
-                local exWeight = math.round(newWeight - hattribute.get(u, "weight"))
-                httg.model({
-                    msg = "超重" .. exWeight .. "KG",
-                    width = 10,
-                    scale = 0.25,
-                    speed = 0.5,
-                    whichUnit = u,
-                    red = 255,
-                    green = 0,
-                    blue = 0,
-                })
-                -- 判断如果是真实物品并且有影子，转为影子物品
-                if (hitem.isShadowFront(itId)) then
-                    itId = hitem.shadowID(itId)
-                end
-                hitem.del(it)
-                it = cj.CreateItem(string.char2id(itId), hunit.x(u), hunit.y(u))
-                cj.SetItemCharges(it, charges)
-                hcache.alloc(it)
-                hitem.setLastHolder(it, lastHolder)
-                -- 触发超重事件
-                hevent.triggerEvent(u, CONST_EVENT.itemOverWeight, {
-                    triggerUnit = u,
-                    triggerItem = it,
-                    value = exWeight
-                })
-                return
-            end
-            -- 如果是影子物品
-            if (hitem.isShadowBack(itId)) then
-                itId = hitem.shadowID(itId)
-                hitem.del(it)
-                it = cj.CreateItem(string.char2id(itId), hunit.x(u), hunit.y(u))
-                cj.SetItemCharges(it, charges)
-                hitem.setLastHolder(it, lastHolder)
-                if (hitem.getEmptySlot(u) <= 0) then
-                    hitem.synthesis(u, it) -- 看看有没有合成，可能这个实体物品有合成可以收到物品栏
-                else
-                    cj.UnitAddItem(u, it)
-                end
-                return
-            end
             -- 触发获得物品
             local evtData = { triggerUnit = u, triggerItem = it }
             hevent.triggerEvent(u, CONST_EVENT.itemGet, evtData)
@@ -652,13 +591,9 @@ hevent_default_actions = {
                 if (false == hcache.exist(it)) then
                     hcache.alloc(it)
                 end
-                -- 设置持有单位
-                hitem.setHolder(it, u)
                 hitemPool.delete(CONST_CACHE.ITEM_POOL_PICK, it)
                 -- 计算属性
                 hitem.addProperty(u, itId, charges)
-                -- 检查合成
-                hitem.synthesis(u)
             end
         end),
         drop = cj.Condition(function()
@@ -685,21 +620,7 @@ hevent_default_actions = {
                             --坐标相同视为给予单位类型（几乎不可能坐标一致）
                             return
                         end
-                        hitem.setHolder(it, nil)
                         hitemPool.insert(CONST_CACHE.ITEM_POOL_PICK, it)
-                        if (hitem.isShadowFront(itId)) then
-                            local lastHolder = hitem.getLastHolder(it)
-                            hitem.del(it, 0)
-                            -- 影子物品替换
-                            it = hitem.create({
-                                id = hitem.shadowID(itId),
-                                x = x,
-                                y = y,
-                                charges = charges,
-                            })
-                            hcache.alloc(it)
-                            hitem.setLastHolder(it, lastHolder)
-                        end
                     end
                     --触发丢弃物品事件
                     hevent.triggerEvent(u, CONST_EVENT.itemDrop, {

@@ -5,7 +5,7 @@ hattribute = {
         INTEGER = {
             "life", "mana", "move", "attack_white", "attack_green",
             "attack_range", "attack_range_acquire",
-            "sight", "sight_day", "sight_night", "defend_white", "defend_green",
+            "defend_white", "defend_green",
             "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green", "punish"
         },
     },
@@ -102,7 +102,7 @@ end
 -- 设定属性
 --[[
     白字攻击 绿字攻击 攻击间隔
-    攻速 视野 攻击范围 主动攻击范围
+    攻速 攻击范围 主动攻击范围
     力敏智 力敏智(绿)
     白字护甲 绿字护甲
     生命 魔法 +恢复
@@ -228,9 +228,6 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
             elseif (attr == "defend_green") then
                 -- 绿字护甲
                 hattributeSetter.setUnitDefendGreen(whichUnit, futureVal)
-            elseif (attr == "sight") then
-                -- 视野
-                hattributeSetter.setUnitSight(whichUnit, futureVal)
             elseif (his.hero(whichUnit) and table.includes({ "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green" }, attr)) then
                 -- 白/绿字力敏智
                 hattributeSetter.setUnitThree(whichUnit, futureVal, attr, diff)
@@ -396,7 +393,7 @@ hattribute.set = function(whichUnit, during, data)
             end
             buffKey = hattribute.setHandle(whichUnit, attr, opr, val, during)
         elseif (type(v) == "table") then
-            -- table型，如 xtras
+            -- table型
             if (v.add ~= nil and type(v.add) == "table") then
                 for _, set in ipairs(v.add) do
                     if (set == nil) then
@@ -468,8 +465,6 @@ hattribute.get = function(whichUnit, attr, default)
     attribute.str = (attribute.str_white or 0) + (attribute.str_green or 0)
     attribute.agi = (attribute.agi_white or 0) + (attribute.agi_green or 0)
     attribute.int = (attribute.int_white or 0) + (attribute.int_green or 0)
-    attribute.sight_day = hunit.getSight(whichUnit) + (attribute.sight or 0)
-    attribute.sight_night = hunit.getNSight(whichUnit) + (attribute.sight or 0)
     if (attr == nil) then
         return attribute or default
     end

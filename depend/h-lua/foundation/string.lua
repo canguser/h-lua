@@ -349,21 +349,14 @@ string.findCount = function(str, pattern)
     return qty
 end
 
---- 获取属性table合成key
+--- 获取属性table生成key
 ---@private
 ---@param val table
 ---@return string
 string.attrBuffKey = function(val)
-    local valx = table.obj2arr(val, CONST_ATTR_XTRAS)
-    local valxx = {}
-    for _, xv in ipairs(valx) do
-        if (xv.value ~= nil) then
-            table.insert(valxx, xv.value)
-        end
-    end
-    local key = string.vkey(valxx)
-    valx = nil
-    valxx = nil
+    local val = {}
+    local key = string.vkey(val)
+    val = nil
     return key
 end
 
