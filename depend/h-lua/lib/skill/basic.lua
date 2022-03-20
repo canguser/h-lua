@@ -1,17 +1,3 @@
---- 回避
----@param whichUnit userdata
-hskill.avoid = function(whichUnit)
-    cj.UnitAddAbility(whichUnit, HL_ID.avoid.add)
-    cj.SetUnitAbilityLevel(whichUnit, HL_ID.avoid.add, 2)
-    cj.UnitRemoveAbility(whichUnit, HL_ID.avoid.add)
-    htime.setTimeout(0, function(t)
-        t.destroy()
-        cj.UnitAddAbility(whichUnit, HL_ID.avoid.sub)
-        cj.SetUnitAbilityLevel(whichUnit, HL_ID.avoid.sub, 2)
-        cj.UnitRemoveAbility(whichUnit, HL_ID.avoid.sub)
-    end)
-end
-
 --- 无敌
 ---@param whichUnit userdata
 ---@param during number
@@ -21,7 +7,7 @@ hskill.invulnerable = function(whichUnit, during, effect)
         return
     end
     if (during < 0) then
-        during = 0.00 -- 如果设置持续时间错误，则0秒无敌，跟回避效果相同
+        during = 0.00 -- 如果设置持续时间错误，则0秒无敌
     end
     cj.UnitAddAbility(whichUnit, HL_ID.ability_invulnerable)
     if (during > 0 and effect ~= nil) then
@@ -45,7 +31,7 @@ hskill.invulnerableRange = function(x, y, radius, filter, during, effect)
         return
     end
     if (during < 0) then
-        during = 0.00 -- 如果设置持续时间错误，则0秒无敌，跟回避效果相同
+        during = 0.00 -- 如果设置持续时间错误，则0秒无敌
     end
     local g = hgroup.createByXY(x, y, radius, filter)
     hgroup.forEach(g, function(eu)

@@ -520,24 +520,3 @@ for i = 1, 9 do
         DataA = Data.A,
     })
 end
-
---- #回避(伤害)+
-hslk_ability({
-    _parent = "AIlf",
-    _type = "system",
-    EditorSuffix = "#h-lua",
-    Name = "H_LUA_A_AVOID_ADD",
-    Art = "",
-    levels = 2,
-    DataA = { 0, -10000000 }
-})
---- #回避(伤害)-
-hslk_ability({
-    _parent = "AIlf",
-    _type = "system",
-    EditorSuffix = "#h-lua",
-    Name = "H_LUA_A_AVOID_SUB",
-    Art = "",
-    levels = 2,
-    DataA = { 0, 10000000 }
-})

@@ -39,10 +39,6 @@ HL_ID_INIT = function()
             add = {},
             sub = {}
         },
-        avoid = {
-            add = 0,
-            sub = 0
-        },
         ablis_gradient = {},
     }
 
@@ -66,7 +62,4 @@ HL_ID_INIT = function()
         HL_ID.defend.add[v] = string.char2id(hslk.n2i("H_LUA_A_DEF_ADD_" .. v))
         HL_ID.defend.sub[v] = string.char2id(hslk.n2i("H_LUA_A_DEF_SUB_" .. v))
     end
-    -- 属性系统 回避
-    HL_ID.avoid.add = string.char2id(hslk.n2i("H_LUA_A_AVOID_ADD"))
-    HL_ID.avoid.sub = string.char2id(hslk.n2i("H_LUA_A_AVOID_SUB"))
 end

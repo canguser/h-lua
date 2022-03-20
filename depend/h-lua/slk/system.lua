@@ -130,14 +130,3 @@ for _ = 1, 9 do
         _type = "system",
     })
 end
-
---- #回避(伤害)+
-hslk_ability({
-    _parent = "AIlf",
-    _type = "system",
-})
---- #回避(伤害)-
-hslk_ability({
-    _parent = "AIlf",
-    _type = "system",
-})

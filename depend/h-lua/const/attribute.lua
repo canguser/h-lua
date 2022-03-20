@@ -52,22 +52,7 @@ ATTR_CONFIGURATOR({
     { "int_white", "本体智力", 0 },
     { "life_back", "生命恢复", 0 },
     { "mana_back", "魔法恢复", 0 },
-    { "avoid", "回避", 0 },
-    { "aim", "命中", 0 },
-    { "hemophagia", "吸血", 0 }, --(%)
-    { "hemophagia_skill", "技能吸血", 0 }, --(%)
-    { "damage_extent", "伤害增幅", 0 }, --(%)
-    { "damage_reduction", "减伤", 0 }, --(%)
-    { "damage_rebound", "反弹伤害", 0 }, --(%)
-    { "damage_rebound_oppose", "反伤抵抗", 0 },
-    { "cure", "治疗", 0 }, --(%)
     { "reborn", "复活时间", -999 },
-    { "knocking_odds", "暴击几率", 0 },
-    { "knocking_extent", "暴击增伤", 0 }, --(%)
-    { "knocking_oppose", "暴击抵抗", 0 },
-    { "hemophagia_oppose", "吸血抵抗", 0 },
-    { "hemophagia_skill_oppose", "技能吸血抵抗", 0 },
-    { "split_oppose", "分裂抵抗", 0 },
     { "swim_oppose", "眩晕抵抗", 0 },
     { "broken_oppose", "打断抵抗", 0 },
     { "silent_oppose", "沉默抵抗", 0 },
@@ -75,8 +60,6 @@ ATTR_CONFIGURATOR({
     { "lightning_chain_oppose", "闪电链抵抗", 0 },
     { "crack_fly_oppose", "击飞抵抗", 0 },
     --
-    { "knocking", "额外暴击", 0 },
-    { "split", "分裂", 0 },
     { "swim", "眩晕", 0 },
     { "broken", "打断", 0 },
     { "silent", "沉默", 0 },

@@ -23,7 +23,7 @@ _upgrade = function(_v)
     return _v
 end
 
----@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,avoid,aim,hemophagia,hemophagia_skill,damage_extent,damage_reduction,damage_rebound,damage_rebound_oppose,cure,reborn,knocking_odds,knocking_extent,knocking_oppose,hemophagia_oppose,hemophagia_skill_oppose,split_oppose,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
+---@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,reborn,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
 ---@param _v pilotAttr
 _attr = function(_v)
     return _v
@@ -40,8 +40,6 @@ end
 ---@alias pilotDamage {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc}
 ---@alias pilotDamageStep {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc,frequency,times,extraInfluence}
 ---@alias pilotDamageRange {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,effectSingle,damageSrc,radius,frequency,times,extraInfluence}
----@alias pilotKnocking {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
----@alias pilotSplit {radius,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotBroken {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotSwim {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotSilent {during,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
@@ -52,8 +50,4 @@ end
 ---@alias pilotWhirlwind {radius,frequency,during,filter,sourceUnit,targetUnit,damage,odds,effect,effectEnum,damageSrc,animation}
 ---@alias pilotLeap {arrowUnit,sourceUnit,targetUnit,x,y,speed,acceleration,height,shake,filter,tokenX,tokenY,tokenArrow,tokenArrowScale,tokenArrowOpacity,tokenArrowHeight,effectMovement,effectEnd,damageMovement,damageMovementRadius,damageMovementRepeat,damageMovementDrag,damageEnd,damageEndRadius,damageSrc,damageEffect,oneHitOnly,onEnding,extraInfluence}
 ---@alias pilotLeapPaw {qty,deg,arrowUnit,sourceUnit,targetUnit,x,y,speed,acceleration,height,shake,filter,tokenX,tokenY,tokenArrow,tokenArrowScale,tokenArrowOpacity,tokenArrowHeight,effectMovement,effectEnd,damageMovement,damageMovementRadius,damageMovementRepeat,damageMovementDrag,damageEnd,damageEndRadius,damageSrc,damageEffect,oneHitOnly,onEnding,extraInfluence}
----@alias pilotLeapRange {radius,arrowUnit,sourceUnit,targetUnit,x,y,speed,acceleration,height,shake,filter,tokenX,tokenY,tokenArrow,tokenArrowScale,tokenArrowOpacity,tokenArrowHeight,effectMovement,effectEnd,damageMovement,damageMovementRadius,damageMovementRepeat,damageMovementDrag,damageEnd,damageEndRadius,damageSrc,damageEffect,oneHitOnly,onEnding,extraInfluence}
----@alias pilotLeapReflex {qty,radius,arrowUnit,sourceUnit,targetUnit,x,y,speed,acceleration,height,shake,filter,tokenX,tokenY,tokenArrow,tokenArrowScale,tokenArrowOpacity,tokenArrowHeight,effectMovement,effectEnd,damageMovement,damageMovementRadius,damageMovementRepeat,damageMovementDrag,damageEnd,damageEndRadius,damageSrc,damageEffect,oneHitOnly,onEnding,extraInfluence}
----@alias pilotRectangleStrike {deg,radius,distance,frequency,filter,sourceUnit,targetUnit,x,y,effect,effectScale,effectOffset,damageSrc,damageEffect,oneHitOnly,extraInfluence}
 ---@alias pilotEffectTTG {msg,width,scale,speed,whichUnit,x,y,red,green,blue}
----@alias pilotDZUIMiniMapTrack {whichUnit,texture:{file,w,h,opacity},miniMap:{w,h,x,y}}

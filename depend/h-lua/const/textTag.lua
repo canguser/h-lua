@@ -2,7 +2,6 @@
 CONST_MODEL_TTG_SPD = {
     default = 1.0, -- 默认
     ignores = 1.2, -- 无视
-    knocking = 1.4, -- 暴击
 }
 --- 模型贴图型特效
 CONST_MODEL_TTG = {

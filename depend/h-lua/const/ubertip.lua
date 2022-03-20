@@ -32,14 +32,8 @@ CONST_UBERTIP_I18N = {
 --- 键值是否百分比数据
 CONST_UBERTIP_IS_PERCENT = function(key)
     if (table.includes({
-        "attack_speed", "avoid", "aim",
-        "hemophagia", "hemophagia_skill",
-        "invincible",
-        "knocking_odds", "knocking_extent",
-        "damage_extent", "damage_reduction", "damage_rebound",
-        "cure",
+        "attack_speed",
         "gold_ratio", "lumber_ratio", "exp_ratio", "sell_ratio",
-        "knocking", "split",
     }, key)) then
         return true
     end
