@@ -368,15 +368,6 @@ hevent.onBeDamage = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.beDamage, callFunc)
 end
 
---- 极限减伤抵抗（完全减免）
----@alias onDamageResistance fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",resistance: "抵扣伤害值"}):void
----@param whichUnit userdata
----@param callFunc onDamageResistance | "function(evtData) end"
----@return any
-hevent.onDamageResistance = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.damageResistance, callFunc)
-end
-
 --- 眩晕成功
 ---@alias onSwim fun(evtData: {triggerUnit:"触发单位",targetUnit:"被眩晕单位",odds:"几率百分比",during:"持续时间（秒）",damage:"伤害"}):void
 ---@param whichUnit userdata
@@ -781,42 +772,6 @@ hevent.onMapDestructableDestroy = function(callFunc)
     cj.EnumDestructablesInRect(hrect.playable(), nil, function()
         cj.TriggerRegisterDeathEvent(tgr, cj.GetEnumDestructable())
     end)
-end
-
---- 信使闪烁时
----@alias onCourierBlink fun(evtData: {triggerUnit:"触发单位",triggerSkill:"施放技能ID字符串",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
----@param whichUnit userdata
----@param callFunc onCourierBlink | "function(evtData) end"
----@return any
-hevent.onCourierBlink = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.courierBlink, callFunc)
-end
-
---- 信使范围拾取时
----@alias onCourierRangePickUp fun(evtData: {triggerUnit:"触发单位",triggerSkill:"施放技能ID字符串",radius:"拾取范围半径"}):void
----@param whichUnit userdata
----@param callFunc onCourierRangePickUp | "function(evtData) end"
----@return any
-hevent.onCourierRangePickUp = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.courierRangePickUp, callFunc)
-end
-
---- 信使拆分时
----@alias onCourierSeparate fun(evtData: {triggerUnit:"触发单位",triggerSkill:"施放技能ID字符串",triggerItemId:"触发物品ID字符串"}):void
----@param whichUnit userdata
----@param callFunc onCourierSeparate | "function(evtData) end"
----@return any
-hevent.onCourierSeparate = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.courierSeparate, callFunc)
-end
-
---- 信使批量传递时
----@alias onCourierDeliver fun(evtData: {triggerUnit:"触发单位",triggerSkill:"施放技能ID字符串",targetUnit:"目标单位"}):void
----@param whichUnit userdata
----@param callFunc onCourierDeliver | "function(evtData) end"
----@return any
-hevent.onCourierDeliver = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.courierDeliver, callFunc)
 end
 
 --- 当单位移动开始捕获瞬间
