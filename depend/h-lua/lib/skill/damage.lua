@@ -87,9 +87,6 @@ hskill.damage = function(options)
             return
         end
     end
-    -- 护甲
-    local defend = hattribute.get(targetUnit, "defend")
-    damage = damage + defend
     -- 伤害计算
     lastDamage = damage
     -- 自身暴击计算，自身暴击触发下，回避无效（模拟原生魔兽）
@@ -398,76 +395,6 @@ hskill.damage = function(options)
                         sourceUnit = sourceUnit,
                         value = lastDamage * hemophagiaSkill * 0.01,
                         percent = hemophagiaSkill
-                    }
-                )
-            end
-        end
-        -- 吸魔
-        if (sourceUnit ~= nil and damageSrc == CONST_DAMAGE_SRC.attack) then
-            local siphon = hattribute.get(sourceUnit, "siphon") - hattribute.get(targetUnit, "siphon_oppose")
-            if (siphon > 0) then
-                hunit.addCurMana(sourceUnit, lastDamage * siphon * 0.01)
-                heffect.bindUnit(
-                    "Abilities\\Spells\\Items\\AIma\\AImaTarget.mdl",
-                    sourceUnit,
-                    "origin",
-                    1.00
-                )
-                -- @触发吸魔事件
-                hevent.triggerEvent(
-                    sourceUnit,
-                    CONST_EVENT.siphon,
-                    {
-                        triggerUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        value = lastDamage * siphon * 0.01,
-                        percent = siphon,
-                    }
-                )
-                -- @触发被吸魔事件
-                hevent.triggerEvent(
-                    targetUnit,
-                    CONST_EVENT.beSiphon,
-                    {
-                        triggerUnit = targetUnit,
-                        sourceUnit = sourceUnit,
-                        value = lastDamage * siphon * 0.01,
-                        percent = siphon,
-                    }
-                )
-            end
-        end
-        -- 技能吸魔
-        if (sourceUnit ~= nil and damageSrc == CONST_DAMAGE_SRC.skill) then
-            local siphonSkill = hattribute.get(sourceUnit, "siphon_skill") - hattribute.get(targetUnit, "siphon_skill_oppose")
-            if (siphonSkill > 0) then
-                hunit.addCurMana(sourceUnit, lastDamage * siphonSkill * 0.01)
-                heffect.bindUnit(
-                    "Abilities\\Spells\\Items\\AIma\\AImaTarget.mdl",
-                    sourceUnit,
-                    "origin",
-                    1.80
-                )
-                -- @触发技能吸魔事件
-                hevent.triggerEvent(
-                    sourceUnit,
-                    CONST_EVENT.skillSiphon,
-                    {
-                        triggerUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        value = lastDamage * siphonSkill * 0.01,
-                        percent = siphonSkill
-                    }
-                )
-                -- @触发被技能吸魔事件
-                hevent.triggerEvent(
-                    targetUnit,
-                    CONST_EVENT.beSkillSiphon,
-                    {
-                        triggerUnit = targetUnit,
-                        sourceUnit = sourceUnit,
-                        value = lastDamage * siphonSkill * 0.01,
-                        percent = siphonSkill
                     }
                 )
             end

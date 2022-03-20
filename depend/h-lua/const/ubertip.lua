@@ -29,30 +29,11 @@ CONST_UBERTIP_I18N = {
     self = "自己",
 }
 
---- 属性系统目标文本修正
-CONST_UBERTIP_TARGET_LABEL = function(target, actionType, actionField, isValue)
-    if (actionType == 'spec' and isValue ~= true and table.includes({ 'split', 'bomb', 'lightning_chain' }, actionField)) then
-        if (target == '己') then
-            target = CONST_UBERTIP_I18N.ally
-        else
-            target = CONST_UBERTIP_I18N.enemies
-        end
-    else
-        if (target == '己') then
-            target = CONST_UBERTIP_I18N.self
-        else
-            target = CONST_UBERTIP_I18N.enemy
-        end
-    end
-    return target
-end
-
 --- 键值是否百分比数据
 CONST_UBERTIP_IS_PERCENT = function(key)
     if (table.includes({
         "attack_speed", "avoid", "aim",
         "hemophagia", "hemophagia_skill",
-        "siphon", "siphon_skill",
         "invincible",
         "knocking_odds", "knocking_extent",
         "damage_extent", "damage_reduction", "damage_rebound",

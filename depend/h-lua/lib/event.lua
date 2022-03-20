@@ -485,42 +485,6 @@ hevent.onBeUnarm = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.beUnarm, callFunc)
 end
 
---- 定身成功
----@alias onFetter fun(evtData: {triggerUnit:"触发单位",targetUnit:"被定身单位",odds:"几率百分比",during:"持续时间（秒）",damage:"伤害"}):void
----@param whichUnit userdata
----@param callFunc onFetter | "function(evtData) end"
----@return any
-hevent.onFetter = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.fetter, callFunc)
-end
-
---- 被定身
----@alias onBeFetter fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",odds:"几率百分比",during:"持续时间（秒）",damage:"伤害"}):void
----@param whichUnit userdata
----@param callFunc onBeFetter | "function(evtData) end"
----@return any
-hevent.onBeFetter = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beFetter, callFunc)
-end
-
---- 爆破成功
----@alias onBomb fun(evtData: {triggerUnit:"触发单位",targetUnit:"被爆破单位",odds:"几率百分比",radius:"爆破半径范围",damage:"伤害"}):void
----@param whichUnit userdata
----@param callFunc onBomb | "function(evtData) end"
----@return any
-hevent.onBomb = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.bomb, callFunc)
-end
-
---- 被爆破
----@alias onBeBomb fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",odds:"几率百分比",radius:"爆破半径范围",damage:"伤害"}):void
----@param whichUnit userdata
----@param callFunc onBeBomb | "function(evtData) end"
----@return any
-hevent.onBeBomb = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beBomb, callFunc)
-end
-
 --- 闪电链成功
 ---@alias onLightningChain fun(evtData: {triggerUnit:"触发单位",targetUnit:"被闪电链单位",odds:"几率百分比",radius:"闪电链半径范围",damage:"伤害",index:"是第几个被电到的"}):void
 ---@param whichUnit userdata
@@ -645,42 +609,6 @@ end
 ---@return any
 hevent.onBeSkillHemophagia = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.beSkillHemophagia, callFunc)
-end
-
---- 吸魔时
----@alias onSiphon fun(evtData: {triggerUnit:"触发单位",targetUnit:"目标单位",value:"吸魔值",percent:"吸魔百分比"}):void
----@param whichUnit userdata
----@param callFunc onSiphon | "function(evtData) end"
----@return any
-hevent.onSiphon = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.siphon, callFunc)
-end
-
---- 被吸魔时
----@alias onBeSiphon fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",value:"吸魔值",percent:"吸魔百分比"}):void
----@param whichUnit userdata
----@param callFunc onBeSiphon | "function(evtData) end"
----@return any
-hevent.onBeSiphon = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beSiphon, callFunc)
-end
-
---- 技能吸魔时
----@alias onSkillSiphon fun(evtData: {triggerUnit:"触发单位",targetUnit:"目标单位",value:"吸魔值",percent:"吸魔百分比"}):void
----@param whichUnit userdata
----@param callFunc onSkillSiphon | "function(evtData) end"
----@return any
-hevent.onSkillSiphon = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.skillSiphon, callFunc)
-end
-
---- 被技能吸魔时
----@alias onBeSkillSiphon fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",value:"吸魔值",percent:"吸魔百分比"}):void
----@param whichUnit userdata
----@param callFunc onBeSkillSiphon | "function(evtData) end"
----@return any
-hevent.onBeSkillSiphon = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beSkillSiphon, callFunc)
 end
 
 --- 死亡时

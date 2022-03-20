@@ -56,8 +56,6 @@ ATTR_CONFIGURATOR({
     { "aim", "命中", 0 },
     { "hemophagia", "吸血", 0 }, --(%)
     { "hemophagia_skill", "技能吸血", 0 }, --(%)
-    { "siphon", "吸魔", 0 }, --(%)
-    { "siphon_skill", "技能吸魔", 0 }, --(%)
     { "damage_extent", "伤害增幅", 0 }, --(%)
     { "damage_reduction", "减伤", 0 }, --(%)
     { "damage_rebound", "反弹伤害", 0 }, --(%)
@@ -69,17 +67,11 @@ ATTR_CONFIGURATOR({
     { "knocking_oppose", "暴击抵抗", 0 },
     { "hemophagia_oppose", "吸血抵抗", 0 },
     { "hemophagia_skill_oppose", "技能吸血抵抗", 0 },
-    { "siphon_oppose", "吸魔抵抗", 0 },
-    { "siphon_skill_oppose", "技能吸魔抵抗", 0 },
-    { "buff_oppose", "强化阻碍", 0 },
-    { "debuff_oppose", "负面抵抗", 0 },
     { "split_oppose", "分裂抵抗", 0 },
     { "swim_oppose", "眩晕抵抗", 0 },
     { "broken_oppose", "打断抵抗", 0 },
     { "silent_oppose", "沉默抵抗", 0 },
     { "unarm_oppose", "缴械抵抗", 0 },
-    { "fetter_oppose", "定身抵抗", 0 },
-    { "bomb_oppose", "爆破抵抗", 0 },
     { "lightning_chain_oppose", "闪电链抵抗", 0 },
     { "crack_fly_oppose", "击飞抵抗", 0 },
     --
@@ -89,8 +81,6 @@ ATTR_CONFIGURATOR({
     { "broken", "打断", 0 },
     { "silent", "沉默", 0 },
     { "unarm", "缴械", 0 },
-    { "fetter", "定身", 0 },
-    { "bomb", "爆破", 0 },
     { "lightning_chain", "闪电链", 0 },
     { "crack_fly", "击飞", 0 },
     { "paw", "冲击", 0 },

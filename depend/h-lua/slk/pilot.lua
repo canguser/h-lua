@@ -23,7 +23,7 @@ _upgrade = function(_v)
     return _v
 end
 
----@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,avoid,aim,hemophagia,hemophagia_skill,damage_extent,damage_reduction,damage_rebound,damage_rebound_oppose,cure,reborn,knocking_odds,knocking_extent,knocking_oppose,hemophagia_oppose,hemophagia_skill_oppose,buff_oppose,debuff_oppose,split_oppose,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,fetter_oppose,bomb_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
+---@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,avoid,aim,hemophagia,hemophagia_skill,damage_extent,damage_reduction,damage_rebound,damage_rebound_oppose,cure,reborn,knocking_odds,knocking_extent,knocking_oppose,hemophagia_oppose,hemophagia_skill_oppose,split_oppose,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
 ---@param _v pilotAttr
 _attr = function(_v)
     return _v
@@ -46,8 +46,6 @@ end
 ---@alias pilotSwim {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotSilent {during,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotUnArm {during,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
----@alias pilotFetter {during,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc}
----@alias pilotBomb {radius,sourceUnit,whichGroup,targetUnit,damage,odds,percent,effect,damageSrc}
 ---@alias pilotLightningChain {lightningType,prevUnit,sourceUnit,targetUnit,damage,odds,qty,rate,radius,isRepeat,effect,damageSrc,index,repeatGroup}
 ---@alias pilotCrackFly {distance,height,during,sourceUnit,targetUnit,damage,odds,effect,damageSrc}
 ---@alias pilotRangeSwim {radius,during,x,y,filter,sourceUnit,targetUnit,damage,odds,effect,damageSrc}
