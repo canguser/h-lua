@@ -8,8 +8,6 @@
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE.common} --伤害的类型,注意是table（可选）
-        isFixed = false, --是否固伤（可选）
     }
 ]]
 ---@param options pilotKnocking
@@ -42,8 +40,6 @@ hskill.knocking = function(options)
             damageString = "暴击",
             damageRGB = { 255, 0, 0 },
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
         })
         --@触发暴击事件
         hevent.triggerEvent(options.sourceUnit, CONST_EVENT.knocking, {
@@ -75,7 +71,6 @@ end
         radius = 0, --分裂半径范围，必须
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC.skill --伤害的种类（可选）
-        damageType = {} --伤害的类型,注意是table（可选）
     }
 ]]
 ---@param options pilotSplit
@@ -123,8 +118,6 @@ hskill.split = function(options)
                 damageString = "分裂",
                 damageRGB = { 255, 222, 173 },
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
                 effect = options.effect
             })
         end)
@@ -167,8 +160,6 @@ end
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC.skill, --伤害的种类（可选）
-        damageType = {}, --伤害的类型,注意是table（可选）
-        isFixed = false,
     }
 ]]
 ---@param options pilotBroken
@@ -214,8 +205,6 @@ hskill.broken = function(options)
                 damageString = "打断",
                 damageRGB = { 240, 248, 255 },
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
             }
         )
     end
@@ -253,8 +242,6 @@ end
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotSwim
@@ -364,8 +351,6 @@ hskill.swim = function(options)
             targetUnit = u,
             damage = damage,
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
             damageString = damageString,
             damageRGB = damageRGB
         })
@@ -382,8 +367,6 @@ end
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotSilent
@@ -434,8 +417,6 @@ hskill.silent = function(options)
                 damage = damage,
                 damageString = "沉默",
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
             }
         )
     end
@@ -483,8 +464,6 @@ end
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotUnArm
@@ -534,8 +513,6 @@ hskill.unarm = function(options)
             damage = damage,
             damageString = "缴械",
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
         })
     end
     -- @触发缴械事件
@@ -574,8 +551,6 @@ end
         sourceUnit = nil, --来源单位，可选
         effect = nil, --特效，可选
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotFetter
@@ -616,8 +591,6 @@ hskill.fetter = function(options)
                 damage = damage,
                 damageString = "定身",
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
             }
         )
     end
@@ -659,8 +632,6 @@ end
         effect = nil --目标位置特效（可选）
         effectEnum = nil --选取个体的特效（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotBomb
@@ -719,8 +690,6 @@ hskill.bomb = function(options)
             targetUnit = eu,
             damage = damage,
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
             damageString = "爆破",
             damageRGB = { 255, 99, 71 },
             effect = options.effectEnum,
@@ -768,8 +737,6 @@ end
         isRepeat = false, --是否允许同一个单位重复打击（临近2次不会同一个）
         effect = nil, --目标位置特效（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
         index = 1,--隐藏的参数，用于暗地里记录是第几个被电到的单位
         repeatGroup = [group],--隐藏的参数，用于暗地里记录单位是否被电过
     }
@@ -825,8 +792,6 @@ hskill.lightningChain = function(options)
         targetUnit = targetUnit,
         damage = damage,
         damageSrc = options.damageSrc,
-        damageType = options.damageType,
-        isFixed = options.isFixed,
         damageString = "闪电链",
         damageRGB = { 135, 206, 250 },
     })
@@ -919,8 +884,6 @@ end
         during = 0.5, --击飞过程持续时间，可选，默认0.5秒
         effect = nil, --特效（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotCrackFly
@@ -1017,8 +980,6 @@ hskill.crackFly = function(options)
                     effect = options.effect,
                     damage = damage,
                     damageSrc = options.damageSrc,
-                    damageType = options.damageType,
-                    isFixed = options.isFixed,
                     damageString = "击飞",
                     damageRGB = { 128, 128, 0 },
                 })
@@ -1091,8 +1052,6 @@ end
         damage = 0, --伤害（可选，但是这里可以等于0）
         sourceUnit = [unit], --伤害来源单位（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotRangeSwim
@@ -1143,8 +1102,6 @@ hskill.rangeSwim = function(options)
             damage = damage,
             sourceUnit = options.sourceUnit,
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
         })
     end)
     g = nil
@@ -1163,8 +1120,6 @@ end
         effectEnum = "", --单体砍中特效（可选）
         animation = "spin", --单位附加动作，常见的spin（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
     }
 ]]
 ---@param options pilotWhirlwind
@@ -1233,8 +1188,6 @@ hskill.whirlwind = function(options)
                 effect = options.effectEnum,
                 damage = damage,
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
             })
         end)
         g = nil
@@ -1269,8 +1222,6 @@ end
         damageEnd = 0, --移动结束时对目标的伤害（可选的，默认为0）
         damageEndRadius = 0, --移动结束时对目标的伤害范围（可选的，默认为0，此处0范围是有效的，会只对targetUnit生效，除非unit不存在）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
         damageEffect = nil, --伤害特效（可选）
         oneHitOnly = false, --是否打击一次就立刻失效（类似格挡，这个一次和只攻击一个单位不是一回事）
         onEnding = [function], --结束时触发的动作
@@ -1414,8 +1365,6 @@ hskill.leap = function(options)
                         targetUnit = options.targetUnit,
                         damage = damageEnd,
                         damageSrc = options.damageSrc,
-                        damageType = options.damageType,
-                        isFixed = options.isFixed,
                         effect = options.damageEffect
                     })
                 end
@@ -1431,8 +1380,6 @@ hskill.leap = function(options)
                             targetUnit = eu,
                             damage = damageEnd,
                             damageSrc = options.damageSrc,
-                            damageType = options.damageType,
-                            isFixed = options.isFixed,
                             effect = options.damageEffect
                         })
                     end
@@ -1525,8 +1472,6 @@ hskill.leap = function(options)
                             targetUnit = eu,
                             damage = damageMovement,
                             damageSrc = options.damageSrc,
-                            damageType = options.damageType,
-                            isFixed = options.isFixed,
                             effect = options.damageEffect
                         })
                     end
@@ -1631,8 +1576,6 @@ hskill.leapPaw = function(options)
             damageEnd = options.damageEnd,
             damageEndRadius = options.damageEndRadius,
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
             damageEffect = options.damageEffect,
             oneHitOnly = options.oneHitOnly,
             onEnding = options.onEnding,
@@ -1704,8 +1647,6 @@ hskill.leapRange = function(options)
             damageEnd = options.damageEnd,
             damageEndRadius = options.damageEndRadius,
             damageSrc = options.damageSrc,
-            damageType = options.damageType,
-            isFixed = options.isFixed,
             damageEffect = options.damageEffect,
             oneHitOnly = options.oneHitOnly,
             onEnding = options.onEnding,
@@ -1786,8 +1727,6 @@ end
         effectScale = 1.30, --打击特效缩放
         effectOffset = 0, --打击特效偏移量（distance+offset才是展示特效距离）
         damageSrc = CONST_DAMAGE_SRC, --伤害的种类（可选）
-        damageType = {CONST_DAMAGE_TYPE} --伤害的类型,注意是table（可选）
-        isFixed = false --是否固伤（可选）
         damageEffect = nil, --伤害特效（可选）
         oneHitOnly = true, --是否每个敌人只打击一次（可选,默认true）
         extraInfluence = [function] --对击中的敌人的额外影响，会回调该敌人单位，可以对其做出自定义行为
@@ -1868,8 +1807,6 @@ hskill.rectangleStrike = function(options)
                 damage = damage,
                 sourceUnit = options.sourceUnit,
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
                 extraInfluence = options.extraInfluence
             })
         end
@@ -1911,8 +1848,6 @@ hskill.rectangleStrike = function(options)
                         damage = damage,
                         sourceUnit = options.sourceUnit,
                         damageSrc = options.damageSrc,
-                        damageType = options.damageType,
-                        isFixed = options.isFixed,
                         extraInfluence = options.extraInfluence
                     }
                 )

@@ -55,7 +55,7 @@ CONST_UBERTIP_IS_PERCENT = function(key)
         "siphon", "siphon_skill",
         "invincible",
         "knocking_odds", "knocking_extent",
-        "damage_extent", "damage_decrease", "damage_rebound",
+        "damage_extent", "damage_reduction", "damage_rebound",
         "cure",
         "gold_ratio", "lumber_ratio", "exp_ratio", "sell_ratio",
         "knocking", "split",
@@ -63,24 +63,7 @@ CONST_UBERTIP_IS_PERCENT = function(key)
         return true
     end
     local s = string.find(key, "_oppose")
-    local n = string.find(key, "e_")
-    local a = string.find(key, "_attack")
-    local p = string.find(key, "_append")
-    if (a ~= nil or p ~= nil) then
-        return false
-    end
-    if (s ~= nil or n == 1) then
-        return true
-    end
-    return false
-end
-
---- 键值是否层级数据
-CONST_UBERTIP_IS_LEVEL = function(key)
-    local a = string.find(key, "_attack")
-    local p = string.find(key, "_append")
-    local n = string.find(key, "e_")
-    if ((a ~= nil or p ~= nil) and n == 1) then
+    if (s ~= nil) then
         return true
     end
     return false
@@ -105,9 +88,6 @@ CONST_UBERTIP_ATTR = function(attr, sep, indent)
         if (CONST_UBERTIP_IS_PERCENT(k) == true) then
             v = v .. "%"
         end
-        if (CONST_UBERTIP_IS_LEVEL(k) == true) then
-            v = v .. CONST_UBERTIP_I18N.layer
-        end
         table.insert(str, indent .. (CONST_ATTR_LABEL[k] or "") .. "：" .. v)
     end
     return string.implode(sep, table.merge(str, strTable))
@@ -129,9 +109,6 @@ CONST_UBERTIP_RESEARCH_ATTR = function(attr)
         end
         if (CONST_UBERTIP_IS_PERCENT(k) == true) then
             v = v .. "%"
-        end
-        if (CONST_UBERTIP_IS_LEVEL(k) == true) then
-            v = v .. CONST_UBERTIP_I18N.layer
         end
         table.insert(str, v .. (CONST_ATTR_LABEL[k] or ""))
     end

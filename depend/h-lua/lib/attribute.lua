@@ -24,12 +24,6 @@ hattribute = {
     CURE_FLOOR = 0.05, --生命魔法恢复绝对值小于此值时无效
 }
 
--- 处理部分设置
-for _, con in ipairs(CONST_ENCHANT) do
-    table.insert(hattribute.VAL_TYPE.INTEGER, "e_" .. con.value .. "_attack")
-    table.insert(hattribute.VAL_TYPE.INTEGER, "e_" .. con.value .. "_append")
-end
-
 --- 判断是否某种类型的数值设定
 ---@param field string attribute
 ---@param valType table VAL_TYPE.?

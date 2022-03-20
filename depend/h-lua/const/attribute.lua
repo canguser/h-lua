@@ -59,8 +59,7 @@ ATTR_CONFIGURATOR({
     { "siphon", "吸魔", 0 }, --(%)
     { "siphon_skill", "技能吸魔", 0 }, --(%)
     { "damage_extent", "伤害增幅", 0 }, --(%)
-    { "damage_reduction", "减伤", 0 }, --(固定)
-    { "damage_decrease", "减伤", 0 }, --(%)
+    { "damage_reduction", "减伤", 0 }, --(%)
     { "damage_rebound", "反弹伤害", 0 }, --(%)
     { "damage_rebound_oppose", "反伤抵抗", 0 },
     { "cure", "治疗", 0 }, --(%)
@@ -111,13 +110,3 @@ ATTR_CONFIGURATOR({
     { "exp_ratio", "经验获得率", 0 },
     { "sell_ratio", "售卖比率", 0 },
 })
-
--- 附魔文本和key
-for _, v in ipairs(CONST_ENCHANT) do
-    ATTR_CONFIGURATOR({
-        { "e_" .. v.value, v.label .. '强化', 0 },
-        { "e_" .. v.value .. '_oppose', v.label .. '抗性', 0 },
-        { "e_" .. v.value .. '_attack', v.label .. '攻击附魔', 0 },
-        { "e_" .. v.value .. '_append', v.label .. '附魔状态', 0 },
-    })
-end

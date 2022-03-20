@@ -198,7 +198,7 @@ hevent.onBeAttackReady = function(whichUnit, callFunc)
 end
 
 --- 造成攻击
----@alias onAttack fun(evtData: {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害",damageType:"伤害类型"}):void
+---@alias onAttack fun(evtData: {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害"}):void
 ---@param whichUnit userdata
 ---@param callFunc onAttack | "function(evtData) end"
 ---@return any
@@ -207,30 +207,12 @@ hevent.onAttack = function(whichUnit, callFunc)
 end
 
 --- 承受攻击
----@alias onBeAttack fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害",damageType:"伤害类型"}):void
+---@alias onBeAttack fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害"}):void
 ---@param whichUnit userdata
 ---@param callFunc onBeAttack | "function(evtData) end"
 ---@return any
 hevent.onBeAttack = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.beAttack, callFunc)
-end
-
---- 技能造成伤害
----@alias onSkill fun(evtData: {triggerUnit:"施法单位",targetUnit:"被伤害单位",damage:"伤害",damageType:"伤害类型"}):void
----@param whichUnit userdata
----@param callFunc onSkill | "function(evtData) end"
----@return any
-hevent.onSkill = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.skill, callFunc)
-end
-
---- 被技能伤害
----@alias onBeSkill fun(evtData: {triggerUnit:"被伤害单位",targetUnit:"被伤害单位",caster:"施法单位",damage:"伤害",damageType:"伤害类型"}):void
----@param whichUnit userdata
----@param callFunc onBeSkill | "function(evtData) end"
----@return any
-hevent.onBeSkill = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beSkill, callFunc)
 end
 
 --- 学习技能
@@ -294,24 +276,6 @@ end
 ---@return any
 hevent.onSkillFinish = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.skillFinish, callFunc)
-end
-
---- 物品造成伤害
----@alias onItem fun(evtData: {triggerUnit:"使用物品单位",targetUnit:"被伤害单位",damage:"伤害",damageType:"伤害类型"}):void
----@param whichUnit userdata
----@param callFunc onItem | "function(evtData) end"
----@return any
-hevent.onItem = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.item, callFunc)
-end
-
---- 被物品伤害
----@alias onBeItem fun(evtData: {triggerUnit:"被伤害单位",useUnit:"使用物品单位",damage:"伤害",damageType:"伤害类型"}):void
----@param whichUnit userdata
----@param callFunc onBeItem | "function(evtData) end"
----@return any
-hevent.onBeItem = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.beItem, callFunc)
 end
 
 --- 单位使用物品
@@ -387,7 +351,7 @@ hevent.onItemDestroy = function(whichItem, callFunc)
 end
 
 --- 造成伤害
----@alias onDamage fun(evtData: {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源",damageType:"伤害类型"}):void
+---@alias onDamage fun(evtData: {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源"}):void
 ---@param whichUnit userdata
 ---@param callFunc onDamage | "function(evtData) end"
 ---@return any
@@ -396,7 +360,7 @@ hevent.onDamage = function(whichUnit, callFunc)
 end
 
 --- 承受伤害
----@alias onBeDamage fun(evtData: {triggerUnit:"被伤害单位",sourceUnit:"伤害来自单位",damage:"伤害",damageSrc:"伤害来源",damageType:"伤害类型"}):void
+---@alias onBeDamage fun(evtData: {triggerUnit:"被伤害单位",sourceUnit:"伤害来自单位",damage:"伤害",damageSrc:"伤害来源"}):void
 ---@param whichUnit userdata
 ---@param callFunc onBeDamage | "function(evtData) end"
 ---@return any

@@ -306,7 +306,6 @@ hevent_default_actions = {
                     hattribute.set(targetUnit, 0, { life = "+" .. changeLife })
                 end
                 local isAttack = hjapi.isEventAttackDamage() or true
-                local isPhysical = hjapi.isEventPhysicalDamage() or true
                 htime.setTimeout(0, function(t)
                     t.destroy()
                     if (isLethal == true) then
@@ -316,23 +315,15 @@ hevent_default_actions = {
                         hunit.setCurLife(targetUnit, curLife)
                     end
                     local damageSrc = CONST_DAMAGE_SRC.attack
-                    local damageType
-                    local isFixed = false
                     if (false == isAttack) then
                         --- [非攻击]->[技能伤害]
                         damageSrc = CONST_DAMAGE_SRC.skill
-                        --- [物理技能]->[物理伤害只判断技能]
-                        if (isPhysical) then
-                            damageType = { CONST_DAMAGE_TYPE.physical }
-                        end
                     end
                     hskill.damage({
                         sourceUnit = sourceUnit,
                         targetUnit = targetUnit,
                         damage = damage,
                         damageSrc = damageSrc,
-                        damageType = damageType,
-                        isFixed = isFixed,
                     })
                 end)
             end

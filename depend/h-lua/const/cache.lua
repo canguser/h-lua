@@ -37,7 +37,6 @@ CONST_CACHE = {
     PLAYER_IS_SHOCKING = "c-p-is-shocking",
     PLAYER_BGM_CURRENT = "c-p-bgm-current",
     PLAYER_BGM_DELAY_TIMER = "c-p-bgm-delay-t",
-    ENCHANT_EFFECT = "c-enchant-effect",
     BUFF = "c-buff",
     BUFF_RGBA = "b-rgba",
     SKILL_SWIM = "c-sk-is-swim",

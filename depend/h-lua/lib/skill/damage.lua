@@ -22,8 +22,6 @@ end
         damageRGB = {255,255,255}, --伤害漂浮字颜色RGB
         effect = nil, --伤害特效
         damageSrc = "unknown", --伤害来源请查看 CONST_DAMAGE_SRC
-        damageType = { "common" }, --伤害类型请查看 CONST_DAMAGE_TYPE
-        isFixed = false, --是否固定伤害，伤害在固定下(无视类型、护甲、魔抗、自然、增幅、减伤)不计算，而自然虽然不影响伤害，但会有自然效果
     }
 ]]
 ---@param options pilotDamage
@@ -60,11 +58,6 @@ hskill.damage = function(options)
     -- 最终伤害
     local lastDamage = 0
     local lastDamagePercent = 0.0
-    -- 是否固伤
-    local isFixed = false
-    if (type(options.isFixed) == "boolean") then
-        isFixed = options.isFixed
-    end
     -- 文本显示
     local damageString = options.damageString or ""
     local damageRGB = options.damageRGB or { 255, 255, 255 }
@@ -86,7 +79,7 @@ hskill.damage = function(options)
     else
         damageSrc = CONST_DAMAGE_SRC.unknown
     end
-    local ignore = { defend = false, avoid = false, invincible = false, enchant = false }
+    local ignore = { defend = false, avoid = false, invincible = false }
     -- 计算单位是否无敌（无敌属性为百分比计算，被动触发抵挡一次）
     if (his.invincible(targetUnit) == true or math.random(1, 100) < hattribute.get(targetUnit, "invincible")) then
         if (ignore.invincible == false) then
@@ -94,63 +87,16 @@ hskill.damage = function(options)
             return
         end
     end
-    local damageType = options.damageType
-    -- 攻击者的攻击里各种类型的占比
-    if (damageType == nil or #damageType <= 0) then
-        if (damageSrc == CONST_DAMAGE_SRC.attack and sourceUnit ~= nil) then
-            damageType = {}
-            for _, con in ipairs(CONST_ENCHANT) do
-                local eAtk = hattribute.get(sourceUnit, 'e_' .. con.value .. '_attack')
-                if (eAtk > 0) then
-                    for _ = 1, eAtk, 1 do
-                        table.insert(damageType, con.value)
-                    end
-                end
-            end
-        end
-    end
-    --常规伤害判定
-    if (damageType == nil or #damageType <= 0) then
-        damageType = { CONST_DAMAGE_TYPE.common } -- common是个通常设置，实际上并无特定效果
-    end
-    local damageTypeRatioPiece = 1 / #damageType
-    local damageTypeRatio = {}
-    for _, dt in ipairs(damageType) do
-        if (damageTypeRatio[dt] == nil) then
-            damageTypeRatio[dt] = 0
-        end
-        damageTypeRatio[dt] = damageTypeRatio[dt] + damageTypeRatioPiece
-    end
-    -- 护甲>0,如果无视护甲，补回伤害
-    -- 护甲<=0,忽略,负护甲增伤可不处理
-    local defenseArmor = math.round(hslk.misc("Misc", "DefenseArmor"), 2) or 0
+    -- 护甲
     local defend = hattribute.get(targetUnit, "defend")
-    if (defenseArmor <= 0) then
-        -- *重要* 当地图平衡常数设定为[DefenseArmor|护甲因子]小于等于0时，这里为了修正魔兽负护甲依然因子保持0.06的bug,补回伤害
-        -- 当护甲x为负时，最大-20,公式2-(1-a)^abs(x)
-        if (defend < 0) then
-            if (defend >= -20) then
-                damage = damage / (2 - 0.94 ^ math.abs(defend))
-            else
-                damage = damage / (2 - 0.94 ^ 20)
-            end
-        end
-    else
-        -- 当地图平衡常数[DefenseArmor|护甲因子]大于0时
-        if (ignore.defend and defend > 0) then
-            local defenseArmorRemain = 1 - hattribute.getArmorReducePercent(defend)
-            if (defenseArmorRemain > 0) then
-                damage = damage * (1 / defenseArmorRemain)
-            end
-        end
-    end
-    -- 开始神奇的伤害计算
+    damage = damage + defend
+    -- 伤害计算
     lastDamage = damage
     -- 自身暴击计算，自身暴击触发下，回避无效（模拟原生魔兽）
     local isKnocking = false
     local knockingOdds = hattribute.get(sourceUnit, "knocking_odds")
     local knockingExtent = hattribute.get(sourceUnit, "knocking_extent")
-    if (isFixed == false and lastDamage > 0 and knockingOdds > 0 and knockingExtent > 0) then
+    if (lastDamage > 0 and knockingOdds > 0 and knockingExtent > 0) then
         local targetKnockingOppose = hattribute.get(targetUnit, "knocking_oppose")
         knockingOdds = knockingOdds - targetKnockingOppose
         if (math.random(1, 100) <= knockingOdds) then
@@ -182,95 +128,51 @@ hskill.damage = function(options)
         end
     end
     if (lastDamage > 0) then
-        -- 计算附魔属性
-        local tempNatural = {}
-        for _, enchant in ipairs(CONST_ENCHANT) do
-            local ev = enchant.value
-            if (damageTypeRatio[ev] ~= nil and damageTypeRatio[ev] > 0) then
-                -- 无视附魔抵抗
-                local ea = hattribute.get(sourceUnit, "e_" .. ev)
-                local eo = hattribute.get(targetUnit, "e_" .. ev .. "_oppose")
-                if (ignore.enchant == false) then
-                    tempNatural[ev] = henchant.INTRINSIC_ADDITION + ea - eo
-                else
-                    tempNatural[ev] = henchant.INTRINSIC_ADDITION + ea
+        -- 计算护甲
+        if (defend ~= 0) then
+            if (defend > 0) then
+                -- 非无视护甲
+                if (ignore.defend == false) then
+                    lastDamage = lastDamage - defend
                 end
-                if (tempNatural[ev] < -100) then
-                    tempNatural[ev] = -100
-                end
-                if (tempNatural[ev] ~= 0) then
-                    if (isFixed == false) then
-                        lastDamagePercent = lastDamagePercent + damageTypeRatio[ev] * tempNatural[ev] * 0.01
-                    end
-                    damageString = damageString .. enchant.label
-                    damageRGB = enchant.rgb
-                    speed = CONST_MODEL_TTG_SPD.enchant
-                end
+            else
+                lastDamage = lastDamage - defend
             end
         end
-        if (isFixed == false) then
-            -- 计算护甲（不涉及伤害类型）
-            if (defend ~= 0) then
-                local defendPercent = 0
-                if (defend > 0) then
-                    -- 非无视护甲
-                    if (ignore.defend == false) then
-                        defendPercent = defend / (defend + 200)
-                    end
-                else
-                    local dfd = math.abs(defend)
-                    defendPercent = -dfd / (dfd * 0.33 + 100)
-                end
-                lastDamagePercent = lastDamagePercent - defendPercent
-            end
-            -- 计算伤害增幅
-            local damageExtent = hattribute.get(sourceUnit, "damage_extent")
-            if (lastDamage > 0 and sourceUnit ~= nil and damageExtent ~= 0) then
-                lastDamagePercent = lastDamagePercent + damageExtent * 0.01
-            end
+        -- 计算伤害增幅
+        local damageExtent = hattribute.get(sourceUnit, "damage_extent")
+        if (lastDamage > 0 and sourceUnit ~= nil and damageExtent ~= 0) then
+            lastDamagePercent = lastDamagePercent + damageExtent * 0.01
         end
         -- 合计 lastDamagePercent
         lastDamage = lastDamage * (1 + lastDamagePercent)
-        if (isFixed == false) then
-            -- 计算减伤
-            local resistance = 0
-            -- 固定值减少
-            local damageReduction = hattribute.get(targetUnit, "damage_reduction")
-            if (damageReduction > 0) then
-                resistance = resistance + damageReduction
-            end
-            -- 百分比减少
-            local damageDecrease = hattribute.get(targetUnit, "damage_decrease")
-            if (damageDecrease > 0) then
-                resistance = resistance + lastDamage * damageDecrease * 0.01
-            end
-            if (resistance > 0) then
-                if (resistance >= lastDamage) then
-                    --@当减伤100%以上时触发事件,触发极限减伤抵抗事件
-                    hevent.triggerEvent(
-                        targetUnit,
-                        CONST_EVENT.damageResistance,
-                        {
-                            triggerUnit = targetUnit,
-                            sourceUnit = sourceUnit,
-                            resistance = resistance,
-                        }
-                    )
-                    lastDamage = 0
-                else
-                    lastDamage = lastDamage - resistance
-                end
+        -- 计算减伤
+        local resistance = 0
+        -- 百分比减少
+        local damageReduction = hattribute.get(targetUnit, "damage_reduction")
+        if (damageReduction > 0) then
+            resistance = resistance + lastDamage * damageReduction * 0.01
+        end
+        if (resistance > 0) then
+            if (resistance >= lastDamage) then
+                --@当减伤100%以上时触发事件,触发极限减伤抵抗事件
+                hevent.triggerEvent(
+                    targetUnit,
+                    CONST_EVENT.damageResistance,
+                    {
+                        triggerUnit = targetUnit,
+                        sourceUnit = sourceUnit,
+                        resistance = resistance,
+                    }
+                )
+                lastDamage = 0
+            else
+                lastDamage = lastDamage - resistance
             end
         end
     end
     -- 上面都是先行计算
     if (lastDamage > 0.125 and his.deleted(targetUnit) == false) then
-        -- 着身附魔
-        henchant.append({
-            targetUnit = targetUnit,
-            sourceUnit = sourceUnit,
-            enchants = damageType,
-        })
         -- 设置单位|玩家正在受伤
         local isBeDamagingTimer = hcache.get(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
         if (isBeDamagingTimer ~= nil) then
@@ -354,97 +256,61 @@ hskill.damage = function(options)
                     targetUnit = targetUnit,
                     damage = lastDamage,
                     damageSrc = damageSrc,
-                    damageType = damageType
                 }
             )
         end
         -- @触发被伤害事件
-        hevent.triggerEvent(
-            targetUnit,
-            CONST_EVENT.beDamage,
-            {
-                triggerUnit = targetUnit,
-                sourceUnit = sourceUnit,
-                damage = lastDamage,
-                damageSrc = damageSrc,
-                damageType = damageType
-            }
-        )
+        hevent.triggerEvent(targetUnit, CONST_EVENT.beDamage, {
+            triggerUnit = targetUnit,
+            sourceUnit = sourceUnit,
+            damage = lastDamage,
+            damageSrc = damageSrc,
+        })
         if (damageSrc == CONST_DAMAGE_SRC.attack) then
             if (sourceUnit ~= nil) then
                 -- @触发攻击事件
-                hevent.triggerEvent(
-                    sourceUnit,
-                    CONST_EVENT.attack,
-                    {
-                        triggerUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        damage = lastDamage,
-                        damageType = damageType
-                    }
-                )
+                hevent.triggerEvent(sourceUnit, CONST_EVENT.attack, {
+                    triggerUnit = sourceUnit,
+                    targetUnit = targetUnit,
+                    damage = lastDamage,
+                })
             end
             -- @触发被攻击事件
-            hevent.triggerEvent(
-                targetUnit,
-                CONST_EVENT.beAttack,
-                {
-                    triggerUnit = targetUnit,
-                    attackUnit = sourceUnit,
-                    damage = lastDamage,
-                    damageType = damageType
-                }
-            )
+            hevent.triggerEvent(targetUnit, CONST_EVENT.beAttack, {
+                triggerUnit = targetUnit,
+                attackUnit = sourceUnit,
+                damage = lastDamage,
+            })
         elseif (damageSrc == CONST_DAMAGE_SRC.skill) then
             if (sourceUnit ~= nil) then
                 -- @触发技能事件
-                hevent.triggerEvent(
-                    sourceUnit,
-                    CONST_EVENT.skill,
-                    {
-                        triggerUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        damage = lastDamage,
-                        damageType = damageType
-                    }
-                )
+                hevent.triggerEvent(sourceUnit, CONST_EVENT.skill, {
+                    triggerUnit = sourceUnit,
+                    targetUnit = targetUnit,
+                    damage = lastDamage,
+                })
             end
             -- @触发被技能击中事件
-            hevent.triggerEvent(
-                targetUnit,
-                CONST_EVENT.beSkill,
-                {
-                    triggerUnit = targetUnit,
-                    castUnit = sourceUnit,
-                    damage = lastDamage,
-                    damageType = damageType
-                }
-            )
+            hevent.triggerEvent(targetUnit, CONST_EVENT.beSkill, {
+                triggerUnit = targetUnit,
+                castUnit = sourceUnit,
+                damage = lastDamage,
+            })
         elseif (damageSrc == CONST_DAMAGE_SRC.item) then
             if (sourceUnit ~= nil) then
                 -- @触发物品事件
-                hevent.triggerEvent(
-                    sourceUnit,
-                    CONST_EVENT.item,
-                    {
-                        triggerUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        damage = lastDamage,
-                        damageType = damageType
-                    }
-                )
+                hevent.triggerEvent(sourceUnit, CONST_EVENT.item, {
+                    triggerUnit = sourceUnit,
+                    targetUnit = targetUnit,
+                    damage = lastDamage,
+                })
             end
             -- @触发被物品伤害事件
-            hevent.triggerEvent(
-                targetUnit,
-                CONST_EVENT.beItem,
-                {
-                    triggerUnit = targetUnit,
-                    useUnit = sourceUnit,
-                    damage = lastDamage,
-                    damageType = damageType
-                }
-            )
+            hevent.triggerEvent(targetUnit, CONST_EVENT.beItem, {
+                triggerUnit = targetUnit,
+                useUnit = sourceUnit,
+                damage = lastDamage,
+            })
         end
         -- 本体暴击
         if (isKnocking == true) then
@@ -647,8 +513,6 @@ end
         damage = 0, --单次伤害（大于0）
         sourceUnit = [unit], --伤害来源单位（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的来源（可选）
-        damageType = {CONST_DAMAGE_TYPE}, --伤害的类型,注意是table（可选）
-        isFixed = false, --是否固伤（可选）
     }
 ]]
 ---@param options pilotDamageStep
@@ -704,8 +568,6 @@ end
         damage = 0, --伤害（可选，但是这里可以等于0）
         sourceUnit = [unit], --伤害来源单位（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的来源（可选）
-        damageType = {CONST_DAMAGE_TYPE}, --伤害的类型,注意是table（可选）
-        isFixed = false, --是否固伤（可选）
         extraInfluence = [function],
     }
 ]]
@@ -758,9 +620,7 @@ hskill.damageRange = function(options)
                 effect = options.effectSingle,
                 damage = damage,
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
                 damageRGB = options.damageRGB,
-                isFixed = options.isFixed,
             })
             if (type(options.extraInfluence) == "function") then
                 options.extraInfluence(eu)
@@ -789,9 +649,7 @@ hskill.damageRange = function(options)
                     effect = options.effectSingle,
                     damage = damage,
                     damageSrc = options.damageSrc,
-                    damageType = options.damageType,
                     damageRGB = options.damageRGB,
-                    isFixed = options.isFixed,
                 })
                 if (type(options.extraInfluence) == "function") then
                     options.extraInfluence(eu)
@@ -812,8 +670,6 @@ end
         damage = 0, --伤害（可选，但是这里可以等于0）
         sourceUnit = [unit], --伤害来源单位（可选）
         damageSrc = CONST_DAMAGE_SRC, --伤害的来源（可选）
-        damageType = {CONST_DAMAGE_TYPE}, --伤害的类型,注意是table（可选）
-        isFixed = false, --是否固伤（可选）
         extraInfluence = [function],
     }
 ]]
@@ -837,8 +693,6 @@ hskill.damageGroup = function(options)
                 effect = options.effect,
                 damage = damage,
                 damageSrc = options.damageSrc,
-                damageType = options.damageType,
-                isFixed = options.isFixed,
             })
             if (type(options.extraInfluence) == "function") then
                 options.extraInfluence(eu)
@@ -859,8 +713,6 @@ hskill.damageGroup = function(options)
                     effect = options.effect,
                     damage = damage,
                     damageSrc = options.damageSrc,
-                    damageType = options.damageType,
-                    isFixed = options.isFixed,
                 })
                 if (type(options.extraInfluence) == "function") then
                     options.extraInfluence(eu)
