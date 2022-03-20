@@ -579,9 +579,7 @@ hevent_default_actions = {
             end
             hcache.set(u, CONST_CACHE.ITEM_USED .. itId, nil)
             --检测是否使用后自动消失，如果不是，次数补回1
-            if (perishable == false) then
-                hitem.setCharges(it, cj.GetItemCharges(it) + 1)
-            else
+            if (perishable == true) then
                 hitem.subProperty(u, itId, 1)
                 if (cj.GetItemCharges(it) <= 0) then
                     hitem.del(it)

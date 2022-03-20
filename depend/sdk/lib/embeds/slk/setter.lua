@@ -509,10 +509,6 @@ F6V_I = function(_v)
             _v.file = "Objects\\InventoryItems\\TreasureChest\\treasurechest.mdl"
         end
     end
-    -- 处理 _shadow
-    if (type(_v._shadow) ~= 'boolean') then
-        _v._shadow = false
-    end
     -- 处理文本
     F6S.i.description._attr(_v)
     F6S.i.description._remarks(_v)

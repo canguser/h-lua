@@ -308,7 +308,11 @@ hitem.create = function(options)
         return
     end
     if (options.charges == nil) then
-        options.charges = 1
+        local slkCharges = hslk.i2v(options.id, "uses")
+        if (slkCharges == "") then
+            slkCharges = nil
+        end
+        options.charges = slkCharges or 1
     end
     if (options.charges < 1) then
         return

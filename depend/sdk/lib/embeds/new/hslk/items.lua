@@ -2,7 +2,11 @@
 
 hslk_item({
     Name = "物理学圣剑",
+    Art = "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp",
     class = "Permanent",
+    uses = 2,
+    perishable = 1,
+    _cooldown = 1,
     _attr = _attr({
         attack_green = "+9876"
     })
