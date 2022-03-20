@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"sdk/lib"
 )
 
 func ProjectExist(sdkData lib.SdkData) bool {
-	fmt.Println(len(sdkData.Args))
 	if len(sdkData.Args) < 3 {
 		return false
 	}
