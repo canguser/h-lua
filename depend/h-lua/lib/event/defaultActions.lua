@@ -402,66 +402,7 @@ hevent_default_actions = {
                 cj.RemoveLocation(loc)
                 loc = nil
             end
-            if (orderId == 851983 or orderId == 851971 or orderId == 851986
-                or (lx ~= 1.11 and ly ~= 2.22 and lz ~= 3.33)) then
-                local mov1 = hcache.get(triggerUnit, CONST_CACHE.MOVING, 0)
-                if (mov1 == 0) then
-                    hcache.set(triggerUnit, CONST_CACHE.MOVING, 1)
-                    local x = math.floor(cj.GetUnitX(triggerUnit))
-                    local y = math.floor(cj.GetUnitY(triggerUnit))
-                    local step = 0
-                    htime.setInterval(0.25, function(curTimer)
-                        local mov2 = hcache.get(triggerUnit, CONST_CACHE.MOVING, 0)
-                        if (mov2 == 0) then
-                            curTimer.destroy()
-                            return
-                        end
-                        local tx = math.floor(cj.GetUnitX(triggerUnit))
-                        local ty = math.floor(cj.GetUnitY(triggerUnit))
-                        if (mov2 == 1) then
-                            -- 移动开始
-                            if (tx ~= x or ty ~= y) then
-                                hcache.set(triggerUnit, CONST_CACHE.MOVING, 2)
-                                hevent.triggerEvent(
-                                    triggerUnit,
-                                    CONST_EVENT.moveStart,
-                                    {
-                                        triggerUnit = triggerUnit,
-                                        targetLoc = cj.GetOrderPointLoc(),
-                                    }
-                                )
-                            else
-                                hcache.set(triggerUnit, CONST_CACHE.MOVING, 0)
-                            end
-                        elseif (mov2 == 2) then
-                            -- 移动ing
-                            step = step + 1
-                            hevent.triggerEvent(
-                                triggerUnit,
-                                CONST_EVENT.moving,
-                                {
-                                    triggerUnit = triggerUnit,
-                                    step = step,
-                                }
-                            )
-                            if (tx == x and ty == y) then
-                                -- 没位移，移动停止
-                                hcache.set(triggerUnit, CONST_CACHE.MOVING, 0)
-                                hevent.triggerEvent(
-                                    triggerUnit,
-                                    CONST_EVENT.moveStop,
-                                    {
-                                        triggerUnit = triggerUnit,
-                                    }
-                                )
-                            end
-                        end
-                        x = tx
-                        y = ty
-                    end)
-                end
-            elseif (orderId == 851993) then
-                hcache.set(triggerUnit, CONST_CACHE.MOVING, 0)
+            if (orderId == 851993) then
                 hevent.triggerEvent(
                     triggerUnit,
                     CONST_EVENT.holdOn,
@@ -470,7 +411,6 @@ hevent_default_actions = {
                     }
                 )
             elseif (orderId == 851972) then
-                hcache.set(triggerUnit, CONST_CACHE.MOVING, 0)
                 hevent.triggerEvent(
                     triggerUnit,
                     CONST_EVENT.stop,

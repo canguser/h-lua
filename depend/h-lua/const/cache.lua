@@ -6,7 +6,6 @@ CONST_CACHE = {
     ATTR_BE_DAMAGING_TIMER = "c-is-be-damaging-t",
     ATTR_DAMAGING = "c-is-damaging",
     ATTR_DAMAGING_TIMER = "c-is-damaging-t",
-    MOVING = "c-moving",
     PLAYER = "c-p-",
     PLAYER_APM = "c-p-apm",
     PLAYER_STATUS = "c-p-status",
