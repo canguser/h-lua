@@ -263,20 +263,6 @@ hunit.z = function(u)
     return hjapi.GetZ(cj.GetUnitX(u), cj.GetUnitY(u))
 end
 
---- 单位启用硬直（启用后硬直属性才有效）
----@param u userdata
-hunit.enablePunish = function(u)
-    hcache.set(u, CONST_CACHE.UNIT_PUNISH, true)
-    hmonitor.listen(CONST_MONITOR.PUNISH, u)
-end
-
---- 单位停用硬直（停用硬直属性无效）
----@param u userdata
-hunit.disablePunish = function(u)
-    hcache.set(u, CONST_CACHE.UNIT_PUNISH, false)
-    hmonitor.ignore(CONST_MONITOR.PUNISH, u)
-end
-
 --- 设置单位无敌
 ---@param u userdata
 ---@param flag boolean
@@ -540,7 +526,6 @@ end
         attackY = nil, --攻击Y，可选
         attackUnit = nil, --攻击单位，可选
         isOpenSlot = false, --是否开启物品栏(自动注册)可选
-        isOpenPunish = false, --是否开启硬直系统，可选
         isShadow = false, --是否影子，可选
         isUnSelectable = false, --是否不可鼠标选中，可选
         isPause = false, -- 是否暂停
@@ -661,10 +646,6 @@ hunit.create = function(options)
         end
         if (options.register == true) then
             hunit.embed(u, options)
-        end
-        --开启硬直，执行硬直计算
-        if (options.isOpenPunish ~= nil and options.isOpenPunish == true) then
-            hunit.enablePunish(u)
         end
         -- 生命周期 dead
         if (options.period ~= nil and options.period > 0) then

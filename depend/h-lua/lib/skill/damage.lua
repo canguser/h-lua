@@ -23,7 +23,6 @@ end
         effect = nil, --伤害特效
         damageSrc = "unknown", --伤害来源请查看 CONST_DAMAGE_SRC
         damageType = { "common" }, --伤害类型请查看 CONST_DAMAGE_TYPE
-        breakArmorType = {} --破防(无视防御)类型请查看 CONST_BREAK_ARMOR_TYPE
         isFixed = false, --是否固定伤害，伤害在固定下(无视类型、护甲、魔抗、自然、增幅、减伤)不计算，而自然虽然不影响伤害，但会有自然效果
     }
 ]]
@@ -61,15 +60,12 @@ hskill.damage = function(options)
     -- 最终伤害
     local lastDamage = 0
     local lastDamagePercent = 0.0
-    -- 僵直计算
-    local punishEffectRatio = 0
     -- 是否固伤
     local isFixed = false
     if (type(options.isFixed) == "boolean") then
         isFixed = options.isFixed
     end
     -- 文本显示
-    local breakArmorType = options.breakArmorType or {}
     local damageString = options.damageString or ""
     local damageRGB = options.damageRGB or { 255, 255, 255 }
     local effect = options.effect
@@ -90,34 +86,7 @@ hskill.damage = function(options)
     else
         damageSrc = CONST_DAMAGE_SRC.unknown
     end
-    local ignores = { "defend", "avoid", "invincible", "enchant" }
     local ignore = { defend = false, avoid = false, invincible = false, enchant = false }
-    if (isFixed == false) then
-        -- 判断无视装甲类型
-        if (breakArmorType ~= nil and #breakArmorType > 0) then
-            damageString = damageString .. "无视"
-            for _, ig in ipairs(ignores) do
-                if (table.includes(breakArmorType, ig)) then
-                    damageString = damageString .. CONST_BREAK_ARMOR_TYPE[ig].label
-                    damageRGB = CONST_BREAK_ARMOR_TYPE[ig].rgb
-                    ignore[ig] = true
-                    speed = CONST_MODEL_TTG_SPD.ignores
-                end
-            end
-            -- @触发无视防御事件
-            hevent.triggerEvent(sourceUnit, CONST_EVENT.breakArmor, {
-                triggerUnit = sourceUnit,
-                targetUnit = targetUnit,
-                breakType = breakArmorType
-            })
-            -- @触发被无视防御事件
-            hevent.triggerEvent(targetUnit, CONST_EVENT.beBreakArmor, {
-                triggerUnit = targetUnit,
-                sourceUnit = sourceUnit,
-                breakType = breakArmorType
-            })
-        end
-    end
     -- 计算单位是否无敌（无敌属性为百分比计算，被动触发抵挡一次）
     if (his.invincible(targetUnit) == true or math.random(1, 100) < hattribute.get(targetUnit, "invincible")) then
         if (ignore.invincible == false) then
@@ -151,15 +120,6 @@ hskill.damage = function(options)
             damageTypeRatio[dt] = 0
         end
         damageTypeRatio[dt] = damageTypeRatio[dt] + damageTypeRatioPiece
-    end
-    -- 计算硬直抵抗
-    punishEffectRatio = 0.99
-    local punishOppose = hattribute.get(targetUnit, "punish_oppose")
-    if (punishOppose > 0) then
-        punishEffectRatio = punishEffectRatio - punishOppose * 0.01
-        if (punishEffectRatio < 0.100) then
-            punishEffectRatio = 0.100
-        end
     end
     -- 护甲>0,如果无视护甲，补回伤害
     -- 护甲<=0,忽略,负护甲增伤可不处理
@@ -324,9 +284,6 @@ hskill.damage = function(options)
                 t.destroy()
                 hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
                 hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
-                if (his.enablePunish(targetUnit)) then
-                    hmonitor.listen(CONST_MONITOR.PUNISH, targetUnit)
-                end
             end)
         )
         local targetPlayer = hunit.getOwner(targetUnit)
@@ -649,44 +606,6 @@ hskill.damage = function(options)
                 )
             end
         end
-        -- 硬直
-        local punishDuring = 5.00
-        if (lastDamage > 1 and his.alive(targetUnit) and his.punish(targetUnit) == false and his.enablePunish(targetUnit)) then
-            local cutVal = lastDamage * 1
-            local isCut = hattribute.get(targetUnit, "punish_current") - cutVal <= 0
-            hattribute.set(targetUnit, 0, {
-                punish_current = "-" .. cutVal
-            })
-            if (isCut and his.deleted(targetUnit) == false) then
-                hcache.set(targetUnit, CONST_CACHE.ATTR_PUNISHING, true)
-                hunit.setRGBA(targetUnit, 77, 77, 77, 1, punishDuring)
-                htime.setTimeout(punishDuring + 1, function(t)
-                    t.destroy()
-                    hattribute.set(targetUnit, 0, { punish_current = "=" .. hattribute.get(targetUnit, "punish") })
-                    hcache.set(targetUnit, CONST_CACHE.ATTR_PUNISHING, false)
-                end)
-                local punishEffectAttackSpeed = (100 + hattribute.get(targetUnit, "attack_speed")) * punishEffectRatio
-                local punishEffectMove = hattribute.get(targetUnit, "move") * punishEffectRatio
-                if (punishEffectAttackSpeed < 1) then
-                    punishEffectAttackSpeed = 1
-                end
-                if (punishEffectMove < 1) then
-                    punishEffectMove = 1
-                end
-                hattribute.set(targetUnit, punishDuring, {
-                    attack_speed = "-" .. punishEffectAttackSpeed,
-                    move = "-" .. punishEffectMove
-                })
-                htextTag.model({ msg = "僵直", whichUnit = targetUnit, red = 192, green = 192, blue = 192 })
-                -- @触发硬直事件
-                hevent.triggerEvent(targetUnit, CONST_EVENT.punish, {
-                    triggerUnit = targetUnit,
-                    sourceUnit = sourceUnit,
-                    percent = punishEffectRatio * 100,
-                    during = punishDuring
-                })
-            end
-        end
         -- 反伤
         if (sourceUnit ~= nil and his.invincible(sourceUnit) == false) then
             local targetUnitDamageRebound = hattribute.get(targetUnit, "damage_rebound") - hattribute.get(sourceUnit, "damage_rebound_oppose")
@@ -841,7 +760,6 @@ hskill.damageRange = function(options)
                 damageSrc = options.damageSrc,
                 damageType = options.damageType,
                 damageRGB = options.damageRGB,
-                breakArmorType = options.breakArmorType,
                 isFixed = options.isFixed,
             })
             if (type(options.extraInfluence) == "function") then
@@ -873,7 +791,6 @@ hskill.damageRange = function(options)
                     damageSrc = options.damageSrc,
                     damageType = options.damageType,
                     damageRGB = options.damageRGB,
-                    breakArmorType = options.breakArmorType,
                     isFixed = options.isFixed,
                 })
                 if (type(options.extraInfluence) == "function") then

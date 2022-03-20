@@ -131,9 +131,6 @@ hevent_default_actions = {
                 agi_white = "=" .. cj.GetHeroAgi(u, false),
                 int_white = "=" .. cj.GetHeroInt(u, false),
             })
-            if (his.enablePunish(u)) then
-                hmonitor.listen(CONST_MONITOR.PUNISH, u)
-            end
         end),
         reborn = function(u, rebornSec)
             local x = hunit.x(u)
@@ -310,7 +307,6 @@ hevent_default_actions = {
                 end
                 local isAttack = hjapi.isEventAttackDamage() or true
                 local isPhysical = hjapi.isEventPhysicalDamage() or true
-                local DType = cj.ConvertAttackType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_DAMAGE_TYPE))
                 htime.setTimeout(0, function(t)
                     t.destroy()
                     if (isLethal == true) then
@@ -321,7 +317,6 @@ hevent_default_actions = {
                     end
                     local damageSrc = CONST_DAMAGE_SRC.attack
                     local damageType
-                    local breakArmorType = {}
                     local isFixed = false
                     if (false == isAttack) then
                         --- [非攻击]->[技能伤害]
@@ -331,47 +326,12 @@ hevent_default_actions = {
                             damageType = { CONST_DAMAGE_TYPE.physical }
                         end
                     end
-                    if (DType == DAMAGE_TYPE_ENHANCED) then
-                        --- [强化]->[固伤]
-                        isFixed = true
-                    elseif (DType == DAMAGE_TYPE_DEMOLITION) then
-                        --- [破坏]->[破防:无视回避]
-                        breakArmorType = { CONST_BREAK_ARMOR_TYPE.avoid }
-                    elseif (DType == DAMAGE_TYPE_MAGIC) then
-                        --- [魔法]->[魔法]
-                        damageType = { CONST_DAMAGE_TYPE.magic }
-                    elseif (DType == DAMAGE_TYPE_POISON or DType == DAMAGE_TYPE_SLOW_POISON or DType == DAMAGE_TYPE_SHADOW_STRIKE or DType == DAMAGE_TYPE_ACID) then
-                        --- [毒药|慢性毒药|暗影突袭|酸性]->[毒]
-                        damageType = { CONST_DAMAGE_TYPE.poison }
-                    elseif (DType == DAMAGE_TYPE_FIRE) then
-                        --- [火焰]->[火]
-                        damageType = { CONST_DAMAGE_TYPE.fire }
-                    elseif (DType == DAMAGE_TYPE_COLD) then
-                        --- [冰冻]->[冰]
-                        damageType = { CONST_DAMAGE_TYPE.ice }
-                    elseif (DType == DAMAGE_TYPE_LIGHTNING) then
-                        --- [闪电]->[雷]
-                        damageType = { CONST_DAMAGE_TYPE.thunder }
-                    elseif (DType == DAMAGE_TYPE_PLANT) then
-                        --- [植物]->[木]
-                        damageType = { CONST_DAMAGE_TYPE.wood }
-                    elseif (DType == DAMAGE_TYPE_DISEASE) then
-                        --- [疾病]->[邪]
-                        damageType = { CONST_DAMAGE_TYPE.evil }
-                    elseif (DType == DAMAGE_TYPE_DEATH) then
-                        --- [死亡]->[鬼]
-                        damageType = { CONST_DAMAGE_TYPE.ghost }
-                    elseif (DType == DAMAGE_TYPE_DIVINE) then
-                        --- [神圣]->[圣]
-                        damageType = { CONST_DAMAGE_TYPE.holy }
-                    end
                     hskill.damage({
                         sourceUnit = sourceUnit,
                         targetUnit = targetUnit,
                         damage = damage,
                         damageSrc = damageSrc,
                         damageType = damageType,
-                        breakArmorType = breakArmorType,
                         isFixed = isFixed,
                     })
                 end)

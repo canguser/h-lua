@@ -46,13 +46,6 @@ F6V_I_CD = function(_v)
     return cdID
 end
 
-F6V_I_SHADOW = function(_v)
-    _v._parent = "gold"
-    _v._class = "item"
-    _v._type = "shadow"
-    return _v
-end
-
 F6V_I = function(_v)
     _v._class = "item"
     _v._type = _v._type or "common"

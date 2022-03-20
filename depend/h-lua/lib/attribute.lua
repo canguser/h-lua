@@ -6,7 +6,7 @@ hattribute = {
             "life", "mana", "move", "attack_white", "attack_green",
             "attack_range", "attack_range_acquire",
             "defend_white", "defend_green",
-            "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green", "punish"
+            "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green"
         },
     },
     ---@private
@@ -237,23 +237,6 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
                     hmonitor.listen(CONST_MONITOR[string.upper(attr)], whichUnit)
                 else
                     hmonitor.ignore(CONST_MONITOR[string.upper(attr)], whichUnit)
-                end
-            elseif (attr == "punish" and his.enablePunish(whichUnit)) then
-                -- 硬直
-                if (currentVal > 0) then
-                    local punishCurrent = params.punish_current or 0
-                    if (punishCurrent > futureVal) then
-                        params.punish_current = futureVal
-                    end
-                else
-                    params.punish_current = futureVal
-                end
-            elseif (attr == "punish_current" and his.enablePunish(whichUnit)) then
-                -- 硬直(current)
-                if (futureVal <= 0) then
-                    params.punish_current = 0
-                elseif (futureVal < (params.punish or 0)) then
-                    hmonitor.listen(CONST_MONITOR.PUNISH, whichUnit)
                 end
             end
         end

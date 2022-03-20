@@ -23,14 +23,14 @@ _upgrade = function(_v)
     return _v
 end
 
----@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,avoid,aim,punish,punish_current,hemophagia,hemophagia_skill,damage_extent,damage_reduction,damage_decrease,damage_rebound,damage_rebound_oppose,cure,reborn,knocking_odds,knocking_extent,knocking_oppose,hemophagia_oppose,hemophagia_skill_oppose,buff_oppose,debuff_oppose,split_oppose,punish_oppose,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,fetter_oppose,bomb_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
+---@alias pilotAttr {disabled,life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,avoid,aim,hemophagia,hemophagia_skill,damage_extent,damage_reduction,damage_decrease,damage_rebound,damage_rebound_oppose,cure,reborn,knocking_odds,knocking_extent,knocking_oppose,hemophagia_oppose,hemophagia_skill_oppose,buff_oppose,debuff_oppose,split_oppose,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,fetter_oppose,bomb_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
 ---@param _v pilotAttr
 _attr = function(_v)
     return _v
 end
 
----@alias pilotUnitCreate {register,registerOrderEvent,whichPlayer,id,x,y,height,timeScale,modelScale,red,green,blue,opacity,qty,period,during,facing,facingX,facingY,facingUnit,attackX,attackY,attackUnit,isOpenSlot,isOpenPunish,isShadow,isUnSelectable,isPause,isInvulnerable,isShareSight,attr}
----@alias pilotEnemyCreate {teamNo,register,registerOrderEvent,id,x,y,height,timeScale,modelScale,red,green,blue,opacity,qty,period,during,facing,facingX,facingY,facingUnit,attackX,attackY,attackUnit,isOpenSlot,isOpenPunish,isShadow,isUnSelectable,isPause,isInvulnerable,isShareSight,attr}
+---@alias pilotUnitCreate {register,registerOrderEvent,whichPlayer,id,x,y,height,timeScale,modelScale,red,green,blue,opacity,qty,period,during,facing,facingX,facingY,facingUnit,attackX,attackY,attackUnit,isOpenSlot,isShadow,isUnSelectable,isPause,isInvulnerable,isShareSight,attr}
+---@alias pilotEnemyCreate {teamNo,register,registerOrderEvent,id,x,y,height,timeScale,modelScale,red,green,blue,opacity,qty,period,during,facing,facingX,facingY,facingUnit,attackX,attackY,attackUnit,isOpenSlot,isShadow,isUnSelectable,isPause,isInvulnerable,isShareSight,attr}
 ---@alias pilotWeatherCreate {x,y,w,h,whichRect,type,during}
 ---@alias pilotRectLock {type,during,width,height,lockRect,lockUnit,lockX,lockY}
 ---@alias pilotQuestCreate {side:"位置",title:"标题",content:"内容",icon:"图标",during:"持续时间"}
@@ -38,9 +38,9 @@ end
 ---@alias pilotHeroBuildSelector {heroes,during,type,buildX,buildY,buildDistance,buildRowQty,tavernId,tavernUnitQty,onUnitSell,direct}
 ---@alias pilotEnchantAppend {targetUnit,sourceUnit,enchants,during}
 ---@alias pilotDialogCreate {title,buttons}
----@alias pilotDamage {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc,damageType,breakArmorType,isFixed}
----@alias pilotDamageStep {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc,damageType,breakArmorType,isFixed,frequency,times,extraInfluence}
----@alias pilotDamageRange {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,effectSingle,damageSrc,damageType,breakArmorType,isFixed,radius,frequency,times,extraInfluence}
+---@alias pilotDamage {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc,damageType,isFixed}
+---@alias pilotDamageStep {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,damageSrc,damageType,isFixed,frequency,times,extraInfluence}
+---@alias pilotDamageRange {sourceUnit,targetUnit,damage,damageString,damageRGB,effect,effectSingle,damageSrc,damageType,isFixed,radius,frequency,times,extraInfluence}
 ---@alias pilotKnocking {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc,damageType,isFixed}
 ---@alias pilotSplit {radius,sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc,damageType,isFixed}
 ---@alias pilotBroken {sourceUnit,targetUnit,damage,odds,percent,effect,damageSrc,damageType,isFixed}

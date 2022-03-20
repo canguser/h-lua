@@ -719,15 +719,6 @@ hevent.onBeSkillSiphon = function(whichUnit, callFunc)
     return hevent.registerEvent(whichUnit, CONST_EVENT.beSkillSiphon, callFunc)
 end
 
---- 硬直时
----@alias onPunish fun(evtData: {triggerUnit:"触发单位",sourceUnit:"来源单位",during:"持续时间",percent:"硬直程度百分比"}):void
----@param whichUnit userdata
----@param callFunc onPunish | "function(evtData) end"
----@return any
-hevent.onPunish = function(whichUnit, callFunc)
-    return hevent.registerEvent(whichUnit, CONST_EVENT.punish, callFunc)
-end
-
 --- 死亡时
 ---@alias onDead fun(evtData: {triggerUnit:"死亡单位",killUnit:"凶手单位"}):void
 ---@param whichUnit userdata

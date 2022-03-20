@@ -2,5 +2,4 @@
 CONST_MONITOR = {
     LIFE_BACK = "mon-life-back",
     MANA_BACK = "mon-mana-back",
-    PUNISH = "mon-punish",
 }

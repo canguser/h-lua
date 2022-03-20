@@ -54,8 +54,6 @@ ATTR_CONFIGURATOR({
     { "mana_back", "魔法恢复", 0 },
     { "avoid", "回避", 0 },
     { "aim", "命中", 0 },
-    { "punish", "僵直", 0 },
-    { "punish_current", "当前僵直", 0 },
     { "hemophagia", "吸血", 0 }, --(%)
     { "hemophagia_skill", "技能吸血", 0 }, --(%)
     { "siphon", "吸魔", 0 }, --(%)
@@ -77,7 +75,6 @@ ATTR_CONFIGURATOR({
     { "buff_oppose", "强化阻碍", 0 },
     { "debuff_oppose", "负面抵抗", 0 },
     { "split_oppose", "分裂抵抗", 0 },
-    { "punish_oppose", "僵直抵抗", 0 },
     { "swim_oppose", "眩晕抵抗", 0 },
     { "broken_oppose", "打断抵抗", 0 },
     { "silent_oppose", "沉默抵抗", 0 },

@@ -198,25 +198,6 @@ hmonitor.create(CONST_MONITOR.MANA_BACK, 0.7,
     end
 )
 
--- 硬直监听器（没收到伤害时,每1秒恢复3%硬直）
-hmonitor.create(CONST_MONITOR.PUNISH, 1,
-    function(object)
-        local punish_current = hattribute.get(object, "punish_current")
-        local punish = hattribute.get(object, "punish")
-        local val = math.floor(0.03 * punish)
-        if (punish_current + val > punish) then
-            hattribute.set(object, 0, { punish_current = "=" .. punish })
-        else
-            hattribute.set(object, 0, { punish_current = "+" .. val })
-        end
-    end,
-    function(object)
-        local punish_current = hattribute.get(object, "punish_current")
-        local punish = hattribute.get(object, "punish")
-        return punish_current >= punish or his.dead(object) or his.deleted(object) or his.beDamaging(object) or his.enablePunish(object) == false
-    end
-)
-
 -- 沉默
 local silentTrigger = cj.CreateTrigger()
 cj.TriggerAddAction(silentTrigger, function()

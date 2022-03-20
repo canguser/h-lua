@@ -475,21 +475,6 @@ F6V_I_CD = function(_v)
     return cdID
 end
 
-F6V_I_SHADOW = function(_v)
-    _v._parent = "gold"
-    _v._class = "item"
-    _v._type = "shadow"
-    _v.Name = "　" .. _v.Name .. "　"
-    _v.class = "Charged"
-    _v.abilList = ""
-    _v.cooldownID = "AIat"
-    _v.ignoreCD = 1
-    _v.perishable = 1
-    _v.usable = 1
-    _v.powerup = 1
-    return _v
-end
-
 F6V_I = function(_v)
     _v._class = "item"
     _v._type = _v._type or "common"
