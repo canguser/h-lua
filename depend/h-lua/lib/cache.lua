@@ -1,12 +1,6 @@
 ---@class cache
 hcache = { _c_ = {}, _p_ = {} }
 
----@protected
----@return number
-hcache.len = function()
-    return table.len(hcache._c_)
-end
-
 ---@param handle any
 ---@param key any
 ---@return boolean
@@ -26,7 +20,7 @@ end
 ---@param handle any
 hcache.alloc = function(handle)
     if (handle == nil) then
-        print_stack()
+        stack()
         return
     end
     if (hcache._c_[handle] == nil) then

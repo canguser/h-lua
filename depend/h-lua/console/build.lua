@@ -7,19 +7,16 @@ JassRuntime.debugger = 4279
 JassRuntime.error_handle = function(msg)
     print("========lua-err========")
     print(tostring(msg))
-    print_stack()
+    stack()
     print("=========================")
 end
 JassDebug = require "jass.debug"
 JassConsole = require "jass.console"
 
-local hPrint = print
-print = function(...)
-    hPrint(...)
-end
+print = function(...) JassConsole.write(...) end
 
 --- 打印栈
-print_stack = function(...)
+function stack(...)
     local out = { "[TRACE]" }
     local n = select("#", ...)
     for i = 1, n, 1 do
@@ -31,69 +28,80 @@ print_stack = function(...)
     print(table.concat(out, " "))
 end
 
---- 打印utf8->ansi编码,此方法可以打印出中文
-print_mb = function(...)
-    JassConsole.write(...)
-end
-
---- 错误调试
-print_err = function(val)
-    print("========h-lua-err========")
-    if (type(val) == "table") then
-        print_mbr(val)
-    else
-        print_mb(val)
+--- 输出详尽内容
+---@param value any 输出的table
+---@param description string 调试信息格式
+---@param nesting number 输出时的嵌套层级，默认为 10
+function dump(value, description, nesting)
+    if type(nesting) ~= "number" then nesting = 10 end
+    local lookup = {}
+    local result = {}
+    local traceback = string.explode("\n", debug.traceback("", 2))
+    local str = "- dump from: " .. string.trim(traceback[3])
+    local _format = function(v)
+        if type(v) == "string" then
+            v = "\"" .. v .. "\""
+        end
+        return tostring(v)
     end
-    print_stack()
-    print("=========================")
-end
-
---- 打印对象table
----@param showDetail boolean
-print_r = function(t, printMethod, showDetail)
-    local print_r_cache = {}
-    printMethod = printMethod or print
-    if (showDetail == nil) then
-        showDetail = true
-    end
-    local function sub_print_r(tt, indent)
-        if (print_r_cache[tostring(tt)]) then
-            printMethod(indent .. "*" .. tostring(tt))
+    local _dump
+    _dump = function(val, desc, indent, nest, keyLen)
+        desc = desc or "<var>"
+        local spc = ""
+        if type(keyLen) == "number" then
+            spc = string.rep(" ", keyLen - string.len(_format(desc)))
+        end
+        if type(val) ~= "table" then
+            result[#result + 1] = string.format("%s%s%s = %s", indent, _format(desc), spc, _format(val))
+        elseif lookup[tostring(val)] then
+            result[#result + 1] = string.format("%s%s%s = *REF*", indent, _format(desc), spc)
         else
-            print_r_cache[tostring(tt)] = true
-            if (type(tt) == "table") then
-                for pos, val in pairs(tt) do
-                    if (type(pos) == "userdata") then
-                        pos = "userdata"
-                    end
-                    if (type(val) == "table") then
-                        printMethod(indent .. "[" .. pos .. "](" .. table.len(val) .. ") => " .. tostring(tt) .. " {")
-                        sub_print_r(val, indent .. string.rep(" ", string.len(pos) + 8))
-                        printMethod(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-                    elseif (showDetail == true) then
-                        if (type(val) == "string") then
-                            printMethod(indent .. "[" .. pos .. '] => <string>"' .. val .. '"')
-                        else
-                            printMethod(indent .. "[" .. pos .. "] => " .. "<" .. type(val) .. ">" .. tostring(val))
-                        end
+            lookup[tostring(val)] = true
+            if nest > nesting then
+                result[#result + 1] = string.format("%s%s = *MAX NESTING*", indent, _format(desc))
+            else
+                result[#result + 1] = string.format("%s%s = {", indent, _format(desc))
+                local indent2 = indent .. "    "
+                local keys = {}
+                local kl = 0
+                local vs = {}
+                for k, v in pairs(val) do
+                    if k ~= "___message" then
+                        keys[#keys + 1] = k
+                        local vk = _format(k)
+                        local vkl = string.len(vk)
+                        if vkl > kl then kl = vkl end
+                        vs[k] = v
                     end
                 end
-            else
-                printMethod(indent .. "<" .. type(tt) .. ">" .. tostring(tt))
+                table.sort(keys, function(a, b)
+                    if type(a) == "number" and type(b) == "number" then
+                        return a < b
+                    else
+                        return tostring(a) < tostring(b)
+                    end
+                end)
+                for _, k in ipairs(keys) do
+                    _dump(vs[k], k, indent2, nest + 1, kl)
+                end
+                result[#result + 1] = string.format("%s}", indent)
             end
         end
     end
-    if (type(t) == "table") then
-        printMethod(tostring(t) .. "(" .. table.len(t) .. ") {")
-        sub_print_r(t, "  ")
-        print("}")
-    else
-        sub_print_r(t, "  ")
-    end
-    print()
+    _dump(value, description, " ", 1)
+    str = str .. "\n" .. table.concat(result, "\n")
+    print(str)
 end
 
---- 打印对象table,此方法可以打印出中文
-print_mbr = function(t)
-    print_r(t, print_mb, true)
+--- 错误调试
+---@param val any
+function err(val)
+    print("=========sl-err=========")
+    if (type(val) == "table") then
+        dump(val)
+    else
+        print(val)
+    end
+    stack()
+    print("=========================")
 end

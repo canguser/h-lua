@@ -1,13 +1,9 @@
 DEBUGGING = false
 print = function(...)
 end
-print_stack = function(...)
+stack = function(...)
 end
-print_mb = function(...)
+dump = function(value, description, nesting)
 end
-print_err = function(val)
-end
-print_r = function(t, printMethod, showDetail)
-end
-print_mbr = function(t)
+err = function(val)
 end

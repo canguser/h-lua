@@ -151,7 +151,7 @@ end
 ---@param eventId any
 hevent.deleteEvent = function(handle, key, eventId)
     if (handle == nil or key == nil or eventId == nil) then
-        print_stack()
+        stack()
         return
     end
     local register = hcache.get(handle, CONST_CACHE.EVENT_REGISTER)

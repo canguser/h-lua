@@ -17,7 +17,7 @@ hjapi.echo = function(msg)
     if (hjapi._tips[msg] == nil) then
         hjapi._tips[msg] = 1
         if (DEBUGGING) then
-            print_mb("<JAPI> " .. msg)
+            print("<JAPI> " .. msg)
         else
             echo("<JAPI> " .. msg)
         end

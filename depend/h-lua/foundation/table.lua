@@ -1,17 +1,4 @@
--- 大部分方法不再支持pairs，会引起异步
-
---- 获取一个table的正确长度
---- 不建议使用，在不同的lua引擎可能会引起异步，但却没法保证平台提供的引擎是否可靠
----@protected
----@param table table
----@return number
-table.len = function(table)
-    local len = 0
-    for _, _ in pairs(table) do
-        len = len + 1
-    end
-    return len
-end
+-- 大部分方法不支持pairs，会引起异步
 
 --- 随机在数组内取一个
 ---@param arr table

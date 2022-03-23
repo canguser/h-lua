@@ -1,29 +1,5 @@
----
---- 记录运行时间rem方法。只有key1时为记录，有key2时会打印对应记录间的差值，如：
---- **rem("a") --1**
---- rem("b") --2
---- rem("c") --4
---- print rem("a","b") =1
---- print rem("a","c") =3
-rem = function(key1, key2)
-    if (type(key1) ~= "string") then
-        return
-    end
-    if (key2 ~= nil and type(key2) ~= "string") then
-        return
-    end
-    if (remStack == nil) then
-        remStack = {}
-    end
-    remStack[key1] = os.clock()
-    if (key2 ~= nil) then
-        remStack[key2] = os.clock()
-        print("[rem " .. key1 .. "->" .. key2 .. "]:" .. remStack[key2] - remStack[key1])
-    end
-end
-
 --- 打印栈
-print_stack = function(...)
+function stack(...)
     local out = { "[TRACE]" }
     local n = select("#", ...)
     for i = 1, n, 1 do
@@ -35,39 +11,67 @@ print_stack = function(...)
     print(table.concat(out, " "))
 end
 
-print_r = function(t)
-    local print_r_cache = {}
-    local function sub_print_r(tt, indent)
-        if (print_r_cache[tostring(tt)]) then
-            print(indent .. "*" .. tostring(tt))
+--- 输出详尽内容
+---@param value any 输出的table
+---@param description string 调试信息格式
+---@param nesting number 输出时的嵌套层级，默认为 10
+function dump(value, description, nesting)
+    if type(nesting) ~= "number" then nesting = 10 end
+    local lookup = {}
+    local result = {}
+    local traceback = string.explode("\n", debug.traceback("", 2))
+    local str = "- dump from: " .. string.trim(traceback[3])
+    local _format = function(v)
+        if type(v) == "string" then
+            v = "\"" .. v .. "\""
+        end
+        return tostring(v)
+    end
+    local _dump
+    _dump = function(val, desc, indent, nest, keyLen)
+        desc = desc or "<var>"
+        local spc = ""
+        if type(keyLen) == "number" then
+            spc = string.rep(" ", keyLen - string.len(_format(desc)))
+        end
+        if type(val) ~= "table" then
+            result[#result + 1] = string.format("%s%s%s = %s", indent, _format(desc), spc, _format(val))
+        elseif lookup[tostring(val)] then
+            result[#result + 1] = string.format("%s%s%s = *REF*", indent, _format(desc), spc)
         else
-            print_r_cache[tostring(tt)] = true
-            if (type(tt) == "table") then
-                for pos, val in pairs(tt) do
-                    if (type(pos) == "userdata") then
-                        pos = "userdata"
-                    end
-                    if (type(val) == "table") then
-                        print(indent .. "[" .. pos .. "](" .. table.len(val) .. ") => " .. tostring(tt) .. " {")
-                        sub_print_r(val, indent .. string.rep(" ", string.len(pos) + 8))
-                        print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
-                    elseif (type(val) == "string") then
-                        print(indent .. "[" .. pos .. '] => <string>"' .. val .. '"')
-                    else
-                        print(indent .. "[" .. pos .. "] => " .. "<" .. type(val) .. ">" .. tostring(val))
+            lookup[tostring(val)] = true
+            if nest > nesting then
+                result[#result + 1] = string.format("%s%s = *MAX NESTING*", indent, _format(desc))
+            else
+                result[#result + 1] = string.format("%s%s = {", indent, _format(desc))
+                local indent2 = indent .. "    "
+                local keys = {}
+                local kl = 0
+                local vs = {}
+                for k, v in pairs(val) do
+                    if k ~= "___message" then
+                        keys[#keys + 1] = k
+                        local vk = _format(k)
+                        local vkl = string.len(vk)
+                        if vkl > kl then kl = vkl end
+                        vs[k] = v
                     end
                 end
-            else
-                print(indent .. "<" .. type(tt) .. ">" .. tostring(tt))
+                table.sort(keys, function(a, b)
+                    if type(a) == "number" and type(b) == "number" then
+                        return a < b
+                    else
+                        return tostring(a) < tostring(b)
+                    end
+                end)
+                for _, k in ipairs(keys) do
+                    _dump(vs[k], k, indent2, nest + 1, kl)
+                end
+                result[#result + 1] = string.format("%s}", indent)
             end
         end
     end
-    if (type(t) == "table") then
-        print(tostring(t) .. "(" .. table.len(t) .. ") {")
-        sub_print_r(t, "  ")
-        print("}")
-    else
-        sub_print_r(t, "  ")
-    end
-    print()
+    _dump(value, description, " ", 1)
+    str = str .. "\n" .. table.concat(result, "\n")
+    print(str)
 end

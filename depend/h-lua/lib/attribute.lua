@@ -314,7 +314,7 @@ hattribute.set = function(whichUnit, during, data)
     if (whichUnit == nil) then
         -- 例如有时造成伤害之前把单位删除就捕捉不到这个伤害来源了
         -- 虽然这里直接返回不执行即可，但是提示下可以帮助完善业务的构成~
-        print_stack("whichUnit is nil")
+        stack("whichUnit is nil")
         return
     end
     local attribute = hattribute.get(whichUnit)
@@ -348,12 +348,12 @@ hattribute.set = function(whichUnit, during, data)
                 for _, set in ipairs(v.add) do
                     if (set == nil) then
                         print_err("table effect loss[set]!")
-                        print_stack()
+                        stack()
                         break
                     end
                     if (type(set) ~= "table") then
                         print_err("add type(set) must be a table!")
-                        print_stack()
+                        stack()
                         break
                     end
                     buffKey = hattribute.setHandle(whichUnit, attr, "+", set, during)
@@ -362,12 +362,12 @@ hattribute.set = function(whichUnit, during, data)
                 for _, set in ipairs(v.sub) do
                     if (set == nil) then
                         print_err("table effect loss[set]!")
-                        print_stack()
+                        stack()
                         break
                     end
                     if (type(set) ~= "table") then
                         print_err("sub type(set) must be a table!")
-                        print_stack()
+                        stack()
                         break
                     end
                     buffKey = hattribute.setHandle(whichUnit, attr, "-", set, during)

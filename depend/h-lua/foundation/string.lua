@@ -9,7 +9,7 @@ string.cache = {
 ---@return number
 string.char2id = function(idChar)
     if (idChar == nil or type(idChar) ~= "string") then
-        print_stack()
+        stack()
         return
     end
     local id = string.cache.char2id[idChar]
@@ -26,7 +26,7 @@ end
 ---@return string
 string.id2char = function(id)
     if (id == nil or type(id) ~= "number") then
-        print_stack()
+        stack()
         print(id)
         return
     end
@@ -380,4 +380,12 @@ string.random = function(n)
         s = s .. randChars[math.random(1, #randChars)]
     end
     return s
+end
+
+--- 移除字符串两侧的空白字符或其他预定义字符
+---@param str string
+---@return string
+function string.trim(str)
+    local res = string.gsub(str, "^%s*(.-)%s*$", "%1")
+    return res
 end

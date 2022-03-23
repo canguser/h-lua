@@ -180,11 +180,11 @@ json.null = {} -- This is a one-off table to represent the null value.
 function json.parse(str, pos, end_delim)
     pos = pos or 1
     if str == nil then
-        print_stack()
+        stack()
         error("json str is nil.")
     end
     if pos > #str then
-        print_stack()
+        stack()
         error("Reached unexpected end of input.")
     end
     local pos = pos + #str:match("^%s*", pos) -- Skip whitespace.
