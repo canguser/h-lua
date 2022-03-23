@@ -230,15 +230,15 @@ hskill.damageStep = function(options)
     local frequency = options.frequency or 0
     options.damage = options.damage or 0
     if (options.targetUnit == nil) then
-        print_err("hskill.damageStep:-targetUnit")
+        err("hskill.damageStep:-targetUnit")
         return
     end
     if (times <= 0 or options.damage <= 0) then
-        print_err("hskill.damageStep:-times -damage")
+        err("hskill.damageStep:-times -damage")
         return
     end
     if (times > 1 and frequency <= 0) then
-        print_err("hskill.damageStep:-frequency")
+        err("hskill.damageStep:-frequency")
         return
     end
     if (times <= 1) then
@@ -287,11 +287,11 @@ hskill.damageRange = function(options)
     local frequency = options.frequency or 0
     local damage = options.damage or 0
     if (radius <= 0 or times <= 0) then
-        print_err("hskill.damageRange:-radius -times")
+        err("hskill.damageRange:-radius -times")
         return
     end
     if (times > 1 and frequency <= 0) then
-        print_err("hskill.damageRange:-frequency")
+        err("hskill.damageRange:-frequency")
         return
     end
     local x, y
@@ -303,12 +303,12 @@ hskill.damageRange = function(options)
         y = hunit.y(options.whichUnit)
     end
     if (x == nil or y == nil) then
-        print_err("hskill.damageRange:-x -y")
+        err("hskill.damageRange:-x -y")
         return
     end
     local filter = options.filter
     if (type(filter) ~= "function") then
-        print_err("filter must be function")
+        err("filter must be function")
         return
     end
     if (options.effect ~= nil) then
@@ -387,11 +387,11 @@ hskill.damageGroup = function(options)
     local frequency = options.frequency or 0
     local damage = options.damage or 0
     if (options.whichGroup == nil) then
-        print_err("hskill.damageGroup:-whichGroup")
+        err("hskill.damageGroup:-whichGroup")
         return
     end
     if (times <= 0 or frequency < 0) then
-        print_err("hskill.damageGroup:-times -frequency")
+        err("hskill.damageGroup:-times -frequency")
         return
     end
     if (times <= 1) then

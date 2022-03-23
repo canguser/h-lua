@@ -304,7 +304,7 @@ end
 ---@return userdata|nil
 hitem.create = function(options)
     if (options.id == nil) then
-        print_err("hitem create -it-id")
+        err("hitem create -it-id")
         return
     end
     if (options.charges == nil) then
@@ -331,7 +331,7 @@ hitem.create = function(options)
         x = hunit.x(options.whichUnit)
         y = hunit.y(options.whichUnit)
     else
-        print_err("hitem create -position")
+        err("hitem create -position")
         return
     end
     if (type(id) == "string") then

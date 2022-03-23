@@ -41,7 +41,7 @@ end
 ---@return userdata
 hdialog.create = function(whichPlayer, options, action)
     if (#options.buttons <= 0) then
-        print_err("Dialog buttons is empty")
+        err("Dialog buttons is empty")
         return
     end
     local d = cj.DialogCreate()

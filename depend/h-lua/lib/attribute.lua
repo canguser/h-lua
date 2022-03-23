@@ -323,7 +323,7 @@ hattribute.set = function(whichUnit, during, data)
     end
     -- 处理data
     if (type(data) ~= "table") then
-        print_err("data must be table")
+        err("data must be table")
         return
     end
     local buffKeys = {}
@@ -347,13 +347,11 @@ hattribute.set = function(whichUnit, during, data)
             if (v.add ~= nil and type(v.add) == "table") then
                 for _, set in ipairs(v.add) do
                     if (set == nil) then
-                        print_err("table effect loss[set]!")
-                        stack()
+                        err("table effect loss[set]!")
                         break
                     end
                     if (type(set) ~= "table") then
-                        print_err("add type(set) must be a table!")
-                        stack()
+                        err("add type(set) must be a table!")
                         break
                     end
                     buffKey = hattribute.setHandle(whichUnit, attr, "+", set, during)
@@ -361,13 +359,11 @@ hattribute.set = function(whichUnit, during, data)
             elseif (v.sub ~= nil and type(v.sub) == "table") then
                 for _, set in ipairs(v.sub) do
                     if (set == nil) then
-                        print_err("table effect loss[set]!")
-                        stack()
+                        err("table effect loss[set]!")
                         break
                     end
                     if (type(set) ~= "table") then
-                        print_err("sub type(set) must be a table!")
-                        stack()
+                        err("sub type(set) must be a table!")
                         break
                     end
                     buffKey = hattribute.setHandle(whichUnit, attr, "-", set, during)

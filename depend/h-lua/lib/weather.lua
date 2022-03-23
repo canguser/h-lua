@@ -46,16 +46,16 @@ end
 hweather.create = function(options)
     if (options.whichRect == nil) then
         if (options.w == nil or options.h == nil or options.w <= 0 or options.h <= 0) then
-            print_err("hweather.create -w-h")
+            err("hweather.create -w-h")
             return nil
         end
         if (options.x == nil or options.y == nil) then
-            print_err("hweather.create -x-y")
+            err("hweather.create -x-y")
             return nil
         end
     end
     if (options.type == nil) then
-        print_err("hweather.create -type")
+        err("hweather.create -type")
         return nil
     end
     options.during = options.during or 0

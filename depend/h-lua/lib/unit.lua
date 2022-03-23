@@ -502,23 +502,23 @@ hunit.create = function(options)
         options.qty = 1
     end
     if (options.whichPlayer == nil) then
-        print_err("create unit fail -pl")
+        err("create unit fail -pl")
         return
     end
     if (options.id == nil) then
-        print_err("create unit fail -id")
+        err("create unit fail -id")
         return
     end
     if (options.qty <= 0) then
-        print_err("create unit fail -qty")
+        err("create unit fail -qty")
         return
     end
     if (options.x == nil or options.y == nil) then
-        print_err("create unit fail -place")
+        err("create unit fail -place")
         return
     end
     if (options.id == nil) then
-        print_err("create unit id")
+        err("create unit id")
         return
     end
     if (type(options.id) == "string") then

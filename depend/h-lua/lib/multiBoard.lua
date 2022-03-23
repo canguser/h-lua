@@ -46,7 +46,7 @@ hmultiBoard.create = function(key, refreshFrequency, yourData)
                     totalCol = #data[1]
                 end
                 if (totalRow <= 0 or totalCol <= 0) then
-                    print_err("Multiboard:-totalRow -totalCol")
+                    err("Multiboard:-totalRow -totalCol")
                     return
                 end
                 --设置行列数

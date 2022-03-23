@@ -410,11 +410,11 @@ end
 ---@param options pilotLightningChain
 hskill.lightningChain = function(options)
     if (options.damage == nil or options.damage <= 0) then
-        print_err("lightningChain -damage")
+        err("lightningChain -damage")
         return
     end
     if (options.targetUnit == nil) then
-        print_err("lightningChain -targetUnit")
+        err("lightningChain -targetUnit")
         return
     end
     if (his.deleted(options.targetUnit)) then
@@ -726,7 +726,7 @@ hskill.rangeSwim = function(options)
     local during = options.during or 0
     local damage = options.damage or 0
     if (radius <= 0 or during <= 0) then
-        print_err("hskill.rangeSwim:-radius -during")
+        err("hskill.rangeSwim:-radius -during")
         return
     end
     local odds = options.odds or 100
@@ -743,18 +743,18 @@ hskill.rangeSwim = function(options)
         y = hunit.y(options.targetUnit)
     end
     if (x == nil or y == nil) then
-        print_err("hskill.rangeSwim:-x -y")
+        err("hskill.rangeSwim:-x -y")
         return
     end
     local filter = options.filter
     if (type(filter) ~= "function") then
-        print_err("filter must be function")
+        err("filter must be function")
         return
     end
     heffect.toXY(effect, x, y, 0)
     local g = hgroup.createByXY(x, y, radius, filter)
     if (g == nil) then
-        print_err("rangeSwim has not target")
+        err("rangeSwim has not target")
         return
     end
     if (hgroup.count(g) <= 0) then
@@ -795,24 +795,24 @@ hskill.whirlwind = function(options)
     local during = options.during or 0
     local damage = options.damage or 0
     if (radius <= 0 or during <= 0 or frequency <= 0) then
-        print_err("hskill.whirlwind:-radius -during -frequency")
+        err("hskill.whirlwind:-radius -during -frequency")
         return
     end
     if (during < frequency) then
-        print_err("hskill.whirlwind:-during < frequency")
+        err("hskill.whirlwind:-during < frequency")
         return
     end
     if (damage < 0 or options.sourceUnit == nil) then
-        print_err("hskill.whirlwind:-damage -sourceUnit")
+        err("hskill.whirlwind:-damage -sourceUnit")
         return
     end
     if (options.filter == nil) then
-        print_err("hskill.whirlwind:-filter")
+        err("hskill.whirlwind:-filter")
         return
     end
     local filter = options.filter
     if (type(filter) ~= "function") then
-        print_err("filter must be function")
+        err("filter must be function")
         return
     end
     --不二次
@@ -897,18 +897,18 @@ end
 ---@param options pilotLeap
 hskill.leap = function(options)
     if (options.sourceUnit == nil) then
-        print_err("leap: -sourceUnit")
+        err("leap: -sourceUnit")
         return
     end
     if (type(options.filter) ~= "function") then
-        print_err("leap: -filter")
+        err("leap: -filter")
         return
     end
     if (options.arrowUnit == nil and options.tokenArrow == nil) then
-        print_err("leap: -not arrow")
+        err("leap: -not arrow")
     end
     if (options.targetUnit == nil and options.x == nil and options.y == nil) then
-        print_err("leap: -target")
+        err("leap: -target")
         return
     end
     if (options.targetUnit ~= nil and his.deleted(options.targetUnit)) then
@@ -964,7 +964,7 @@ hskill.leap = function(options)
         initFacing = math.getDegBetweenXY(hunit.x(prevUnit), hunit.y(prevUnit), options.x, options.y)
         distanceOrigin = math.getDistanceBetweenXY(hunit.x(prevUnit), hunit.y(prevUnit), options.x, options.y)
     else
-        print_err("leapType: -unknow")
+        err("leapType: -unknow")
         return
     end
     local repeatGroup
@@ -1178,7 +1178,7 @@ hskill.leapPaw = function(options)
     local qty = options.qty or 0
     local deg = options.deg or 15
     if (qty < 1) then
-        print_err("leapPaw: -qty")
+        err("leapPaw: -qty")
         return
     end
     if (qty == 1) then
@@ -1186,18 +1186,18 @@ hskill.leapPaw = function(options)
         return
     end
     if (options.sourceUnit == nil) then
-        print_err("leapPaw: -sourceUnit")
+        err("leapPaw: -sourceUnit")
         return
     end
     if (type(options.filter) ~= "function") then
-        print_err("leapPaw: -filter")
+        err("leapPaw: -filter")
         return
     end
     if (options.tokenArrow == nil) then
-        print_err("leapPaw: -not arrow")
+        err("leapPaw: -not arrow")
     end
     if (options.targetUnit == nil and options.x == nil and options.y == nil) then
-        print_err("leapPaw: -target")
+        err("leapPaw: -target")
         return
     end
     local x, y
