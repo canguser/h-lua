@@ -37,7 +37,6 @@ CONST_CACHE = {
     PLAYER_BGM_CURRENT = "c-p-bgm-current",
     PLAYER_BGM_DELAY_TIMER = "c-p-bgm-delay-t",
     BUFF = "c-buff",
-    BUFF_RGBA = "b-rgba",
     SKILL_SWIM = "c-sk-is-swim",
     SKILL_SWIM_TIMER = "c-sk-is-swim-t",
     SKILL_SILENT = "c-sk-is-silent",

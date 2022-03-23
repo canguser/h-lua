@@ -167,14 +167,10 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
                 if (diff < 0) then
                     groupKey = 'attr.' .. attr .. '-'
                 end
-                buffKey = hbuff.create(during, whichUnit, groupKey, diff,
-                    function()
-                        params[attr] = futureVal
-                    end,
-                    function()
-                        hattribute.setHandle(whichUnit, attr, "-", diff, 0)
-                    end
-                )
+                params[attr] = futureVal
+                htime.setTimeout(during, function()
+                    hattribute.setHandle(whichUnit, attr, "-", diff, 0)
+                end)
             else
                 params[attr] = futureVal
             end
@@ -239,14 +235,10 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
         if (opr == "+") then
             local _k = string.attrBuffKey(val)
             if (during > 0) then
-                buffKey = hbuff.create(during, whichUnit, 'attr.' .. attr .. '+', diff,
-                    function()
-                        table.insert(params[attr], { _k = _k, _t = val })
-                    end,
-                    function()
-                        hattribute.setHandle(whichUnit, attr, "-", val, 0)
-                    end
-                )
+                table.insert(params[attr], { _k = _k, _t = val })
+                htime.setTimeout(during, function()
+                    hattribute.setHandle(whichUnit, attr, "-", val, 0)
+                end)
             else
                 table.insert(params[attr], { _k = _k, _t = val })
             end
@@ -262,13 +254,9 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
             end
             if (hasKey == true) then
                 if (during > 0) then
-                    buffKey = hbuff.create(during, whichUnit, 'attr.' .. attr .. '-', diff,
-                        function()
-                        end,
-                        function()
-                            hattribute.setHandle(whichUnit, attr, "+", val, 0)
-                        end
-                    )
+                    htime.setTimeout(during, function()
+                        hattribute.setHandle(whichUnit, attr, "+", val, 0)
+                    end)
                 end
             end
         end
@@ -277,34 +265,24 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
         if (opr == "+") then
             local valArr = string.explode(",", val)
             if (during > 0) then
-                buffKey = hbuff.create(
-                    during, whichUnit, 'attr.' .. attr .. '+', diff,
-                    function()
-                        params[attr] = table.merge(params[attr], valArr)
-                    end,
-                    function()
-                        hattribute.setHandle(whichUnit, attr, "-", val, 0)
-                    end
-                )
+                params[attr] = table.merge(params[attr], valArr)
+                htime.setTimeout(during, function()
+                    hattribute.setHandle(whichUnit, attr, "-", val, 0)
+                end)
             else
                 params[attr] = table.merge(params[attr], valArr)
             end
         elseif (opr == "-") then
             local valArr = string.explode(",", val)
             if (during > 0) then
-                buffKey = hbuff.create(
-                    during, whichUnit, 'attr.' .. attr .. '-', diff,
-                    function()
-                        for _, v in ipairs(valArr) do
-                            if (table.includes(params[attr], v)) then
-                                table.delete(params[attr], v, 1)
-                            end
-                        end
-                    end,
-                    function()
-                        hattribute.setHandle(whichUnit, attr, "+", val, 0)
+                for _, v in ipairs(valArr) do
+                    if (table.includes(params[attr], v)) then
+                        table.delete(params[attr], v, 1)
                     end
-                )
+                end
+                htime.setTimeout(during, function()
+                    hattribute.setHandle(whichUnit, attr, "+", val, 0)
+                end)
             else
                 for _, v in ipairs(valArr) do
                     if (table.includes(params[attr], v)) then
@@ -315,15 +293,10 @@ hattribute.setHandle = function(whichUnit, attr, opr, val, during)
         elseif (opr == "=") then
             local old = table.clone(params[attr])
             if (during > 0) then
-                buffKey = hbuff.create(
-                    during, whichUnit, 'attr.' .. attr .. '=', diff,
-                    function()
-                        params[attr] = string.explode(",", val)
-                    end,
-                    function()
-                        hattribute.setHandle(whichUnit, attr, "=", string.implode(",", old), 0)
-                    end
-                )
+                params[attr] = string.explode(",", val)
+                htime.setTimeout(during, function()
+                    hattribute.setHandle(whichUnit, attr, "=", string.implode(",", old), 0)
+                end)
             else
                 params[attr] = string.explode(",", val)
             end
@@ -461,7 +434,9 @@ hattribute.caleAttribute = function(damageSrc, isAdd, whichUnit, attr, times)
         return
     end
     damageSrc = damageSrc or CONST_DAMAGE_SRC.unknown
-    times = times or 1
+    if (times == nil or times < 1) then
+        times = 1
+    end
     local diff = {}
     local diffPlayer = {}
     for _, arr in ipairs(table.obj2arr(attr, CONST_ATTR_KEYS)) do

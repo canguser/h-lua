@@ -516,7 +516,7 @@ F6V_I = function(_v)
     F6S.i.ubertip._attr(_v)
     F6S.i.ubertip._remarks(_v)
     if (_v.uses == nil) then
-        _v.uses = 1
+        _v.uses = 0
     end
     if (_v.goldcost == nil) then
         _v.goldcost = 1000000

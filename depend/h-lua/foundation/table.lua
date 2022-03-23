@@ -47,24 +47,13 @@ end
 ---@return table
 table.clone = function(org)
     local function copy(org1, res)
-        if (cj == nil and #org1 == 0) then
-            for k, v in pairs(org1) do
-                if type(v) ~= "table" then
-                    res[k] = v
-                else
-                    res[k] = {}
-                    copy(v, res[k])
-                end
-            end
-        else
-            for _, v in ipairs(org1) do
-                if type(v) ~= "table" then
-                    table.insert(res, v)
-                else
-                    local rl = #res + 1
-                    res[rl] = {}
-                    copy(v, res[rl])
-                end
+        for _, v in ipairs(org1) do
+            if type(v) ~= "table" then
+                table.insert(res, v)
+            else
+                local rl = #res + 1
+                res[rl] = {}
+                copy(v, res[rl])
             end
         end
     end
@@ -83,17 +72,9 @@ table.merge = function(...)
         return {}
     end
     for _, tn in ipairs(tables) do
-        if (cj == nil and #tn == 0) then
-            if (type(tn) == "table") then
-                for k, v in pairs(tn) do
-                    tempTable[k] = v
-                end
-            end
-        else
-            if (type(tn) == "table") then
-                for _, v in ipairs(tn) do
-                    table.insert(tempTable, v)
-                end
+        if (type(tn) == "table") then
+            for _, v in ipairs(tn) do
+                table.insert(tempTable, v)
             end
         end
     end

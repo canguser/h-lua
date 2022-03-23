@@ -274,7 +274,7 @@ end
 --- 附加单位获得物品后的属性
 ---@protected
 hitem.addProperty = function(whichUnit, itId, charges)
-    if (whichUnit == nil or itId == nil or charges < 1) then
+    if (whichUnit == nil or itId == nil) then
         return
     end
     hattribute.caleAttribute(CONST_DAMAGE_SRC.item, true, whichUnit, hitem.getAttribute(itId), charges)
@@ -283,7 +283,7 @@ end
 --- 削减单位获得物品后的属性
 ---@protected
 hitem.subProperty = function(whichUnit, itId, charges)
-    if (whichUnit == nil or itId == nil or charges < 1) then
+    if (whichUnit == nil or itId == nil) then
         return
     end
     hattribute.caleAttribute(CONST_DAMAGE_SRC.item, false, whichUnit, hitem.getAttribute(itId), charges)
@@ -308,13 +308,15 @@ hitem.create = function(options)
         return
     end
     if (options.charges == nil) then
-        local slkCharges = hslk.i2v(options.id, "uses")
+        local slkCharges = hslk.i2v(options.id, "slk", "uses")
         if (slkCharges == "") then
             slkCharges = nil
+        else
+            slkCharges = math.floor(slkCharges)
         end
         options.charges = slkCharges or 1
     end
-    if (options.charges < 1) then
+    if (options.charges < 0) then
         return
     end
     local charges = options.charges
