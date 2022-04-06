@@ -69,19 +69,13 @@ hdzapi.hasMallItem = function(whichPlayer, key)
     if (whichPlayer == nil or key == nil) then
         return false
     end
-    if (cache.hasMallItem[key] == nil) then
-        cache.hasMallItem[key] = {}
-        for i = 1, bj_MAX_PLAYERS, 1 do
-            cache.hasMallItem[key][i] = hjapi.DzAPI_Map_HasMallItem(hplayer.players[i], key) or false
-        end
-    end
-    return cache.hasMallItem[key][hplayer.index(whichPlayer)]
+    return hjapi.DzAPI_Map_HasMallItem(whichPlayer, key) or false
 end
 
 --- 获取服务器数据
 ---@param whichPlayer userdata
 ---@param key string
----@return string
+---@return string|nil
 hdzapi.loadServer = function(whichPlayer, key)
     if (whichPlayer == nil or key == nil) then
         return
@@ -89,10 +83,10 @@ hdzapi.loadServer = function(whichPlayer, key)
     local idx = hplayer.index(whichPlayer)
     if (cache.serverData[key] == nil) then
         cache.serverData[key] = {}
-        if (cache.serverData[key][idx] == nil) then
-            if (true == hjapi.GetPlayerServerValueSuccess(whichPlayer)) then
-                cache.serverData[key][idx] = hjapi.DzAPI_Map_GetServerValue(whichPlayer, key) or ""
-            end
+    end
+    if (cache.serverData[key][idx] == nil) then
+        if (true == hjapi.GetPlayerServerValueSuccess(whichPlayer)) then
+            cache.serverData[key][idx] = hjapi.DzAPI_Map_GetServerValue(whichPlayer, key) or ""
         end
     end
     return cache.serverData[key][idx]

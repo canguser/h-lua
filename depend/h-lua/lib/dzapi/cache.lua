@@ -6,7 +6,6 @@ local cache = {
     isBlueVip = {},
     isPlatformVIP = {},
     mapLevel = {},
-    hasMallItem = {},
     serverData = {},
 }
 
