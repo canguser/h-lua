@@ -14,7 +14,7 @@ import (
 func stack() string {
 	var buf [2 << 10]byte
 	res := string(buf[:runtime.Stack(buf[:], true)])
-	res = strings.Replace(res, "Z:/Workspace/war3/hunzsig-warcraft3/h-lua/depend/sdk/", "SDK::", -1)
+	res = strings.Replace(res, "Z:/Workspace/war3/h-lua/h-lua/depend/sdk/", "SDK::", -1)
 	return res
 }
 
