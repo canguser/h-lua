@@ -1,3 +1,3 @@
-* 【mirror】[https://gitlab.com/hunzsig/h-lua](https://gitlab.com/hunzsig/h-lua)
+* 【mirror】[https://gitlab.com/h-mirror/h-lua](https://gitlab.com/h-mirror/h-lua)
 * 【document】[https://h-lua.hunzsig.org](https://h-lua.hunzsig.org)
-* 【domo】[https://github.com/hunzsig-warcraft3/h-lua-demo](https://github.com/hunzsig-warcraft3/h-lua-demo)
+* 【domo】[https://github.com/h-lua/demo](https://github.com/h-lua/demo)
