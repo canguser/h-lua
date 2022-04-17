@@ -12,8 +12,9 @@ function main()
     SETUP()
     UI()
 
-    print("hello world!")
+    print("你好，世界！")
     echo("你好，世界！")
+    dump({ "你好，世界！" }, "dump")
 
     hitem.create({
         id = hslk.n2i("物理学圣剑"),

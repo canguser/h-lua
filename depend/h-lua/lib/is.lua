@@ -448,7 +448,7 @@ end
 his.hasItem = function(whichUnit, whichItemId)
     local f = false
     if (type(whichItemId) == "string") then
-        whichItemId = string.char2id(whichItemId)
+        whichItemId = c2i(whichItemId)
     end
     for i = 0, 5, 1 do
         local it = cj.UnitItemInSlot(whichUnit, i)

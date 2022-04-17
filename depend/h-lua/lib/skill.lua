@@ -5,7 +5,7 @@ hskill = {}
 ---@return table|nil
 hskill.getAttribute = function(abilityId)
     if (type(abilityId) == "number") then
-        abilityId = string.id2char(abilityId)
+        abilityId = i2c(abilityId)
     end
     return hslk.i2v(abilityId, "_attr")
 end
@@ -41,7 +41,7 @@ end
 hskill.getName = function(abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     return cj.GetObjectName(id)
 end
@@ -54,7 +54,7 @@ end
 hskill.add = function(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     level = level or 1
     if (during == nil or during <= 0) then
@@ -85,7 +85,7 @@ end
 hskill.set = function(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     local prevLv = cj.GetUnitAbilityLevel(whichUnit, id)
     if (level == nil or level == prevLv) then
@@ -114,7 +114,7 @@ end
 hskill.del = function(whichUnit, abilityId, delay)
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     local lv = cj.GetUnitAbilityLevel(whichUnit, id)
     if (lv < 1) then
@@ -139,7 +139,7 @@ end
 hskill.forever = function(whichUnit, abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     cj.UnitMakeAbilityPermanent(whichUnit, true, id)
 end
@@ -153,7 +153,7 @@ hskill.has = function(whichUnit, abilityId)
     end
     local id = abilityId
     if (type(abilityId) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     if (cj.GetUnitAbilityLevel(whichUnit, id) >= 1) then
         return true

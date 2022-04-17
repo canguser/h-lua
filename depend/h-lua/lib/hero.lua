@@ -366,7 +366,7 @@ hhero.buildSelector = function(options)
                             y = hhero.bornY,
                         })
                         table.insert(hhero.player_heroes[pIndex], whichHero)
-                        table.delete(hhero.selectorPool, string.id2char(soldUid))
+                        table.delete(hhero.selectorPool, i2c(soldUid))
                         local tips = "您选择了 |cffffff80" .. cj.GetUnitName(whichHero) .. "|r"
                         if (#hhero.player_heroes[pIndex] >= hhero.player_allow_qty[pIndex]) then
                             echo(tips .. ",已挑选完毕", p)
@@ -388,7 +388,7 @@ hhero.buildSelector = function(options)
                 currentRowQty = currentRowQty + 1
             end
             currentTavernQty = currentTavernQty + 1
-            cj.AddUnitToStock(tavern, string.char2id(heroId), 1, 1)
+            cj.AddUnitToStock(tavern, c2i(heroId), 1, 1)
             hhero.selectorTavern[heroId] = tavern
             table.insert(hhero.selectorPool, heroId)
         end

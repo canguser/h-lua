@@ -168,7 +168,7 @@ end
 ---@param life number
 hunit.setPeriod = function(u, life)
     if (life > 0) then
-        cj.UnitApplyTimedLife(u, string.char2id("BTLF"), life)
+        cj.UnitApplyTimedLife(u, c2i("BTLF"), life)
         if (hcache.exist(u) == false) then
             hcache.alloc(u)
         end
@@ -389,7 +389,7 @@ hunit.embed = function(u, options)
     -- 记入realtime
     local id = options.id
     if (type(id) == "number") then
-        id = string.id2char(id)
+        id = i2c(id)
     end
     hcache.alloc(u)
     hcache.set(u, CONST_CACHE.UNIT_ANIMATE_SPEED, options.timeScale or 1.00)
@@ -522,7 +522,7 @@ hunit.create = function(options)
         return
     end
     if (type(options.id) == "string") then
-        options.id = string.char2id(options.id)
+        options.id = c2i(options.id)
     end
     local u
     local facing
@@ -637,9 +637,9 @@ hunit.getId = function(uOrId)
         if (id == 0) then
             return
         end
-        id = string.id2char(id)
+        id = i2c(id)
     elseif (type(uOrId) == "number") then
-        id = string.id2char(uOrId)
+        id = i2c(uOrId)
     elseif (type(uOrId) == "string") then
         id = uOrId
     end
@@ -746,8 +746,8 @@ end
 --- 设置单位可飞，用于设置单位飞行高度之前
 ---@param u userdata
 hunit.setCanFly = function(u)
-    cj.UnitAddAbility(u, string.char2id("Arav"))
-    cj.UnitRemoveAbility(u, string.char2id("Arav"))
+    cj.UnitAddAbility(u, c2i("Arav"))
+    cj.UnitRemoveAbility(u, c2i("Arav"))
 end
 
 --- 获取单位飞行高度

@@ -126,7 +126,7 @@ htexture.alertCircle = function(diameter, x, y, during, token, color)
         return
     end
     if (type(token) == "string") then
-        token = string.char2id(token)
+        token = c2i(token)
     end
     color = color or PLAYER_COLOR_RED
     modelScale = math.round(math.round(modelScale, 3) * (diameter / 128), 2)

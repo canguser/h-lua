@@ -338,7 +338,7 @@ local formatter = {
     end,
     DzSetUnitID = function(params)
         if (type(params[2]) == 'string') then
-            params[2] = string.char2id(params[2])
+            params[2] = c2i(params[2])
         else
             params[2] = toInt(params[2])
         end
@@ -465,7 +465,7 @@ local formatter = {
     end,
     EXGetUnitAbility = function(params)
         if (type(params[2]) == 'string') then
-            params[2] = string.char2id(params[2])
+            params[2] = c2i(params[2])
         end
     end,
     EXGetUnitAbilityByIndex = function(params)

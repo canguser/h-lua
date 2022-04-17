@@ -118,9 +118,9 @@ hitem.getId = function(itOrId)
         if (id == 0) then
             return
         end
-        id = string.id2char(id)
+        id = i2c(id)
     elseif (type(itOrId) == "number") then
-        id = string.id2char(itOrId)
+        id = i2c(itOrId)
     elseif (type(itOrId) == "string") then
         id = itOrId
     end
@@ -335,7 +335,7 @@ hitem.create = function(options)
         return
     end
     if (type(id) == "string") then
-        id = string.char2id(id)
+        id = c2i(id)
     end
     local it
     -- 如果不是创建给单位，又或者单位已经不存在了，直接返回

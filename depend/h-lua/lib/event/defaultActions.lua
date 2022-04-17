@@ -206,7 +206,7 @@ hevent_default_actions = {
                 learnedSkill = cj.GetLearnedSkill(),
             }
             hevent.triggerEvent(evtData.triggerUnit, CONST_EVENT.skillStudy, evtData)
-            local lv = cj.GetUnitAbilityLevel(evtData.triggerUnit, string.char2id(evtData.learnedSkill))
+            local lv = cj.GetUnitAbilityLevel(evtData.triggerUnit, c2i(evtData.learnedSkill))
             if (lv == 1) then
                 hskill.addProperty(evtData.triggerUnit, evtData.learnedSkill, lv)
             elseif (lv > 1) then
@@ -296,24 +296,10 @@ hevent_default_actions = {
             local sourceUnit = cj.GetEventDamageSource()
             local targetUnit = cj.GetTriggerUnit()
             local damage = cj.GetEventDamage()
-            local curLife = hunit.getCurLife(targetUnit)
-            local isLethal = curLife <= damage
+            hjapi.EXSetEventDamage(0)
             if (damage > 0.125) then
-                local changeLife = math.floor(damage) + 1
-                if (isLethal == true) then
-                    cj.SetUnitInvulnerable(targetUnit, true)
-                else
-                    hattribute.set(targetUnit, 0, { life = "+" .. changeLife })
-                end
                 local isAttack = hjapi.isEventAttackDamage() or true
-                htime.setTimeout(0, function(t)
-                    t.destroy()
-                    if (isLethal == true) then
-                        cj.SetUnitInvulnerable(targetUnit, false)
-                    else
-                        hattribute.set(targetUnit, 0, { life = "-" .. changeLife })
-                        hunit.setCurLife(targetUnit, curLife)
-                    end
+                htime.setTimeout(0, function()
                     local damageSrc = CONST_DAMAGE_SRC.attack
                     if (false == isAttack) then
                         --- [非攻击]->[技能伤害]
@@ -463,7 +449,7 @@ hevent_default_actions = {
                 --过滤无效物品
                 return
             end
-            itId = string.id2char(itId)
+            itId = i2c(itId)
             local u = cj.GetTriggerUnit()
             local charges = hitem.getCharges(it)
             -- 触发获得物品
@@ -494,7 +480,7 @@ hevent_default_actions = {
                 --过滤无效物品
                 return
             end
-            itId = string.id2char(itId)
+            itId = i2c(itId)
             local u = cj.GetTriggerUnit()
             if (cj.GetUnitCurrentOrder(u) == 852001) then
                 -- dropitem:852001
@@ -591,7 +577,7 @@ hevent_default_actions = {
             if (his.silent(u)) then
                 return
             end
-            local skillId = string.id2char(cj.GetSpellAbilityId())
+            local skillId = i2c(cj.GetSpellAbilityId())
             local itId = HSLK_ICD[skillId] or nil
             if (itId == nil) then
                 return

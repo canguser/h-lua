@@ -113,10 +113,10 @@ end
 hevent.triggerData = function(triggerData)
     triggerData = triggerData or {}
     if (triggerData.triggerSkill ~= nil and type(triggerData.triggerSkill) == "number") then
-        triggerData.triggerSkill = string.id2char(triggerData.triggerSkill)
+        triggerData.triggerSkill = i2c(triggerData.triggerSkill)
     end
     if (triggerData.learnedSkill ~= nil and type(triggerData.learnedSkill) == "number") then
-        triggerData.learnedSkill = string.id2char(triggerData.learnedSkill)
+        triggerData.learnedSkill = i2c(triggerData.learnedSkill)
     end
     if (triggerData.targetLoc ~= nil) then
         triggerData.targetX = cj.GetLocationX(triggerData.targetLoc)

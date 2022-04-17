@@ -2,8 +2,8 @@
 hshop = {
     license = {
         --- 许可证
-        item = string.char2id("Asid"),
-        unit = string.char2id("Asud"),
+        item = c2i("Asid"),
+        unit = c2i("Asud"),
         --- 检查目标商店的物品/单位售卖资格(也就是出售物品、出售单位技能)
         --- 如果商店没有资格，给它个许可证
         grant = function(whichShop, license)
@@ -59,7 +59,7 @@ hshop = {
     },
     stockId = function(id)
         if (type(id) == "string") then
-            id = string.char2id(id)
+            id = c2i(id)
         end
         if (type(id) ~= "number") then
             return 0

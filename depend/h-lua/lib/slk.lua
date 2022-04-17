@@ -29,7 +29,7 @@ hslk.i2v = function(id, ...)
         return
     end
     if (type(id) == "number") then
-        id = string.id2char(id)
+        id = i2c(id)
     end
     if (HSLK_I2V[id] == nil) then
         return

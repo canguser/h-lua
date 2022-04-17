@@ -1169,3 +1169,41 @@ math.tan = cj.Tan
 math.asin = cj.Asin
 math.acos = cj.Acos
 math.atan = cj.Atan2
+
+--- ID缓存
+local cic = { c2i = {}, i2c = {} }
+
+--- 获取一个对象的id
+---@param idChar string
+---@return number
+c2i = function(idChar)
+    if (idChar == nil or type(idChar) ~= "string") then
+        stack()
+        return
+    end
+    local id = cic.c2i[idChar]
+    if (id == nil) then
+        id = ('>I4'):unpack(idChar)
+        cic.c2i[idChar] = id
+        cic.i2c[id] = idChar
+    end
+    return id
+end
+
+--- 获取一个对象的id字符串
+---@param id number
+---@return string
+i2c = function(id)
+    if (id == nil or type(id) ~= "number") then
+        stack()
+        print(id)
+        return
+    end
+    local idChar = cic.i2c[id]
+    if (idChar == nil) then
+        idChar = ('>I4'):pack(id)
+        cic.i2c[id] = idChar
+        cic.c2i[idChar] = id
+    end
+    return idChar
+end

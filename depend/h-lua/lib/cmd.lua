@@ -86,7 +86,7 @@ hcmd._cds["-random"] = {
                     y = hhero.bornY
                 })
                 hcache.set(u, CONST_CACHE.HERO_SELECTOR, hhero.selectorTavern[one])
-                cj.RemoveUnitFromStock(hhero.selectorTavern[one], string.char2id(one))
+                cj.RemoveUnitFromStock(hhero.selectorTavern[one], c2i(one))
             else
                 table.delete(hhero.selectorClearPool, one)
                 hunit.setInvulnerable(u, false)
