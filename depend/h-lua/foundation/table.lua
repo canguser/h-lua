@@ -1,14 +1,64 @@
--- 大部分方法不支持pairs，会引起异步
+-- 默认不支持pairs
 
---- 随机在数组内取一个
----@param arr table
----@return any
-table.random = function(arr)
-    local val
-    if (#arr > 0) then
-        val = arr[math.random(1, #arr)]
+--- 生成整数段
+---@param n1 number integer
+---@param n2 number integer
+---@return table
+table.section = function(n1, n2)
+    n1 = math.floor(n1)
+    n2 = math.floor(n2 or n1)
+    local s = {}
+    if (n1 == n2) then
+        n2 = nil
     end
-    return val
+    if (n2 == nil) then
+        for i = 1, n1 do
+            table.insert(s, i)
+        end
+    else
+        if (n1 < n2) then
+            for i = n1, n2, 1 do
+                table.insert(s, i)
+            end
+        else
+            for i = n1, n2, -1 do
+                table.insert(s, i)
+            end
+        end
+    end
+    return s
+end
+
+--- 随机在数组内取N个
+--- 如果 n == 1, 则返回某值
+--- 如果 n > 1, 则返回table
+---@param arr table
+---@return nil|any|any[]
+function table.random(arr, n)
+    if (type(arr) ~= "table") then
+        return
+    end
+    n = n or 1
+    if (n > #arr) then
+        n = #arr
+    end
+    if (n < 1) then
+        return
+    end
+    if (n == 1) then
+        return arr[math.rand(1, #arr)]
+    end
+    local rd = {}
+    local rge = {}
+    for i, v in ipairs(arr) do
+        rge[i] = v
+    end
+    for i = 1, n do
+        local j = math.rand(i, #rge)
+        rge[i], rge[j] = rge[j], rge[i]
+        rd[i] = rge[i]
+    end
+    return rd
 end
 
 --- 洗牌
@@ -27,6 +77,34 @@ table.shuffle = function(arr)
         length = length - 1
     end
     return shuffle
+end
+
+--- 倒序
+---@param arr table
+---@return table
+table.reverse = function(arr)
+    local r = {}
+    for i = #arr, 1, -1 do
+        if (type(arr[i]) == "table") then
+            table.insert(r, table.reverse(arr[i]))
+        else
+            table.insert(r, arr[i])
+        end
+    end
+    return r
+end
+
+--- 重复table
+---@param params any
+---@param qty number integer
+---@return table
+table.repeater = function(params, qty)
+    qty = math.floor(qty or 1)
+    local r = {}
+    for _ = 1, qty do
+        table.insert(r, params)
+    end
+    return r
 end
 
 --- 克隆table
