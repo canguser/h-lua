@@ -1,3 +1,46 @@
+--[[
+    允许使用方括号索引到字符串
+    s = "hello"
+    s[1] = "h"
+]]
+---@param str string
+---@param i number
+---@return string
+getmetatable('').__index = function(str, i)
+    if (type(i) == 'number') then
+        return string.sub(str, i, i)
+    end
+    return string[i]
+end
+
+--[[
+    允许使用前后两个索引执行括号法返回子字符串
+    s = "hello"
+    s(2,5) = "ello"
+
+    如果只有单索引，则返回byte(unicode)
+    s = "hello"
+    s(2) = 101 (e)
+
+    如果第二个索引为字符串，则进行替换
+    s = "hello"
+    s(2,'p') = "hpllo"
+]]
+---@param str string
+---@param i number
+---@param j number
+---@return string
+getmetatable('').__call = function(str, i, j)
+    if (type(i) == 'number' and type(j) == 'number') then
+        return string.sub(str, i, j)
+    elseif (type(i) == 'number' and type(j) == 'string') then
+        return table.concat { string.sub(str, 1, i - 1), j, string.sub(str, i + 1) }
+    elseif (type(i) == 'number' and type(j) == 'nil') then
+        return string.byte(str, i)
+    end
+    return string[i]
+end
+
 --- 获取字符串真实长度
 ---@param inputStr string
 ---@return number
