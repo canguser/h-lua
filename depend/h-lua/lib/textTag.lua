@@ -272,7 +272,7 @@ htextTag.model = function(options)
     elseif (speed > 3) then
         speed = 3
     end
-    local words = string.mb_split(msg, 1)
+    local words = mbstring.split(msg, 1)
     if (#words > 0) then
         x = math.floor(x)
         y = math.floor(y)
