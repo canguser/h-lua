@@ -3,6 +3,10 @@ hevent = {
     POOL_RED_LINE = 1000,
 }
 
+--- 事件反应
+---@protected
+hevent_reaction = hevent_reaction or {}
+
 ---@protected
 hevent.free = function(handle)
     local poolRegister = hcache.get(handle, CONST_CACHE.EVENT_POOL)
@@ -61,6 +65,34 @@ hevent.pool = function(handle, conditionAction, regEvent)
     hevent.POOL[key][poolIndex].count = hevent.POOL[key][poolIndex].count + 1
     hevent.POOL[key][poolIndex].stock = hevent.POOL[key][poolIndex].stock + 1
     regEvent(hevent.POOL[key][poolIndex].trigger)
+end
+
+--- 捕捉反应
+---@param evt string 事件类型
+---@vararg any
+---@return void
+hevent.reaction = function(evt, ...)
+    local opt = { ... }
+    ---@type string 关联反应标识符
+    local key
+    ---@type fun(callData:table) 回调
+    local callFunc
+    if (type(opt[1]) == "function") then
+        key = "default"
+        callFunc = opt[1]
+    elseif (type(opt[1]) == "string") then
+        key = opt[1]
+        if (type(opt[2]) == "function") then
+            callFunc = opt[2]
+        end
+    end
+    if (evt == nil) then
+        stack()
+    end
+    if (hevent_reaction[evt] == nil) then
+        hevent_reaction[evt] = Array()
+    end
+    hevent_reaction[evt].set(key, callFunc)
 end
 
 --- set最后一位伤害的单位关系
@@ -136,6 +168,14 @@ hevent.triggerEvent = function(handle, key, triggerData)
     end
     -- 数据
     triggerData = hevent.triggerData(triggerData)
+    -- 反应
+    if (hevent_reaction[key] ~= nil) then
+        hevent_reaction[key].forEach(function(_, val)
+            if (type(val) == "function") then
+                val(triggerData)
+            end
+        end)
+    end
     -- 判断事件注册执行与否
     local register = hcache.get(handle, CONST_CACHE.EVENT_REGISTER, {})
     if (register ~= nil and register[key] ~= nil and #register[key] > 0) then
