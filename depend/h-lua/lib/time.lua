@@ -57,8 +57,9 @@ function Timer(isInterval, period, callFunc)
         local k = this.__PROPERTIES__.kernel or 0
         if (k > htime.inc) then
             htime.kernel[k].splice(this.__ID__)
-            this.__PROPERTIES__.pause = k - htime.inc
         end
+        this.__PROPERTIES__.pause = k - htime.inc
+        this.__PROPERTIES__.kernel = nil
         return this
     end
     this.resume = function()

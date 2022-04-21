@@ -39,14 +39,11 @@ function table.random(arr, n)
         return
     end
     n = n or 1
-    if (n > #arr) then
-        n = #arr
-    end
     if (n < 1) then
         return
     end
     if (n == 1) then
-        return arr[math.rand(1, #arr)]
+        return arr[math.random(1, #arr)]
     end
     local rd = {}
     local rge = {}
@@ -54,7 +51,7 @@ function table.random(arr, n)
         rge[i] = v
     end
     for i = 1, n do
-        local j = math.rand(i, #rge)
+        local j = math.random(i, #rge)
         rge[i], rge[j] = rge[j], rge[i]
         rd[i] = rge[i]
     end
