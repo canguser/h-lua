@@ -47,13 +47,18 @@ function table.random(arr, n)
     end
     local rd = {}
     local rge = {}
-    for i, v in ipairs(arr) do
-        rge[i] = v
+    for i = 1, n do
+        local d = i % #arr
+        if (d == 0) then
+            rge[i] = arr[#arr]
+        else
+            rge[i] = arr[d]
+        end
     end
     for i = 1, n do
         local j = math.random(i, #rge)
+        rd[i] = rge[j]
         rge[i], rge[j] = rge[j], rge[i]
-        rd[i] = rge[i]
     end
     return rd
 end
