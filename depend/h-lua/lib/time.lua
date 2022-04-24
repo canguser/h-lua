@@ -237,6 +237,7 @@ end
 --- 获取服务器当前时间对象
 --- * 此方法在本地不能准确获取当前时间，将从UNIX元秒开始(1970年)
 ---@return table {Y:"年",m:"月",d:"日",H:"时",i:"分",s:"秒",w:"周[0-6]",W:"周[日-六]"}
-function htime.date()
-    return math.date(htime.unix())
+function htime.date(timestamp)
+    timestamp = timestamp or htime.unix()
+    return math.date(timestamp)
 end

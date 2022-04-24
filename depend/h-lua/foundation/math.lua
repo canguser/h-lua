@@ -224,6 +224,6 @@ math.date = function(timestamp)
         i = d[5],
         s = d[6],
         w = d[7],
-        W = W[d[7]],
+        W = W[d[7] + 1],
     }
 end
