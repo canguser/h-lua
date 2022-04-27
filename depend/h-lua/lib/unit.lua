@@ -289,9 +289,8 @@ hunit.setAnimateSpeed = function(whichUnit, speed, during)
     cj.SetUnitTimeScale(whichUnit, speed)
     hcache.set(whichUnit, CONST_CACHE.UNIT_ANIMATE_SPEED, speed)
     if (during > 0) then
-        htime.setTimeout(during, function(t)
-            t.destroy()
-            cj.SetUnitTimeScale(u, prevSpeed)
+        htime.setTimeout(during, function()
+            cj.SetUnitTimeScale(whichUnit, prevSpeed)
             hcache.set(whichUnit, CONST_CACHE.UNIT_ANIMATE_SPEED, prevSpeed)
         end)
     end
