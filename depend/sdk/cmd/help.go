@@ -18,6 +18,7 @@ func Help() {
 	fmt.Println("┃ sdk.exe build [:PROJECT_NAME] - package a project for pre launch")
 	fmt.Println("┃ sdk.exe dist [:PROJECT_NAME] - package a project for launch")
 	fmt.Println("┃")
-	fmt.Println("┃ QQ:325338043 Pwd:HJux213jP")
+	fmt.Println("┃ @see https://h-lua.hunzsig.org")
+	fmt.Println("┃ @add QQ<325338043> Pwd<HJux213jP>")
 	fmt.Println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 }

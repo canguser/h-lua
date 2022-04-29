@@ -45,22 +45,23 @@ function table.random(arr, n)
     if (n == 1) then
         return arr[math.random(1, #arr)]
     end
-    local rd = {}
-    local rge = {}
-    for i = 1, n do
-        local d = i % #arr
-        if (d == 0) then
-            rge[i] = arr[#arr]
-        else
-            rge[i] = arr[d]
+    local res = {}
+    local l = #arr
+    while (#res < n) do
+        local rge = {}
+        for i = 1, l do
+            rge[i] = arr[i]
+        end
+        for i = 1, l do
+            local j = math.random(i, #rge)
+            table.insert(res, rge[j])
+            if (#res >= n) then
+                break
+            end
+            rge[i], rge[j] = rge[j], rge[i]
         end
     end
-    for i = 1, n do
-        local j = math.random(i, #rge)
-        rd[i] = rge[j]
-        rge[i], rge[j] = rge[j], rge[i]
-    end
-    return rd
+    return res
 end
 
 --- 洗牌
