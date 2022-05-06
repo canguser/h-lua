@@ -10,7 +10,7 @@ import (
 
 func runDist(sdkData lib.SdkData, w3xFire string, times int) {
 	cmd := exec.Command(sdkData.YDWE+"/bin/YDWEconfig.exe", "-launchwar3", "-loadfile", w3xFire)
-	_, _ = cmd.Output()
+	_ = cmd.Run()
 	fmt.Println("尝试启动中")
 	ticker := time.NewTicker(time.Second)
 	fmt.Println(<-ticker.C)

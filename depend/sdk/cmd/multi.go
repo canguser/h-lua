@@ -12,7 +12,7 @@ import (
 func runMulti(sdkData lib.SdkData, max int, cur int) {
 	for i := cur; i <= max; i++ {
 		cmd := exec.Command(sdkData.YDWE+"/bin/YDWEconfig.exe", "-launchwar3")
-		_, _ = cmd.Output()
+		_ = cmd.Run()
 		fmt.Println("第" + strconv.Itoa(i) + "个魔兽尝试启动中")
 	}
 	ticker := time.NewTicker(time.Second)
