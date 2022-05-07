@@ -1,7 +1,5 @@
 -- 事件
 CONST_EVENT = {
-    attackDetect = "attackDetect",
-    attackGetTarget = "attackGetTarget",
     beAttackReady = "beAttackReady",
     attack = "attack",
     beAttack = "beAttack",

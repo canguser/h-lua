@@ -3,7 +3,7 @@
 hevent_default_actions = {
     player = {
         esc = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 cj.GetTriggerPlayer(),
                 CONST_EVENT.esc,
                 {
@@ -12,7 +12,7 @@ hevent_default_actions = {
             )
         end),
         deSelection = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 cj.GetTriggerPlayer(),
                 CONST_EVENT.deSelection,
                 {
@@ -22,7 +22,7 @@ hevent_default_actions = {
             )
         end),
         constructStart = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 hunit.getOwner(cj.GetTriggerUnit()),
                 CONST_EVENT.constructStart,
                 {
@@ -31,7 +31,7 @@ hevent_default_actions = {
             )
         end),
         constructCancel = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 hunit.getOwner(cj.GetTriggerUnit()),
                 CONST_EVENT.constructCancel,
                 {
@@ -40,7 +40,7 @@ hevent_default_actions = {
             )
         end),
         constructFinish = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 hunit.getOwner(cj.GetTriggerUnit()),
                 CONST_EVENT.constructFinish,
                 {
@@ -65,7 +65,7 @@ hevent_default_actions = {
             hplayer.clearUnit(p)
             hplayer.qty_current = hplayer.qty_current - 1
             -- 触发玩家离开事件(全局)
-            hevent.triggerEvent(
+            hevent.trigger(
                 "global",
                 CONST_EVENT.playerLeave,
                 {
@@ -87,7 +87,7 @@ hevent_default_actions = {
             end)
             for qty = 1, 10 do
                 if (hcache.get(triggerPlayer, CONST_CACHE.PLAYER_CLICK) >= qty) then
-                    hevent.triggerEvent(
+                    hevent.trigger(
                         triggerPlayer,
                         CONST_EVENT.selection .. "#" .. qty,
                         {
@@ -100,219 +100,22 @@ hevent_default_actions = {
             end
         end),
         chat = cj.Condition(function()
-            hevent.triggerEvent(cj.GetTriggerPlayer(), CONST_EVENT.chat, {
+            hevent.trigger(cj.GetTriggerPlayer(), CONST_EVENT.chat, {
                 triggerPlayer = cj.GetTriggerPlayer(),
                 chatString = cj.GetEventPlayerChatString()
             })
         end),
         changeOwner = cj.Condition(function()
-            hevent.triggerEvent(hunit.getOwner(cj.GetTriggerUnit()), CONST_EVENT.changeOwner, {
+            hevent.trigger(hunit.getOwner(cj.GetTriggerUnit()), CONST_EVENT.changeOwner, {
                 triggerUnit = cj.GetChangingUnit(),
                 prevOwner = cj.GetChangingUnitPrevOwner()
             })
         end),
-    },
-    hero = {
-        levelUp = cj.Condition(function()
-            local u = cj.GetTriggerUnit()
-            local diffLv = cj.GetHeroLevel(u) - hhero.getPrevLevel(u)
-            if (diffLv < 1) then
-                return
-            end
-            hhero.setPrevLevel(u, cj.GetHeroLevel(u))
-            -- @触发升级事件
-            hevent.triggerEvent(u, CONST_EVENT.levelUp, {
-                triggerUnit = u,
-                value = diffLv
-            })
-            -- 重读部分属性（因为有些属性在物编可升级提升）
-            hattribute.set(u, 0, {
-                str_white = "=" .. cj.GetHeroStr(u, false),
-                agi_white = "=" .. cj.GetHeroAgi(u, false),
-                int_white = "=" .. cj.GetHeroInt(u, false),
-            })
-        end),
-        reborn = function(u, rebornSec)
-            local x = hunit.x(u)
-            local y = hunit.y(u)
-            if (rebornSec > 0) then
-                local p = hunit.getOwner(u)
-                htexture.mark(htexture.DEFAULT_MARKS.DREAM, rebornSec, p, 255, 0, 0)
-                local ghost = hunit.create({
-                    register = false,
-                    whichPlayer = hplayer.player_passive,
-                    id = hunit.getId(u),
-                    x = x,
-                    y = y,
-                    facing = 270,
-                    height = 40,
-                    modelScale = 0.9,
-                    opacity = 0.6,
-                    isShadow = true,
-                    isInvulnerable = true,
-                    during = rebornSec,
-                })
-                hunit.setColor(ghost, hplayer.index(p))
-                hunit.create({
-                    register = false,
-                    whichPlayer = p,
-                    id = HL_ID.hero_death_token,
-                    x = x,
-                    y = y,
-                    opacity = 0.8,
-                    isShadow = true,
-                    isInvulnerable = true,
-                    during = rebornSec,
-                    timeScale = 10 / rebornSec,
-                })
-            end
-            hhero.reborn(u, rebornSec, 1, x, y)
-        end,
-    },
-    unit = {
-        attackDetect = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.attackDetect,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    targetUnit = cj.GetEventTargetUnit()
-                }
-            )
-        end),
-        attackGetTarget = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.attackGetTarget,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    targetUnit = cj.GetEventTargetUnit()
-                }
-            )
-        end),
         beAttackReady = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.beAttackReady,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    attackUnit = cj.GetAttacker()
-                }
-            )
-        end),
-        skillStudy = cj.Condition(function()
-            local evtData = {
+            hevent.trigger(cj.GetTriggerUnit(), CONST_EVENT.beAttackReady, {
                 triggerUnit = cj.GetTriggerUnit(),
-                learnedSkill = cj.GetLearnedSkill(),
-            }
-            hevent.triggerEvent(evtData.triggerUnit, CONST_EVENT.skillStudy, evtData)
-            local lv = cj.GetUnitAbilityLevel(evtData.triggerUnit, c2i(evtData.learnedSkill))
-            if (lv == 1) then
-                hskill.addProperty(evtData.triggerUnit, evtData.learnedSkill, lv)
-            elseif (lv > 1) then
-                hskill.subProperty(evtData.triggerUnit, evtData.learnedSkill, lv - 1)
-                hskill.addProperty(evtData.triggerUnit, evtData.learnedSkill, lv)
-            end
-        end),
-        skillReady = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.skillReady,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    triggerSkill = cj.GetSpellAbilityId(),
-                    targetUnit = cj.GetSpellTargetUnit(),
-                    targetLoc = cj.GetSpellTargetLoc()
-                }
-            )
-        end),
-        skillCast = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.skillCast,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    triggerSkill = cj.GetSpellAbilityId(),
-                    targetUnit = cj.GetSpellTargetUnit(),
-                    targetLoc = cj.GetSpellTargetLoc()
-                }
-            )
-        end),
-        skillStop = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.skillStop,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                    triggerSkill = cj.GetSpellAbilityId()
-                }
-            )
-        end),
-        skillEffect = cj.Condition(function()
-            local evtData = {
-                triggerUnit = cj.GetTriggerUnit(),
-                triggerSkill = cj.GetSpellAbilityId(),
-                targetUnit = cj.GetSpellTargetUnit(),
-                targetItem = cj.GetSpellTargetItem(),
-                targetLoc = cj.GetSpellTargetLoc(),
-            }
-            hevent.triggerEvent(evtData.triggerUnit, CONST_EVENT.skillEffect, evtData)
-        end),
-        skillFinish = cj.Condition(function()
-            local evtData = {
-                triggerUnit = cj.GetTriggerUnit(),
-                triggerSkill = cj.GetSpellAbilityId(),
-            }
-            hevent.triggerEvent(evtData.triggerUnit, CONST_EVENT.skillFinish, evtData)
-        end),
-        upgradeStart = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.upgradeStart,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                }
-            )
-        end),
-        upgradeCancel = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.upgradeCancel,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                }
-            )
-        end),
-        upgradeFinish = cj.Condition(function()
-            hevent.triggerEvent(
-                cj.GetTriggerUnit(),
-                CONST_EVENT.upgradeFinish,
-                {
-                    triggerUnit = cj.GetTriggerUnit(),
-                }
-            )
-        end),
-        damaged = cj.Condition(function()
-            local sourceUnit = cj.GetEventDamageSource()
-            local targetUnit = cj.GetTriggerUnit()
-            local damage = cj.GetEventDamage()
-            hjapi.EXSetEventDamage(0)
-            if (damage > 0.125) then
-                local isAttack = hjapi.isEventAttackDamage() or true
-                htime.setTimeout(0, function()
-                    local damageSrc = CONST_DAMAGE_SRC.attack
-                    if (false == isAttack) then
-                        --- [非攻击]->[技能伤害]
-                        damageSrc = CONST_DAMAGE_SRC.skill
-                    end
-                    hskill.damage({
-                        sourceUnit = sourceUnit,
-                        targetUnit = targetUnit,
-                        damage = damage,
-                        damageSrc = damageSrc,
-                    })
-                end)
-            end
+                attackUnit = cj.GetAttacker()
+            })
         end),
         dead = cj.Condition(function()
             local u = cj.GetTriggerUnit()
@@ -323,12 +126,12 @@ hevent_default_actions = {
             -- 死亡标志
             hcache.set(u, CONST_CACHE.UNIT_DEAD, true)
             -- @触发死亡事件
-            hevent.triggerEvent(u, CONST_EVENT.dead, {
+            hevent.trigger(u, CONST_EVENT.dead, {
                 triggerUnit = u,
                 killUnit = killer
             })
             -- @触发击杀事件
-            hevent.triggerEvent(killer, CONST_EVENT.kill, {
+            hevent.trigger(killer, CONST_EVENT.kill, {
                 triggerUnit = killer,
                 targetUnit = u
             })
@@ -350,7 +153,7 @@ hevent_default_actions = {
                 end
             end
         end),
-        order = cj.Condition(function()
+        issued = cj.Condition(function()
             --[[
                 851983:ATTACK 攻击
                 851971:SMART
@@ -389,7 +192,7 @@ hevent_default_actions = {
                 loc = nil
             end
             if (orderId == 851993) then
-                hevent.triggerEvent(
+                hevent.trigger(
                     triggerUnit,
                     CONST_EVENT.holdOn,
                     {
@@ -397,7 +200,7 @@ hevent_default_actions = {
                     }
                 )
             elseif (orderId == 851972) then
-                hevent.triggerEvent(
+                hevent.trigger(
                     triggerUnit,
                     CONST_EVENT.stop,
                     {
@@ -406,10 +209,121 @@ hevent_default_actions = {
                 )
             end
         end),
-        sell = cj.Condition(function()
+        skillStudy = cj.Condition(function()
+            local evtData = {
+                triggerUnit = cj.GetTriggerUnit(),
+                learnedSkill = cj.GetLearnedSkill(),
+            }
+            hevent.trigger(evtData.triggerUnit, CONST_EVENT.skillStudy, evtData)
+            local lv = cj.GetUnitAbilityLevel(evtData.triggerUnit, c2i(evtData.learnedSkill))
+            if (lv == 1) then
+                hskill.addProperty(evtData.triggerUnit, evtData.learnedSkill, lv)
+            elseif (lv > 1) then
+                hskill.subProperty(evtData.triggerUnit, evtData.learnedSkill, lv - 1)
+                hskill.addProperty(evtData.triggerUnit, evtData.learnedSkill, lv)
+            end
+        end),
+        skillReady = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.skillReady,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                    triggerSkill = cj.GetSpellAbilityId(),
+                    targetUnit = cj.GetSpellTargetUnit(),
+                    targetLoc = cj.GetSpellTargetLoc()
+                }
+            )
+        end),
+        skillCast = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.skillCast,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                    triggerSkill = cj.GetSpellAbilityId(),
+                    targetUnit = cj.GetSpellTargetUnit(),
+                    targetLoc = cj.GetSpellTargetLoc()
+                }
+            )
+        end),
+        skillStop = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.skillStop,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                    triggerSkill = cj.GetSpellAbilityId()
+                }
+            )
+        end),
+        skillEffect = cj.Condition(function()
+            local evtData = {
+                triggerUnit = cj.GetTriggerUnit(),
+                triggerSkill = cj.GetSpellAbilityId(),
+                targetUnit = cj.GetSpellTargetUnit(),
+                targetItem = cj.GetSpellTargetItem(),
+                targetLoc = cj.GetSpellTargetLoc(),
+            }
+            hevent.trigger(evtData.triggerUnit, CONST_EVENT.skillEffect, evtData)
+        end),
+        skillFinish = cj.Condition(function()
+            local evtData = {
+                triggerUnit = cj.GetTriggerUnit(),
+                triggerSkill = cj.GetSpellAbilityId(),
+            }
+            hevent.trigger(evtData.triggerUnit, CONST_EVENT.skillFinish, evtData)
+        end),
+        levelUp = cj.Condition(function()
+            local u = cj.GetTriggerUnit()
+            local diffLv = cj.GetHeroLevel(u) - hhero.getPrevLevel(u)
+            if (diffLv < 1) then
+                return
+            end
+            hhero.setPrevLevel(u, cj.GetHeroLevel(u))
+            -- @触发升级事件
+            hevent.trigger(u, CONST_EVENT.levelUp, {
+                triggerUnit = u,
+                value = diffLv
+            })
+            -- 重读部分属性（因为有些属性在物编可升级提升）
+            hattribute.set(u, 0, {
+                str_white = "=" .. cj.GetHeroStr(u, false),
+                agi_white = "=" .. cj.GetHeroAgi(u, false),
+                int_white = "=" .. cj.GetHeroInt(u, false),
+            })
+        end),
+        upgradeStart = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.upgradeStart,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                }
+            )
+        end),
+        upgradeCancel = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.upgradeCancel,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                }
+            )
+        end),
+        upgradeFinish = cj.Condition(function()
+            hevent.trigger(
+                cj.GetTriggerUnit(),
+                CONST_EVENT.upgradeFinish,
+                {
+                    triggerUnit = cj.GetTriggerUnit(),
+                }
+            )
+        end),
+        sellUnit = cj.Condition(function()
             local u = cj.GetSoldUnit()
             hunit.embed(u)
-            hevent.triggerEvent(
+            hevent.trigger(
                 cj.GetSellingUnit(),
                 CONST_EVENT.unitSell,
                 {
@@ -419,30 +333,7 @@ hevent_default_actions = {
                 }
             )
         end),
-    },
-    dialog = {
-        click = cj.Condition(function()
-            local clickedDialog = cj.GetClickedDialog()
-            local clickedButton = cj.GetClickedButton()
-            local buttons = hcache.get(clickedDialog, CONST_CACHE.DIALOG_BUTTON, nil)
-            if (buttons == nil) then
-                return
-            end
-            local val
-            for _, b in ipairs(buttons) do
-                if (b.button == clickedButton) then
-                    val = b.value
-                end
-            end
-            local action = hcache.get(clickedDialog, CONST_CACHE.DIALOG_ACTION, nil)
-            if (type(action) == 'function') then
-                action(val)
-            end
-            hdialog.del(clickedDialog)
-        end)
-    },
-    item = {
-        pickup = cj.Condition(function()
+        pickupItem = cj.Condition(function()
             local it = cj.GetManipulatedItem()
             local itId = cj.GetItemTypeId(it)
             if (itId == 0) then
@@ -454,7 +345,7 @@ hevent_default_actions = {
             local charges = hitem.getCharges(it)
             -- 触发获得物品
             local evtData = { triggerUnit = u, triggerItem = it }
-            hevent.triggerEvent(u, CONST_EVENT.itemGet, evtData)
+            hevent.trigger(u, CONST_EVENT.itemGet, evtData)
             if (false == his.destroy(it)) then
                 -- 如果是自动使用的，用一波
                 if (hitem.getIsPowerUp(itId)) then
@@ -473,7 +364,7 @@ hevent_default_actions = {
                 hitem.addProperty(u, itId, charges)
             end
         end),
-        drop = cj.Condition(function()
+        dropItem = cj.Condition(function()
             local it = cj.GetManipulatedItem()
             local itId = cj.GetItemTypeId(it)
             if (itId == 0) then
@@ -500,7 +391,7 @@ hevent_default_actions = {
                         hitemPool.insert(CONST_CACHE.ITEM_POOL_PICK, it)
                     end
                     --触发丢弃物品事件
-                    hevent.triggerEvent(u, CONST_EVENT.itemDrop, {
+                    hevent.trigger(u, CONST_EVENT.itemDrop, {
                         triggerUnit = u,
                         triggerItem = it,
                         targetUnit = nil,
@@ -508,7 +399,7 @@ hevent_default_actions = {
                 end)
             end
         end),
-        pawn = cj.Condition(function()
+        pawnItem = cj.Condition(function()
             --[[
                 抵押物品的原理，首先默认是设定：物品售卖为50%，也就是地图的默认设置
                 根据玩家的sellRatio，额外的减少或增加玩家的收入
@@ -542,7 +433,7 @@ hevent_default_actions = {
                 end
             end
             --触发抵押物品事件
-            hevent.triggerEvent(u, CONST_EVENT.itemPawn, {
+            hevent.trigger(u, CONST_EVENT.itemPawn, {
                 triggerUnit = u,
                 soldItem = it,
                 buyingUnit = cj.GetBuyingUnit(),
@@ -550,7 +441,7 @@ hevent_default_actions = {
                 soldLumber = soldLumber,
             })
         end),
-        use = cj.Condition(function()
+        useItem = cj.Condition(function()
             local u = cj.GetTriggerUnit()
             if (his.silent(u)) then
                 return
@@ -572,7 +463,7 @@ hevent_default_actions = {
                 end
             end
         end),
-        use_s = cj.Condition(function()
+        useItemX = cj.Condition(function()
             local u = cj.GetTriggerUnit()
             if (his.silent(u)) then
                 return
@@ -588,8 +479,8 @@ hevent_default_actions = {
                 targetLoc = cj.GetSpellTargetLoc(),
             })
         end),
-        sell = cj.Condition(function()
-            hevent.triggerEvent(
+        sellItem = cj.Condition(function()
+            hevent.trigger(
                 cj.GetSellingUnit(),
                 CONST_EVENT.itemSell,
                 {
@@ -599,8 +490,93 @@ hevent_default_actions = {
                 }
             )
         end),
+    },
+    hero = {
+        reborn = function(u, rebornSec)
+            local x = hunit.x(u)
+            local y = hunit.y(u)
+            if (rebornSec > 0) then
+                local p = hunit.getOwner(u)
+                htexture.mark(htexture.DEFAULT_MARKS.DREAM, rebornSec, p, 255, 0, 0)
+                local ghost = hunit.create({
+                    register = false,
+                    whichPlayer = hplayer.player_passive,
+                    id = hunit.getId(u),
+                    x = x,
+                    y = y,
+                    facing = 270,
+                    height = 40,
+                    modelScale = 0.9,
+                    opacity = 0.6,
+                    isShadow = true,
+                    isInvulnerable = true,
+                    during = rebornSec,
+                })
+                hunit.setColor(ghost, hplayer.index(p))
+                hunit.create({
+                    register = false,
+                    whichPlayer = p,
+                    id = HL_ID.hero_death_token,
+                    x = x,
+                    y = y,
+                    opacity = 0.8,
+                    isShadow = true,
+                    isInvulnerable = true,
+                    during = rebornSec,
+                    timeScale = 10 / rebornSec,
+                })
+            end
+            hhero.reborn(u, rebornSec, 1, x, y)
+        end,
+    },
+    unit = {
+        damaged = cj.Condition(function()
+            local sourceUnit = cj.GetEventDamageSource()
+            local targetUnit = cj.GetTriggerUnit()
+            local damage = cj.GetEventDamage()
+            hjapi.EXSetEventDamage(0)
+            if (damage > 0.125) then
+                local isAttack = hjapi.isEventAttackDamage() or true
+                htime.setTimeout(0, function()
+                    local damageSrc = CONST_DAMAGE_SRC.attack
+                    if (false == isAttack) then
+                        --- [非攻击]->[技能伤害]
+                        damageSrc = CONST_DAMAGE_SRC.skill
+                    end
+                    hskill.damage({
+                        sourceUnit = sourceUnit,
+                        targetUnit = targetUnit,
+                        damage = damage,
+                        damageSrc = damageSrc,
+                    })
+                end)
+            end
+        end),
+    },
+    dialog = {
+        click = cj.Condition(function()
+            local clickedDialog = cj.GetClickedDialog()
+            local clickedButton = cj.GetClickedButton()
+            local buttons = hcache.get(clickedDialog, CONST_CACHE.DIALOG_BUTTON, nil)
+            if (buttons == nil) then
+                return
+            end
+            local val
+            for _, b in ipairs(buttons) do
+                if (b.button == clickedButton) then
+                    val = b.value
+                end
+            end
+            local action = hcache.get(clickedDialog, CONST_CACHE.DIALOG_ACTION, nil)
+            if (type(action) == 'function') then
+                action(val)
+            end
+            hdialog.del(clickedDialog)
+        end)
+    },
+    item = {
         destroy = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 cj.GetManipulatedItem(),
                 CONST_EVENT.itemDestroy,
                 {
@@ -612,7 +588,7 @@ hevent_default_actions = {
     },
     destructable = {
         destroy = cj.Condition(function()
-            hevent.triggerEvent(
+            hevent.trigger(
                 cj.GetTriggerDestructable(),
                 CONST_EVENT.destructableDestroy,
                 {

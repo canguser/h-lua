@@ -65,7 +65,7 @@ hdialog.create = function(whichPlayer, options, action)
     hcache.alloc(d)
     hcache.set(d, CONST_CACHE.DIALOG_ACTION, action)
     hcache.set(d, CONST_CACHE.DIALOG_BUTTON, buttons)
-    hevent.pool(d, hevent_default_actions.dialog.click, function(tgr)
+    hevent.poolRed(d, hevent_default_actions.dialog.click, function(tgr)
         cj.TriggerRegisterDialogEvent(tgr, d)
     end)
     if (whichPlayer == nil) then

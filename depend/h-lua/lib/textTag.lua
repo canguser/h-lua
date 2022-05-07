@@ -93,41 +93,6 @@ htextTag.create2Unit = function(u, msg, size, color, opacity, during, zOffset)
     return htextTag.create2XY(hunit.x(u), hunit.y(u), msg, size, color, opacity, during, zOffset)
 end
 
---- 漂浮文字 - 默认 (绑定在某单位头上，跟随移动)
----@param u userdata
----@param msg string
----@param size number
----@param color string hex 6位颜色代码 http://www.atool.org/colorpicker.php
----@param opacity number 不透明度，为0则不可见(0.0~1.0)
----@param during number 设置during为0则永久显示
----@param zOffset number z轴高度偏移量
----@return userdata
-htextTag.createFollowUnit = function(u, msg, size, color, opacity, during, zOffset)
-    local ttg = htextTag.create2Unit(u, msg, size, color, opacity, during, zOffset)
-    if (ttg == nil) then
-        htime.setTimeout(0.1, function(t)
-            t.destroy()
-            htextTag.createFollowUnit(u, msg, size, color, opacity, during, zOffset)
-        end)
-        return
-    end
-    local txt = htextTag.getMsg(ttg)
-    local scale = 0.5
-    htime.setInterval(0.03, function(t)
-        if (txt == nil) then
-            t.destroy()
-            return
-        end
-        cj.SetTextTagPos(ttg, hunit.x(u) - cj.StringLength(txt) * size * scale, hunit.y(u), zOffset)
-        if (his.alive(u) == true) then
-            cj.SetTextTagVisibility(ttg, true)
-        else
-            cj.SetTextTagVisibility(ttg, false)
-        end
-    end)
-    return ttg
-end
-
 --- 获取漂浮字大小
 ---@param ttg userdata
 ---@return number|nil
@@ -325,7 +290,7 @@ htextTag.model = function(options)
                             modelScale = scale,
                             qty = 1,
                         })
-                        local eff = heffect.bindUnit(mdl, u, "origin", -1)
+                        local eff = heffect.attach(mdl, u, "origin", -1)
                         local dur = 0
                         local h = z
                         htime.setInterval(0.03, function(curTimer)

@@ -160,7 +160,7 @@ hunit.addExp = function(u, val, showEffect)
     val = cj.R2I(val * hplayer.getExpRatio(hunit.getOwner(u)) / 100)
     cj.AddHeroXP(u, val, showEffect)
     -- @触发事件
-    hevent.triggerEvent(u, CONST_EVENT.exp, { triggerUnit = u, value = val })
+    hevent.trigger(u, CONST_EVENT.exp, { triggerUnit = u, value = val })
 end
 
 --- 设置单位的生命周期
@@ -310,10 +310,10 @@ hunit.setRGBA = function(whichUnit, red, green, blue, opacity)
     if (uid == nil) then
         return
     end
-    red = math.floor(math.max(0, math.min(255, red)))
-    green = math.floor(math.max(0, math.min(255, green)))
-    blue = math.floor(math.max(0, math.min(255, blue)))
-    opacity = math.floor(255 * math.max(0, math.min(1, opacity)))
+    red = math.floor(math.max(0, math.min(255, red or 255)))
+    green = math.floor(math.max(0, math.min(255, green or 255)))
+    blue = math.floor(math.max(0, math.min(255, blue or 255)))
+    opacity = math.floor(255 * math.max(0, math.min(1, opacity or 1)))
     cj.SetUnitVertexColor(whichUnit, red, green, blue, opacity)
 end
 
@@ -393,48 +393,16 @@ hunit.embed = function(u, options)
     hcache.alloc(u)
     hcache.set(u, CONST_CACHE.UNIT_ANIMATE_SPEED, options.timeScale or 1.00)
     hcache.set(u, CONST_CACHE.ATTR, -1)
-    hevent.pool(u, hevent_default_actions.unit.damaged, function(tgr)
+    hevent.poolRed(u, hevent_default_actions.unit.damaged, function(tgr)
         cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_DAMAGED)
     end)
-    hevent.pool(u, hevent_default_actions.unit.dead, function(tgr)
-        cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_DEATH)
-    end)
-    hevent.pool(u, hevent_default_actions.unit.skillEffect, function(tgr)
-        cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_SPELL_EFFECT)
-    end)
-    hevent.pool(u, hevent_default_actions.unit.skillFinish, function(tgr)
-        cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_SPELL_FINISH)
-    end)
-    --[[
-        单位指令，如果单位的玩家是真人或者开发者要求嵌入，才会使指令捕捉生效
-        因为大部分单位不需要捕捉指令，故做此判断
-        开启指令的单位可以开启以下事件：移动相关、停止、驻扎
-        开启指令的单位可以开启以下判断：是否正在移动
-        * 移动的具体指标请查看event说明
-    ]]
-    if (his.computer(hunit.getOwner(u)) == false or options.registerOrderEvent == true) then
-        hevent.pool(u, hevent_default_actions.unit.order, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_ISSUED_ORDER)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_ISSUED_POINT_ORDER)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_ISSUED_TARGET_ORDER)
-        end)
-    end
     -- 物品系统
-    if (his.hasSlot(u)) then
-        hitem.embed(u)
-    elseif (options.isOpenSlot == true) then
+    if (options.isOpenSlot == true) then
         hskill.add(u, HL_ID.ability_item_slot, 1)
-        hitem.embed(u)
     end
     -- 如果是英雄，注册事件和计算初次属性
     if (his.hero(u) == true) then
         hhero.setPrevLevel(u, 1)
-        hevent.pool(u, hevent_default_actions.hero.levelUp, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_HERO_LEVEL)
-        end)
-        hevent.pool(u, hevent_default_actions.unit.skillStudy, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_HERO_SKILL)
-        end)
         hattribute.set(u, 0, {
             str_white = "=" .. cj.GetHeroStr(u, false),
             agi_white = "=" .. cj.GetHeroAgi(u, false),

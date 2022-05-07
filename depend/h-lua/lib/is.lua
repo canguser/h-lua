@@ -1,8 +1,6 @@
 ---@class his 判断
 his = {}
 
-
-
 --- 是否电脑(如果位置为电脑玩家或无玩家，则为true)
 --- 常用来判断电脑AI是否开启
 ---@param whichPlayer userdata

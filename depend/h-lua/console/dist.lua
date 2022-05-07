@@ -1,9 +1,5 @@
 DEBUGGING = false
-print = function(...)
-end
-stack = function(...)
-end
-dump = function(value, description, nesting)
-end
-err = function(val)
-end
+print = function(...) end
+function stack(...) end
+function dump(value, description, nesting) end
+function err(val) end

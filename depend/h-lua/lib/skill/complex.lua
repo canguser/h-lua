@@ -41,7 +41,7 @@ hskill.broken = function(options)
     cj.IssueTargetOrder(cu, "thunderbolt", u)
     hunit.del(cu, 0.3)
     if (type(options.effect) == "string" and string.len(options.effect) > 0) then
-        heffect.toUnit(options.effect, u, 0)
+        heffect.xyz(options.effect, hunit.x(u), hunit.y(u), hunit.z(u), 0)
     end
     if (damage > 0) then
         hskill.damage(
@@ -56,7 +56,7 @@ hskill.broken = function(options)
         )
     end
     -- @触发打断事件
-    hevent.triggerEvent(
+    hevent.trigger(
         sourceUnit,
         CONST_EVENT.broken,
         {
@@ -67,7 +67,7 @@ hskill.broken = function(options)
         }
     )
     -- @触发被打断事件
-    hevent.triggerEvent(
+    hevent.trigger(
         u,
         CONST_EVENT.beBroken,
         {
@@ -144,7 +144,7 @@ hskill.swim = function(options)
     end
     hcache.set(u, CONST_CACHE.SKILL_SWIM, true)
     if (type(options.effect) == "string" and string.len(options.effect) > 0) then
-        heffect.bindUnit(options.effect, u, "origin", during)
+        heffect.attach(options.effect, u, "origin", during)
     end
     if (during <= 0.5) then
         during = 0.05 * math.floor(during / 0.05) --必须是0.05的倍数
@@ -169,7 +169,7 @@ hskill.swim = function(options)
         )
     end
     -- @触发眩晕事件
-    hevent.triggerEvent(
+    hevent.trigger(
         sourceUnit,
         CONST_EVENT.swim,
         {
@@ -181,7 +181,7 @@ hskill.swim = function(options)
         }
     )
     -- @触发被眩晕事件
-    hevent.triggerEvent(
+    hevent.trigger(
         u,
         CONST_EVENT.beSwim,
         {
@@ -242,17 +242,12 @@ hskill.silent = function(options)
         damage = damage * (1 - oppose * 0.01)
     end
     local level = hcache.get(u, CONST_CACHE.SKILL_SILENT_LEVEL, 0) + 1
-    if (level <= 1) then
-        htextTag.model({ msg = "沉默", whichUnit = u, red = 238, green = 130, blue = 238 })
-    else
-        htextTag.model({ msg = math.floor(level) .. "重沉默", whichUnit = u, red = 238, green = 130, blue = 238 })
-    end
     if (type(options.effect) == "string" and string.len(options.effect) > 0) then
-        heffect.bindUnit(options.effect, u, "origin", during)
+        heffect.attach(options.effect, u, "origin", during)
     end
     hcache.set(u, CONST_CACHE.SKILL_SILENT_LEVEL, level)
     if (true == hcache.get(u, CONST_CACHE.SKILL_SILENT, false)) then
-        local eff = heffect.bindUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl", u, "head", -1)
+        local eff = heffect.attach("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl", u, "head", -1)
         hcache.set(u, CONST_CACHE.SKILL_SILENT_EFFECT, eff)
     end
     hcache.set(u, CONST_CACHE.SKILL_SILENT, true)
@@ -268,7 +263,7 @@ hskill.silent = function(options)
         )
     end
     -- @触发沉默事件
-    hevent.triggerEvent(
+    hevent.trigger(
         sourceUnit,
         CONST_EVENT.silent,
         {
@@ -280,7 +275,7 @@ hskill.silent = function(options)
         }
     )
     -- @触发被沉默事件
-    hevent.triggerEvent(
+    hevent.trigger(
         u,
         CONST_EVENT.beSilent,
         {
@@ -295,7 +290,7 @@ hskill.silent = function(options)
         t.destroy()
         hcache.set(u, CONST_CACHE.SKILL_SILENT_LEVEL, hcache.get(u, CONST_CACHE.SKILL_SILENT_LEVEL, 0) - 1)
         if (hcache.get(u, CONST_CACHE.SKILL_SILENT_LEVEL, 0) <= 0) then
-            heffect.del(hcache.get(u, CONST_CACHE.SKILL_SILENT_EFFECT))
+            heffect.destroy(hcache.get(u, CONST_CACHE.SKILL_SILENT_EFFECT))
             hcache.set(u, CONST_CACHE.SKILL_SILENT, false)
         end
     end)
@@ -339,17 +334,12 @@ hskill.unarm = function(options)
         damage = damage * (1 - oppose * 0.01)
     end
     local level = hcache.get(u, CONST_CACHE.SKILL_UN_ARM_LEVEL, 0) + 1
-    if (level <= 1) then
-        htextTag.model({ msg = "缴械", whichUnit = u, red = 255, green = 228, blue = 225 })
-    else
-        htextTag.model({ msg = math.floor(level) .. "重缴械", whichUnit = u, red = 255, green = 228, blue = 225 })
-    end
     if (type(options.effect) == "string" and string.len(options.effect) > 0) then
-        heffect.bindUnit(options.effect, u, "origin", during)
+        heffect.attach(options.effect, u, "origin", during)
     end
     hcache.set(u, CONST_CACHE.SKILL_UN_ARM_LEVEL, level)
     if (true == hcache.get(u, CONST_CACHE.SKILL_UN_ARM, false)) then
-        local eff = heffect.bindUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl", u, "weapon", -1)
+        local eff = heffect.attach("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl", u, "weapon", -1)
         hcache.set(u, CONST_CACHE.SKILL_UN_ARM_EFFECT, eff)
     end
     hcache.set(u, CONST_CACHE.SKILL_UN_ARM, true)
@@ -363,7 +353,7 @@ hskill.unarm = function(options)
         })
     end
     -- @触发缴械事件
-    hevent.triggerEvent(sourceUnit, CONST_EVENT.unarm, {
+    hevent.trigger(sourceUnit, CONST_EVENT.unarm, {
         triggerUnit = sourceUnit,
         targetUnit = u,
         odds = odds,
@@ -371,7 +361,7 @@ hskill.unarm = function(options)
         during = during
     })
     -- @触发被缴械事件
-    hevent.triggerEvent(u, CONST_EVENT.beUnarm, {
+    hevent.trigger(u, CONST_EVENT.beUnarm, {
         triggerUnit = u,
         sourceUnit = sourceUnit,
         odds = odds,
@@ -382,7 +372,7 @@ hskill.unarm = function(options)
         t.destroy()
         hcache.set(u, CONST_CACHE.SKILL_UN_ARM_LEVEL, hcache.get(u, CONST_CACHE.SKILL_UN_ARM_LEVEL, 0) - 1)
         if (hcache.get(u, CONST_CACHE.SKILL_UN_ARM_LEVEL, 0) <= 0) then
-            heffect.del(hcache.get(u, CONST_CACHE.SKILL_UN_ARM_EFFECT))
+            heffect.destroy(hcache.get(u, CONST_CACHE.SKILL_UN_ARM_EFFECT))
             hcache.set(u, CONST_CACHE.SKILL_UN_ARM, false)
         end
     end)
@@ -451,7 +441,7 @@ hskill.lightningChain = function(options)
     end
     hlightning.unit2unit(lightningType, prevUnit, targetUnit, 0.25)
     if (options.effect ~= nil) then
-        heffect.bindUnit(options.effect, targetUnit, "origin", 0.5)
+        heffect.attach(options.effect, targetUnit, "origin", 0.5)
     end
     hskill.damage({
         sourceUnit = options.sourceUnit,
@@ -462,7 +452,7 @@ hskill.lightningChain = function(options)
         damageRGB = { 135, 206, 250 },
     })
     -- @触发闪电链成功事件
-    hevent.triggerEvent(
+    hevent.trigger(
         options.sourceUnit,
         CONST_EVENT.lightningChain,
         {
@@ -475,7 +465,7 @@ hskill.lightningChain = function(options)
         }
     )
     -- @触发被闪电链事件
-    hevent.triggerEvent(
+    hevent.trigger(
         targetUnit,
         CONST_EVENT.beLightningChain,
         {
@@ -595,7 +585,7 @@ hskill.crackFly = function(options)
     hskill.silent(tempObj)
     hattribute.set(options.targetUnit, during, { move = "-9999" })
     if (type(options.effect) == "string" and string.len(options.effect) > 0) then
-        heffect.bindUnit(options.effect, options.targetUnit, "origin", during)
+        heffect.attach(options.effect, options.targetUnit, "origin", during)
     end
     hunit.setCanFly(options.targetUnit)
     cj.SetUnitPathing(options.targetUnit, false)
@@ -609,7 +599,7 @@ hskill.crackFly = function(options)
     end
     local cost = 0
     -- @触发击飞事件
-    hevent.triggerEvent(
+    hevent.trigger(
         options.sourceUnit,
         CONST_EVENT.crackFly,
         {
@@ -622,7 +612,7 @@ hskill.crackFly = function(options)
         }
     )
     -- @触发被击飞事件
-    hevent.triggerEvent(
+    hevent.trigger(
         options.targetUnit,
         CONST_EVENT.beCrackFly,
         {
@@ -659,7 +649,7 @@ hskill.crackFly = function(options)
                 -- 如果是水面，创建水花
                 tempEff = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl"
             end
-            heffect.toUnit(tempEff, options.targetUnit, 0)
+            heffect.xyz(tempEff, hunit.x(options.targetUnit), hunit.y(options.targetUnit), hunit.z(options.targetUnit), 0)
             t.destroy()
             return
         end
@@ -668,15 +658,10 @@ hskill.crackFly = function(options)
             dist = distance / (during * 0.5 / timerSetTime)
             z = height / (during * 0.35 / timerSetTime)
             if (dist > 0) then
-                local pxy = math.polarProjection(
-                    hunit.x(options.targetUnit),
-                    hunit.y(options.targetUnit),
-                    dist,
-                    originDeg
-                )
+                local px, py = math.polarProjection(hunit.x(options.targetUnit), hunit.y(options.targetUnit), dist, originDeg)
                 cj.SetUnitFacing(options.targetUnit, originFacing)
-                if (his.borderMap(pxy.x, pxy.y) == false) then
-                    hunit.portal(options.targetUnit, pxy.x, pxy.y)
+                if (his.borderMap(px, py) == false) then
+                    hunit.portal(options.targetUnit, px, py)
                 end
             end
             if (z > 0) then
@@ -686,15 +671,10 @@ hskill.crackFly = function(options)
             dist = distance / (during * 0.5 / timerSetTime)
             z = height / (during * 0.65 / timerSetTime)
             if (dist > 0) then
-                local pxy = math.polarProjection(
-                    hunit.x(options.targetUnit),
-                    hunit.y(options.targetUnit),
-                    dist,
-                    originDeg
-                )
+                local px, py = math.polarProjection(hunit.x(options.targetUnit), hunit.y(options.targetUnit), dist, originDeg)
                 cj.SetUnitFacing(options.targetUnit, originFacing)
-                if (his.borderMap(pxy.x, pxy.y) == false) then
-                    hunit.portal(options.targetUnit, pxy.x, pxy.y)
+                if (his.borderMap(px, py) == false) then
+                    hunit.portal(options.targetUnit, px, py)
                 end
             end
             if (z > 0) then
@@ -751,7 +731,7 @@ hskill.rangeSwim = function(options)
         err("filter must be function")
         return
     end
-    heffect.toXY(effect, x, y, 0)
+    heffect.xyz(effect, x, y, nil, 0)
     local g = hgroup.createByXY(x, y, radius, filter)
     if (g == nil) then
         err("rangeSwim has not target")
@@ -821,7 +801,7 @@ hskill.whirlwind = function(options)
     end
     hcache.set(options.sourceUnit, CONST_CACHE.SKILL_WHIRLWIND, true)
     if (options.effect ~= nil) then
-        heffect.bindUnit(options.effect, options.sourceUnit, "origin", during)
+        heffect.attach(options.effect, options.sourceUnit, "origin", during)
     end
     if (options.animation) then
         cj.AddUnitAnimationProperties(options.sourceUnit, options.animation, true)
@@ -972,24 +952,23 @@ hskill.leap = function(options)
         repeatGroup = {}
     end
     if (arrowUnit == nil) then
-        local cxy
+        local cx, cy
         if (options.tokenX and options.tokenY) then
-            cxy = { x = options.tokenX, y = options.tokenY }
+            cx, cy = options.tokenX, options.tokenY
         else
-            cxy = math.polarProjection(hunit.x(prevUnit), hunit.y(prevUnit), 100, initFacing)
+            cx, cy = math.polarProjection(hunit.x(prevUnit), hunit.y(prevUnit), 100, initFacing)
         end
         arrowUnit = hunit.create({
             register = false,
             whichPlayer = hunit.getOwner(sourceUnit),
             id = HL_ID.unit_token_leap,
-            x = cxy.x,
-            y = cxy.y,
+            x = cx,
+            y = cy,
             facing = initFacing,
             modelScale = tokenArrowScale,
             opacity = tokenArrowOpacity,
             qty = 1
         })
-        cxy = nil
         if (tokenArrowHeight > 0) then
             hunit.setFlyHeight(arrowUnit, tokenArrowHeight, 9999)
         end
@@ -999,7 +978,7 @@ hskill.leap = function(options)
     --绑定一个无限的effect
     local tempEffectArrow
     if (tokenArrow ~= nil) then
-        tempEffectArrow = heffect.bindUnit(tokenArrow, arrowUnit, "origin", -1)
+        tempEffectArrow = heffect.attach(tokenArrow, arrowUnit, "origin", -1)
     end
     -- 无敌加无路径
     cj.SetUnitPathing(arrowUnit, false)
@@ -1010,7 +989,7 @@ hskill.leap = function(options)
     -- 结束！
     local ending = function(endX, endY)
         if (tempEffectArrow ~= nil) then
-            heffect.del(tempEffectArrow)
+            heffect.destroy(tempEffectArrow)
         end
         if (repeatGroup ~= nil) then
             repeatGroup = nil
@@ -1022,7 +1001,7 @@ hskill.leap = function(options)
         end
         if (his.alive(arrowUnit)) then
             if (options.effectEnd ~= nil) then
-                heffect.toXY(options.effectEnd, endX, endY, 0)
+                heffect.xyz(options.effectEnd, endX, endY, nil, 0)
             end
             if (damageEndRadius == 0 and options.targetUnit ~= nil) then
                 if (damageEnd > 0) then
@@ -1099,18 +1078,18 @@ hskill.leap = function(options)
             sh = shake * d / distanceOrigin
         end
         local fac = math.getDegBetweenXY(ax, ay, tx, ty) + sh
-        local txy = math.polarProjection(ax, ay, speed, fac)
+        local px, py = math.polarProjection(ax, ay, speed, fac)
         if (acceleration ~= 0) then
             speed = speed + acceleration
         end
-        if (his.borderMap(txy.x, txy.y) == false) then
-            hunit.portal(arrowUnit, txy.x, txy.y)
+        if (his.borderMap(px, py) == false) then
+            hunit.portal(arrowUnit, px, py)
         else
             speed = 0
         end
         cj.SetUnitFacing(arrowUnit, fac)
         if (options.effectMovement ~= nil) then
-            heffect.toXY(options.effectMovement, txy.x, txy.y, 0)
+            heffect.xyz(options.effectMovement, px, py, nil, 0)
         end
         if (damageMovementRadius > 0) then
             local g = hgroup.createByUnit(
@@ -1142,7 +1121,7 @@ hskill.leap = function(options)
                         })
                     end
                     if (damageMovementDrag == true) then
-                        hunit.portal(eu, txy.x, txy.y)
+                        hunit.portal(eu, px, py)
                     end
                     if (type(extraInfluence) == "function") then
                         extraInfluence(eu)
@@ -1159,7 +1138,7 @@ hskill.leap = function(options)
         end
         if (distance <= speed or speed <= 0 or his.dead(arrowUnit) == true) then
             t.destroy()
-            ending(txy.x, txy.y)
+            ending(px, py)
         end
     end)
 end
@@ -1215,13 +1194,13 @@ hskill.leapPaw = function(options)
     local firstDeg = facing + (deg * (qty - 1) * 0.5)
     for i = 1, qty, 1 do
         local angle = firstDeg - deg * (i - 1)
-        local txy = math.polarProjection(sx, sy, distance, angle)
+        local px, py = math.polarProjection(sx, sy, distance, angle)
         hskill.leap({
             arrowUnit = options.arrowUnit,
             sourceUnit = options.sourceUnit,
             targetUnit = nil,
-            x = txy.x,
-            y = txy.y,
+            x = px,
+            y = py,
             speed = options.speed,
             acceleration = options.acceleration,
             height = options.height,

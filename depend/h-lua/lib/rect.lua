@@ -254,9 +254,9 @@ hrect.lock = function(options)
                 end
             end
             if (distance > 0.0) then
-                local polar = math.polarProjection(x, y, distance, deg)
-                hunit.portal(u, polar.x, polar.y)
-                heffect.bindUnit("Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl", u, "origin", 0.2)
+                local px, py = math.polarProjection(x, y, distance, deg)
+                hunit.portal(u, px, py)
+                heffect.attach("Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl", u, "origin", 0.2)
             end
         end)
         if (lockRect ~= nil) then

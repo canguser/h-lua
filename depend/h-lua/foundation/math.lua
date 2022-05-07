@@ -40,7 +40,7 @@ end
 ---@param y number
 ---@param dist number
 ---@param angle number
----@return table
+---@return number,number
 math.polarProjection = function(x, y, dist, angle)
     local tx = x + dist * math.cos(angle * math_deg2rad)
     local ty = y + dist * math.sin(angle * math_deg2rad)
@@ -54,7 +54,7 @@ math.polarProjection = function(x, y, dist, angle)
     elseif (ty > hrect.getMaxY(hrect.playable())) then
         ty = hrect.getMaxY(hrect.playable())
     end
-    return { x = tx, y = ty }
+    return tx, ty
 end
 
 --- 数字四舍五入

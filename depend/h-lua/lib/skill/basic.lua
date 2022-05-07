@@ -11,7 +11,7 @@ hskill.invulnerable = function(whichUnit, during, effect)
     end
     cj.UnitAddAbility(whichUnit, HL_ID.ability_invulnerable)
     if (during > 0 and effect ~= nil) then
-        heffect.bindUnit(effect, whichUnit, "origin", during)
+        heffect.attach(effect, whichUnit, "origin", during)
     end
     htime.setTimeout(during, function(t)
         t.destroy()
@@ -37,7 +37,7 @@ hskill.invulnerableRange = function(x, y, radius, filter, during, effect)
     hgroup.forEach(g, function(eu)
         hunit.setInvulnerable(eu, true)
         if (during > 0 and effect ~= nil) then
-            heffect.bindUnit(effect, eu, "origin", during)
+            heffect.attach(effect, eu, "origin", during)
         end
     end)
     htime.setTimeout(during, function(t)
@@ -115,7 +115,7 @@ hskill.invisible = function(whichUnit, during, transition, effect)
     end
     transition = transition or 0
     if (effect ~= nil) then
-        heffect.toUnit(effect, whichUnit, 0)
+        heffect.xyz(effect, hunit.x(whichUnit), hunit.y(whichUnit), hunit.z(whichUnit), 0)
     end
     if (transition > 0) then
         htime.setTimeout(transition, function(t)
@@ -141,7 +141,7 @@ hskill.visible = function(whichUnit, during, transition, effect)
     end
     transition = transition or 0
     if (effect ~= nil) then
-        heffect.toUnit(effect, whichUnit, 0)
+        heffect.xyz(effect, hunit.x(whichUnit), hunit.y(whichUnit), hunit.z(whichUnit), 0)
     end
     if (transition > 0) then
         htime.setTimeout(transition, function(t)

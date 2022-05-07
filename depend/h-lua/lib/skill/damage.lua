@@ -1,17 +1,3 @@
--- 伤害漂浮字
-local _damageTtgQty = 0
-local _damageTtg = function(targetUnit, damage, fix, rgb, speed)
-    _damageTtgQty = _damageTtgQty + 1
-    local during = 1.0
-    local x = hunit.x(targetUnit) - 0.05 - _damageTtgQty * 0.013
-    local y = hunit.y(targetUnit)
-    htextTag.model({ msg = fix .. math.floor(damage), x = x, y = y, red = rgb[1], green = rgb[2], blue = rgb[3], speed = speed })
-    htime.setTimeout(during, function(t)
-        t.destroy()
-        _damageTtgQty = _damageTtgQty - 1
-    end)
-end
-
 --[[
     造成伤害
     options = {
@@ -81,7 +67,6 @@ hskill.damage = function(options)
     end
     -- 计算单位是否无敌
     if (his.invincible(targetUnit) == true) then
-        htextTag.model({ msg = "无敌", whichUnit = targetUnit, red = 255, green = 215, blue = 0 })
         return
     end
     -- 伤害计算
@@ -163,16 +148,14 @@ hskill.damage = function(options)
                 end)
             )
         end
-        -- 造成伤害及漂浮字
-        _damageTtg(targetUnit, lastDamage, damageString, damageRGB, speed)
-        --
+        -- 扣血
         hunit.subCurLife(targetUnit, lastDamage)
         if (type(effect) == "string" and string.len(effect) > 0) then
-            heffect.toXY(effect, hunit.x(targetUnit), hunit.y(targetUnit), 0)
+            heffect.xyz(effect, hunit.x(targetUnit), hunit.y(targetUnit), hunit.z(targetUnit), 0)
         end
         -- @触发伤害事件
         if (sourceUnit ~= nil) then
-            hevent.triggerEvent(
+            hevent.trigger(
                 sourceUnit,
                 CONST_EVENT.damage,
                 {
@@ -184,7 +167,7 @@ hskill.damage = function(options)
             )
         end
         -- @触发被伤害事件
-        hevent.triggerEvent(targetUnit, CONST_EVENT.beDamage, {
+        hevent.trigger(targetUnit, CONST_EVENT.beDamage, {
             triggerUnit = targetUnit,
             sourceUnit = sourceUnit,
             damage = lastDamage,
@@ -193,14 +176,14 @@ hskill.damage = function(options)
         if (damageSrc == CONST_DAMAGE_SRC.attack) then
             if (sourceUnit ~= nil) then
                 -- @触发攻击事件
-                hevent.triggerEvent(sourceUnit, CONST_EVENT.attack, {
+                hevent.trigger(sourceUnit, CONST_EVENT.attack, {
                     triggerUnit = sourceUnit,
                     targetUnit = targetUnit,
                     damage = lastDamage,
                 })
             end
             -- @触发被攻击事件
-            hevent.triggerEvent(targetUnit, CONST_EVENT.beAttack, {
+            hevent.trigger(targetUnit, CONST_EVENT.beAttack, {
                 triggerUnit = targetUnit,
                 attackUnit = sourceUnit,
                 damage = lastDamage,
@@ -312,7 +295,7 @@ hskill.damageRange = function(options)
         return
     end
     if (options.effect ~= nil) then
-        heffect.toXY(options.effect, x, y, 0.25 + (times * frequency))
+        heffect.xyz(options.effect, x, y, nil, 0.25 + (times * frequency))
     end
     if (times <= 1) then
         local g = hgroup.createByXY(x, y, radius, filter)

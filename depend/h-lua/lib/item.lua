@@ -22,37 +22,6 @@ hitem.z = function(it)
     return hjapi.GetZ(cj.GetItemX(it), cj.GetItemY(it))
 end
 
--- 单位嵌入到物品到框架系统
----@protected
-hitem.embed = function(u)
-    if (false == hcache.exist(u)) then
-        -- 没有注册的单位直接跳过
-        return
-    end
-    -- 如果单位的玩家是真人
-    if (his.computer(hunit.getOwner(u)) == false) then
-        -- 拾取
-        hevent.pool(u, hevent_default_actions.item.pickup, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_PICKUP_ITEM)
-        end)
-        -- 丢弃
-        hevent.pool(u, hevent_default_actions.item.drop, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_DROP_ITEM)
-        end)
-        -- 抵押
-        hevent.pool(u, hevent_default_actions.item.pawn, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_PAWN_ITEM)
-        end)
-        -- 使用
-        hevent.pool(u, hevent_default_actions.item.use, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_USE_ITEM)
-        end)
-        hevent.pool(u, hevent_default_actions.item.use_s, function(tgr)
-            cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_SPELL_EFFECT)
-        end)
-    end
-end
-
 -- 清理物品缓存数据
 ---@protected
 hitem.free = function(whichItem)
@@ -69,7 +38,7 @@ hitem.used = function(whichUnit, whichItem, triggerData)
     triggerData = triggerData or {}
     triggerData.triggerUnit = whichUnit
     triggerData.triggerItem = whichItem
-    hevent.triggerEvent(whichUnit, CONST_EVENT.itemUsed, triggerData)
+    hevent.trigger(whichUnit, CONST_EVENT.itemUsed, triggerData)
 end
 
 --- 删除物品，可延时

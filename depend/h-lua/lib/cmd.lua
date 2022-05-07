@@ -96,7 +96,7 @@ hcmd._cds["-random"] = {
             end
             table.insert(hhero.player_heroes[pIndex], u)
             -- 触发英雄被选择事件(全局)
-            hevent.triggerEvent("global", CONST_EVENT.pickHero, {
+            hevent.trigger("global", CONST_EVENT.pickHero, {
                 triggerPlayer = p,
                 triggerUnit = u
             })

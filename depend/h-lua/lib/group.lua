@@ -181,7 +181,7 @@ hgroup.portal = function(whichGroup, x, y, eff, isFollow)
             cj.PanCameraToTimedForPlayer(hunit.getOwner(eu), x, y, 0.00)
         end
         if (eff ~= nil) then
-            heffect.toXY(eff, x, y, 0)
+            heffect.xyz(eff, x, y, nil, 0)
         end
     end)
 end

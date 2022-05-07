@@ -598,7 +598,7 @@ hplayer.setGold = function(whichPlayer, gold, u)
         return
     end
     -- 触发英雄资源变动
-    hevent.triggerEvent("global", CONST_EVENT.playerResourceChange, {
+    hevent.trigger("global", CONST_EVENT.playerResourceChange, {
         triggerPlayer = whichPlayer,
         triggerUnit = u,
         type = "gold",
@@ -666,7 +666,7 @@ hplayer.setLumber = function(whichPlayer, lumber, u)
         return
     end
     -- 触发英雄资源变动
-    hevent.triggerEvent("global", CONST_EVENT.playerResourceChange, {
+    hevent.trigger("global", CONST_EVENT.playerResourceChange, {
         triggerPlayer = whichPlayer,
         triggerUnit = u,
         type = "lumber",

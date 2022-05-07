@@ -189,7 +189,7 @@ hhero.reborn = function(whichHero, delay, invulnerable, x, y)
                 hskill.invulnerable(whichHero, invulnerable)
             end
             -- @触发复活事件
-            hevent.triggerEvent(whichHero, CONST_EVENT.reborn, {
+            hevent.trigger(whichHero, CONST_EVENT.reborn, {
                 triggerUnit = whichHero
             })
         else
@@ -207,7 +207,7 @@ hhero.reborn = function(whichHero, delay, invulnerable, x, y)
                         hskill.invulnerable(whichHero, invulnerable)
                     end
                     -- @触发复活事件
-                    hevent.triggerEvent(whichHero, CONST_EVENT.reborn, {
+                    hevent.trigger(whichHero, CONST_EVENT.reborn, {
                         triggerUnit = whichHero
                     })
                 end
@@ -302,7 +302,7 @@ hhero.buildSelector = function(options)
                 cj.PauseUnit(whichHero, false)
                 table.insert(hhero.player_heroes[pIndex], whichHero)
                 -- 触发英雄被选择事件(全局)
-                hevent.triggerEvent(
+                hevent.trigger(
                     "global",
                     CONST_EVENT.pickHero,
                     {
@@ -375,7 +375,7 @@ hhero.buildSelector = function(options)
                         end
                         hcache.set(whichHero, CONST_CACHE.HERO_SELECTOR, evtData.triggerUnit)
                         -- 触发英雄被选择事件(全局)
-                        hevent.triggerEvent(
+                        hevent.trigger(
                             "global",
                             CONST_EVENT.pickHero,
                             {
