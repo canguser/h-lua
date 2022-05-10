@@ -160,8 +160,8 @@ end
 
 --- debug
 if (DEBUGGING) then
-    local debugUI = hjapi.DzCreateFrameByTagName("TEXT", "StandardSmallTextTemplate", hdzui.origin.game(), "DEBUG-UI", 0)
-    hjapi.DzFrameSetPoint(debugUI, FRAME_ALIGN_LEFT, hdzui.origin.game(), FRAME_ALIGN_LEFT, 0.001, 0.06)
+    local debugUI = hjapi.DzCreateFrameByTagName("TEXT", "StandardSmallTextTemplate", hjapi.DzGetGameUI(), "DEBUG-UI", 0)
+    hjapi.DzFrameSetPoint(debugUI, FRAME_ALIGN_LEFT, hjapi.DzGetGameUI(), FRAME_ALIGN_LEFT, 0.001, 0.06)
     hjapi.DzFrameSetTextAlignment(debugUI, TEXT_ALIGN_LEFT)
     hjapi.DzFrameSetFont(debugUI, 'fonts.ttf', 8 * 0.001, 0)
     hjapi.DzFrameSetAlpha(debugUI, 210)

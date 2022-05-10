@@ -10,6 +10,7 @@ hjapi = {
 hjapi._cache = hjapi._cache or {
     ["DzLoadToc"] = {},
     ["GetZ"] = {},
+    ["tagIdx"] = 0,
 }
 
 ---@private
@@ -754,6 +755,23 @@ hjapi.DzCreateFrameByTagName = function(frameType, name, parent, template, id)
     return hjapi.exec("DzCreateFrameByTagName", { frameType, name, parent, template, id })
 end
 
+--- tag方式新建一个frame
+---@param fdfType string frame类型 TEXT | BACKDROP等
+---@param fdfName string frame名称
+---@param parent number 父节点ID(def:GameUI)
+---@param tag string 自定义tag名称(def:cache.tagIdx)
+---@param id number integer(def:0)
+---@return number|nil
+hjapi.frameTag = function(fdfType, fdfName, parent)
+    if (fdfType == nil or fdfName == nil) then
+        return
+    end
+    hjapi._cache["tagIdx"] = hjapi._cache["tagIdx"] + 1
+    local tag = "jft-" .. hjapi._cache["tagIdx"]
+    parent = parent or hjapi.DzGetGameUI()
+    return hjapi.DzCreateFrameByTagName(fdfType, tag, parent, fdfName, 0)
+end
+
 ---@param frame string
 ---@param parent number integer
 ---@param id number integer
@@ -1188,6 +1206,23 @@ end
 ---@param y number float(5)
 hjapi.DzFrameSetPoint = function(frame, point, relativeFrame, relativePoint, x, y)
     return hjapi.exec("DzFrameSetPoint", { frame, point, relativeFrame, relativePoint, x, y })
+end
+
+--- 设置frame相对锚点
+---@param frameId number
+---@param relation number 相对节点ID(def:GameUI)
+---@param align number integer 参考blizzard:^FRAME_ALIGN
+---@param alignRelation number 以 align-> alignParent 对齐
+---@param x number 锚点X
+---@param y number 锚点Y
+hjapi.frameRelation = function(frameId, relation, align, alignRelation, x, y)
+    relation = relation or hjapi.DzGetGameUI()
+    align = align or FRAME_ALIGN_CENTER
+    alignRelation = alignRelation or FRAME_ALIGN_CENTER
+    x = x or 0
+    y = y or 0
+    hjapi.DzFrameClearAllPoints(frameId)
+    hjapi.DzFrameSetPoint(frameId, align, relation, alignRelation, x, y)
 end
 
 --- 设置优先级
