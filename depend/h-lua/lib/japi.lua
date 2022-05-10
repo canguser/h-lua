@@ -762,7 +762,7 @@ end
 ---@param tag string 自定义tag名称(def:cache.tagIdx)
 ---@param id number integer(def:0)
 ---@return number|nil
-hjapi.frameTag = function(fdfType, fdfName, parent)
+hjapi.FrameTag = function(fdfType, fdfName, parent)
     if (fdfType == nil or fdfName == nil) then
         return
     end
@@ -1209,20 +1209,20 @@ hjapi.DzFrameSetPoint = function(frame, point, relativeFrame, relativePoint, x, 
 end
 
 --- 设置frame相对锚点
----@param frameId number
----@param relation number 相对节点ID(def:GameUI)
----@param align number integer 参考blizzard:^FRAME_ALIGN
----@param alignRelation number 以 align-> alignParent 对齐
+---@param frame number
+---@param point number integer 参考blizzard:^FRAME_ALIGN
+---@param relativeFrame number 相对节点ID(def:GameUI)
+---@param relativePoint number 以 align-> alignParent 对齐
 ---@param x number 锚点X
 ---@param y number 锚点Y
-hjapi.frameRelation = function(frameId, relation, align, alignRelation, x, y)
-    relation = relation or hjapi.DzGetGameUI()
-    align = align or FRAME_ALIGN_CENTER
-    alignRelation = alignRelation or FRAME_ALIGN_CENTER
+hjapi.FrameRelation = function(frame, point, relativeFrame, relativePoint, x, y)
+    point = point or FRAME_ALIGN_CENTER
+    relativeFrame = relativeFrame or hjapi.DzGetGameUI()
+    relativePoint = relativePoint or FRAME_ALIGN_CENTER
     x = x or 0
     y = y or 0
-    hjapi.DzFrameClearAllPoints(frameId)
-    hjapi.DzFrameSetPoint(frameId, align, relation, alignRelation, x, y)
+    hjapi.DzFrameClearAllPoints(frame)
+    hjapi.DzFrameSetPoint(frame, point, relativeFrame, relativePoint, x, y)
 end
 
 --- 设置优先级
