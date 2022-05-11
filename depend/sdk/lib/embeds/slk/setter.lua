@@ -49,7 +49,7 @@ F6S.a = {
             if (v.levels > 1) then
                 v.Tip = {}
                 for i = 1, v.levels do
-                    table.insert(v.Tip, txt .. " - [|cffffcc00" .. CONST_UBERTIP_I18N.lv .. " " .. i .. "|r]")
+                    table.insert(v.Tip, txt .. " - [|cffffcc00" .. CONST_UBERTIP_TEXTS.lv .. " " .. i .. "|r]")
                 end
             else
                 v.Tip = txt
@@ -58,11 +58,11 @@ F6S.a = {
     end,
     Researchtip = function(v)
         if (v.Researchtip == nil) then
-            local txt = CONST_UBERTIP_I18N.learn .. v.Name
+            local txt = CONST_UBERTIP_TEXTS.learn .. v.Name
             if (v.Hotkey ~= nil) then
                 txt = txt .. "(" .. hcolor.mixed(v.Hotkey, F6_CONF.color.hotKey) .. ")"
             end
-            v.Researchtip = txt .. " - [|cffffcc00" .. CONST_UBERTIP_I18N.lv .. " %d|r]"
+            v.Researchtip = txt .. " - [|cffffcc00" .. CONST_UBERTIP_TEXTS.lv .. " %d|r]"
         end
     end,
     ubertip = function(v)
@@ -89,7 +89,7 @@ F6S.a = {
                 v.Cool[i] = lastCool
             end
             for i = 1, v.levels, 1 do
-                table.insert(ux[i], hcolor.mixed(CONST_UBERTIP_I18N.cd .. CONST_UBERTIP_I18N.colon .. v.Cool[i] .. CONST_UBERTIP_I18N.sec, F6_CONF.color.abilityCoolDown))
+                table.insert(ux[i], hcolor.mixed(CONST_UBERTIP_TEXTS.cd .. CONST_UBERTIP_TEXTS.colon .. v.Cool[i] .. CONST_UBERTIP_TEXTS.sec, F6_CONF.color.abilityCoolDown))
             end
         end
         if (v._attr ~= nil) then
@@ -141,10 +141,10 @@ F6S.a = {
             end
         end
         if (#cd > 0) then
-            table.insert(rbt, hcolor.mixed(CONST_UBERTIP_I18N.cd .. CONST_UBERTIP_I18N.colon .. string.implode("/", cd) .. CONST_UBERTIP_I18N.sec, F6_CONF.color.abilityCoolDown))
+            table.insert(rbt, hcolor.mixed(CONST_UBERTIP_TEXTS.cd .. CONST_UBERTIP_TEXTS.colon .. string.implode("/", cd) .. CONST_UBERTIP_TEXTS.sec, F6_CONF.color.abilityCoolDown))
         end
         for i = 1, v.levels, 1 do
-            table.insert(rbt, hcolor.mixed(CONST_UBERTIP_I18N.lv .. i .. CONST_UBERTIP_I18N.colon .. extent[i], F6_CONF.color["abilityResearch" .. i % 2]))
+            table.insert(rbt, hcolor.mixed(CONST_UBERTIP_TEXTS.lv .. i .. CONST_UBERTIP_TEXTS.colon .. extent[i], F6_CONF.color["abilityResearch" .. i % 2]))
         end
         if (v._remarks ~= nil and v._remarks ~= "") then
             table.insert(rbt, hcolor.mixed(v._remarks, F6_CONF.color.abilityRemarks))
@@ -171,7 +171,7 @@ F6S.i = {
     ubertip = {
         _cooldown = function(v)
             if (v._cooldown ~= nil and v._cooldown > 0) then
-                F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_I18N.cd .. CONST_UBERTIP_I18N.colon .. v._cooldown .. CONST_UBERTIP_I18N.sec, F6_CONF.color.itemCoolDown))
+                F6S.txt(v, "Ubertip", hcolor.mixed(CONST_UBERTIP_TEXTS.cd .. CONST_UBERTIP_TEXTS.colon .. v._cooldown .. CONST_UBERTIP_TEXTS.sec, F6_CONF.color.itemCoolDown))
             end
         end,
         _attr = function(v)
@@ -211,25 +211,25 @@ local F6_HERO = function(_v)
     else
         Ubertip = _v.Ubertip .. "|n"
     end
-    Ubertip = Ubertip .. hcolor.mixed(CONST_UBERTIP_I18N.weapTp1 .. CONST_UBERTIP_I18N.colon .. CONST_WEAPON_TYPE[_v.weapTp1].label .. "(" .. _v.cool1 .. CONST_UBERTIP_I18N.cool1 .. ")", F6_CONF.color.heroWeapon)
-    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.dmgplus1 .. CONST_UBERTIP_I18N.colon .. _v.dmgplus1, F6_CONF.color.heroAttack)
-    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.rangeN1 .. CONST_UBERTIP_I18N.colon .. _v.rangeN1, F6_CONF.color.heroRange)
+    Ubertip = Ubertip .. hcolor.mixed(CONST_UBERTIP_TEXTS.weapTp1 .. CONST_UBERTIP_TEXTS.colon .. CONST_WEAPON_TYPE[_v.weapTp1].label .. "(" .. _v.cool1 .. CONST_UBERTIP_TEXTS.cool1 .. ")", F6_CONF.color.heroWeapon)
+    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.dmgplus1 .. CONST_UBERTIP_TEXTS.colon .. _v.dmgplus1, F6_CONF.color.heroAttack)
+    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.rangeN1 .. CONST_UBERTIP_TEXTS.colon .. _v.rangeN1, F6_CONF.color.heroRange)
     if (_v.Primary == "STR") then
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.STR .. CONST_UBERTIP_I18N.colon .. _v.STR .. "(+" .. _v.STRplus .. ")", F6_CONF.color.heroPrimary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.STR .. CONST_UBERTIP_TEXTS.colon .. _v.STR .. "(+" .. _v.STRplus .. ")", F6_CONF.color.heroPrimary)
     else
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.STR .. CONST_UBERTIP_I18N.colon .. _v.STR .. "(+" .. _v.STRplus .. ")", F6_CONF.color.heroSecondary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.STR .. CONST_UBERTIP_TEXTS.colon .. _v.STR .. "(+" .. _v.STRplus .. ")", F6_CONF.color.heroSecondary)
     end
     if (_v.Primary == "AGI") then
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.AGI .. CONST_UBERTIP_I18N.colon .. _v.AGI .. "(+" .. _v.AGIplus .. ")", F6_CONF.color.heroPrimary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.AGI .. CONST_UBERTIP_TEXTS.colon .. _v.AGI .. "(+" .. _v.AGIplus .. ")", F6_CONF.color.heroPrimary)
     else
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.AGI .. CONST_UBERTIP_I18N.colon .. _v.AGI .. "(+" .. _v.AGIplus .. ")", F6_CONF.color.heroSecondary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.AGI .. CONST_UBERTIP_TEXTS.colon .. _v.AGI .. "(+" .. _v.AGIplus .. ")", F6_CONF.color.heroSecondary)
     end
     if (_v.Primary == "INT") then
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.INT .. CONST_UBERTIP_I18N.colon .. _v.INT .. "(+" .. _v.INTplus .. ")", F6_CONF.color.heroPrimary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.INT .. CONST_UBERTIP_TEXTS.colon .. _v.INT .. "(+" .. _v.INTplus .. ")", F6_CONF.color.heroPrimary)
     else
-        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.INT .. CONST_UBERTIP_I18N.colon .. _v.INT .. "(+" .. _v.INTplus .. ")", F6_CONF.color.heroSecondary)
+        Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.INT .. CONST_UBERTIP_TEXTS.colon .. _v.INT .. "(+" .. _v.INTplus .. ")", F6_CONF.color.heroSecondary)
     end
-    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_I18N.spd .. CONST_UBERTIP_I18N.colon .. _v.spd .. " " .. CONST_MOVE_TYPE[_v.movetp].label, F6_CONF.color.heroMove)
+    Ubertip = Ubertip .. "|n" .. hcolor.mixed(CONST_UBERTIP_TEXTS.spd .. CONST_UBERTIP_TEXTS.colon .. _v.spd .. " " .. CONST_MOVE_TYPE[_v.movetp].label, F6_CONF.color.heroMove)
     _v.Ubertip = Ubertip
 end
 
@@ -241,9 +241,9 @@ F6V_A = function(_v)
     end
     if (_v.Name == nil) then
         if (_v._type == "empty") then
-            _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_passive)
+            _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_passive)
         else
-            _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_skill)
+            _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_skill)
         end
     end
     if (_v.levels == nil) then
@@ -274,9 +274,9 @@ F6V_U = function(_v)
     end
     if (_v.Name == nil) then
         if (_v._type == "hero") then
-            _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_hero)
+            _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_hero)
         else
-            _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_unit)
+            _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_unit)
         end
     end
     if (_v._type == "hero") then
@@ -285,11 +285,11 @@ F6V_U = function(_v)
     if (_v.Hotkey ~= nil) then
         _v.Buttonpos_1 = _v.Buttonpos_1 or CONST_HOTKEY_FULL_KV[_v.Hotkey].Buttonpos_1 or 0
         _v.Buttonpos_2 = _v.Buttonpos_2 or CONST_HOTKEY_FULL_KV[_v.Hotkey].Buttonpos_2 or 0
-        _v.Tip = CONST_UBERTIP_I18N.choose .. CONST_UBERTIP_I18N.colon .. _v.Name .. "(" .. hcolor.mixed(_v.Hotkey, F6_CONF.color.hotKey) .. ")"
+        _v.Tip = CONST_UBERTIP_TEXTS.choose .. CONST_UBERTIP_TEXTS.colon .. _v.Name .. "(" .. hcolor.mixed(_v.Hotkey, F6_CONF.color.hotKey) .. ")"
     else
         _v.Buttonpos_1 = _v.Buttonpos_1 or 0
         _v.Buttonpos_2 = _v.Buttonpos_2 or 0
-        _v.Tip = CONST_UBERTIP_I18N.choose .. CONST_UBERTIP_I18N.colon .. _v.Name
+        _v.Tip = CONST_UBERTIP_TEXTS.choose .. CONST_UBERTIP_TEXTS.colon .. _v.Name
     end
     _v.goldcost = _v.goldcost or 0
     _v.lumbercost = _v.lumbercost or 0
@@ -500,7 +500,7 @@ F6V_I = function(_v)
         end
     end
     if (_v.Name == nil) then
-        _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_item)
+        _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_item)
     end
     if (_v.file == nil) then
         if (_v.class == "PowerUp") then
@@ -546,7 +546,7 @@ F6V_B = function(_v)
     _v._class = "buff"
     _v._type = _v._type or "common"
     if (_v.Name == nil) then
-        _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_buff)
+        _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_buff)
     end
     return _v
 end
@@ -555,7 +555,7 @@ F6V_UP = function(_v)
     _v._class = "upgrade"
     _v._type = _v._type or "common"
     if (_v.Name == nil) then
-        _v.Name = F6_NAME(CONST_UBERTIP_I18N.def_upgrade)
+        _v.Name = F6_NAME(CONST_UBERTIP_TEXTS.def_upgrade)
     end
     return _v
 end

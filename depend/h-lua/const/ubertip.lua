@@ -1,4 +1,4 @@
-CONST_UBERTIP_I18N = {
+CONST_UBERTIP_TEXTS = {
     colon = "：",
     def_passive = "未命名空被动",
     def_skill = "未命名技能",
@@ -55,10 +55,10 @@ CONST_UBERTIP_ATTR = function(attr, sep, indent)
         local v = arr.value
         -- 附加单位
         if (k == "attack_space" or k == "reborn") then
-            v = v .. CONST_UBERTIP_I18N.sec
+            v = v .. CONST_UBERTIP_TEXTS.sec
         end
         if (table.includes({ "life_back", "mana_back" }, k)) then
-            v = v .. CONST_UBERTIP_I18N.perSec
+            v = v .. CONST_UBERTIP_TEXTS.perSec
         end
         if (CONST_UBERTIP_IS_PERCENT(k) == true) then
             v = v .. "%"
@@ -77,10 +77,10 @@ CONST_UBERTIP_RESEARCH_ATTR = function(attr)
         local v = arr.value
         -- 附加单位
         if (k == "attack_space" or k == "reborn") then
-            v = v .. CONST_UBERTIP_I18N.sec
+            v = v .. CONST_UBERTIP_TEXTS.sec
         end
         if (table.includes({ "life_back", "mana_back" }, k)) then
-            v = v .. CONST_UBERTIP_I18N.perSec
+            v = v .. CONST_UBERTIP_TEXTS.perSec
         end
         if (CONST_UBERTIP_IS_PERCENT(k) == true) then
             v = v .. "%"
