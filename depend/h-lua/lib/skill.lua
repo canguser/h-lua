@@ -216,31 +216,12 @@ hskill.damage = function(options)
     if (sourceUnit ~= nil and hattribute.get(sourceUnit) == nil) then
         return
     end
-    local damageSrc = options.damageSrc
+    local damageSrc = options.damageSrc or CONST_DAMAGE_SRC.unknown
     -- 最终伤害
     local lastDamage = 0
     local lastDamagePercent = 0.0
     -- 文本显示
-    local damageString = options.damageString or ""
-    local damageRGB = options.damageRGB or { 255, 255, 255 }
     local effect = options.effect
-    local speed
-    -- 判断伤害方式
-    if (damageSrc == CONST_DAMAGE_SRC.attack) then
-        if (his.unarm(sourceUnit) == true) then
-            return
-        end
-    elseif (damageSrc == CONST_DAMAGE_SRC.skill) then
-        if (his.silent(sourceUnit) == true) then
-            return
-        end
-    elseif (damageSrc == CONST_DAMAGE_SRC.item) then
-        if (his.silent(sourceUnit) == true) then
-            return
-        end
-    else
-        damageSrc = CONST_DAMAGE_SRC.unknown
-    end
     -- 计算单位是否无敌
     if (his.invincible(targetUnit) == true) then
         return

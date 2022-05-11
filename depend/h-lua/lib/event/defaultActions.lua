@@ -443,9 +443,6 @@ hevent_default_actions = {
         end),
         useItem = cj.Condition(function()
             local u = cj.GetTriggerUnit()
-            if (his.silent(u)) then
-                return
-            end
             local it = cj.GetManipulatedItem()
             local itId = hitem.getId(it)
             local perishable = hitem.getIsPerishable(itId)
@@ -465,9 +462,6 @@ hevent_default_actions = {
         end),
         useItemX = cj.Condition(function()
             local u = cj.GetTriggerUnit()
-            if (his.silent(u)) then
-                return
-            end
             local skillId = i2c(cj.GetSpellAbilityId())
             local itId = HSLK_ICD[skillId] or nil
             if (itId == nil) then

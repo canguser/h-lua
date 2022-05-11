@@ -232,34 +232,6 @@ his.locust = function(whichUnit)
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_locust) > 0
 end
 
---- 是否被眩晕
----@param whichUnit userdata
----@return boolean
-his.swim = function(whichUnit)
-    return hcache.get(whichUnit, CONST_CACHE.SKILL_SWIM, false)
-end
-
---- 是否被沉默
----@param whichUnit userdata
----@return boolean
-his.silent = function(whichUnit)
-    return hcache.get(whichUnit, CONST_CACHE.SKILL_SILENT, false)
-end
-
---- 是否被缴械
----@param whichUnit userdata
----@return boolean
-his.unarm = function(whichUnit)
-    return hcache.get(whichUnit, CONST_CACHE.SKILL_UN_ARM, false)
-end
-
---- 是否被击飞
----@param whichUnit userdata
----@return boolean
-his.crackFly = function(whichUnit)
-    return hcache.get(whichUnit, CONST_CACHE.SKILL_CRACK_FLY, false)
-end
-
 --- 是否正在受伤
 ---@param whichUnit userdata
 ---@return boolean
@@ -324,52 +296,6 @@ end
 ---@return boolean
 his.ally = function(whichUnit, otherUnit)
     return cj.IsUnitAlly(whichUnit, hunit.getOwner(otherUnit))
-end
-
---- 判断两个单位是否接近平行同方向
---- 本质上是两单位面向角度接近
----@param u1 userdata
----@param u2 userdata
----@param maxDistance number 最大相对距离
----@param forcedOrder boolean 是否强制顺序，也就是主观上必须u1在前，u2在后
----@return number
-his.parallel = function(u1, u2, maxDistance, forcedOrder)
-    if (his.alive(u1) == false or his.alive(u2) == false) then
-        return false
-    end
-    maxDistance = maxDistance or 99999
-    if (math.getDistanceBetweenUnit(u1, u2) > maxDistance) then
-        return false
-    end
-    local fac1 = hunit.getFacing(u1)
-    local fac2 = hunit.getFacing(u2)
-    if (type(forcedOrder) == "boolean" and forcedOrder == true) then
-        return math.abs(fac1 - fac2) < 50 and math.abs(math.getDegBetweenUnit(u2, u1) - fac2) < 90
-    end
-    return math.abs(fac1 - fac2) < 50
-end
-
---- 判断两个单位是否"正对着"或"背对着"
---- 本质上是两单位面向极度相反
----@param u1 userdata
----@param u2 userdata
----@param maxDistance number 最大相对距离
----@param face2face boolean 是否面对面而不是背对背
----@return number
-his.intersect = function(u1, u2, maxDistance, face2face)
-    if (his.alive(u1) == false or his.alive(u2) == false) then
-        return false
-    end
-    maxDistance = maxDistance or 99999
-    if (math.getDistanceBetweenUnit(u1, u2) > maxDistance) then
-        return false
-    end
-    local fac1 = hunit.getFacing(u1)
-    local fac2 = hunit.getFacing(u2)
-    if (type(face2face) == "boolean" and face2face == true) then
-        return math.abs((math.abs(fac1 - fac2) - 180)) < 50 and math.abs(math.getDegBetweenUnit(u2, u1) - fac2) < 90
-    end
-    return math.abs((math.abs(fac1 - fac2) - 180)) < 50
 end
 
 --- 是否敌人玩家
