@@ -98,6 +98,7 @@ function missile(options)
         rotateY = -rotateY
     end
     speed = frequency * speed
+    hjapi.EXEffectMatRotateY(arrowToken, rotateY)
     hjapi.EXSetEffectZ(arrowToken, sourceH)
     local ending = function(endX, endY, isFinish)
         if (arrowToken ~= nil) then
@@ -176,13 +177,20 @@ function missile(options)
         local curD = math.getDistanceBetweenXY(ax, ay, tx, ty)
         if (curD < dct) then
             local halfD = dct / 2
+            local rot = 0
             local di = 2 * (math.disparity(curD, halfD) / halfD)
             local dg = di * (dct0 / dct)
             if (curD >= halfD) then
                 curH = curH + gravity1 * dg
+                rot = rotateY1i * (2 - di)
             else
                 curH = curH - gravity2 * dg
+                rot = 1.2 * rotateY2i * (2 - di)
             end
+            if (fac0 > 90 and fac0 < 270) then
+                rot = -rot
+            end
+            hjapi.EXEffectMatRotateY(arrowToken, rot)
             hjapi.EXSetEffectZ(arrowToken, curH)
         end
         limit = limit + 1
