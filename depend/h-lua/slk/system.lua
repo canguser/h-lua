@@ -16,26 +16,6 @@ hslk_unit({
     _type = "system",
 })
 
--- #眩晕[0.05-0.5]
-for _ = 1, 10, 1 do
-    hslk_ability({
-        _parent = "AHtb",
-        _type = "system",
-    })
-end
-
--- #无限眩晕
-hslk_ability({
-    _parent = "AHtb",
-    _type = "system",
-})
-
--- #隐身
-hslk_ability({
-    _parent = "Apiv",
-    _type = "system",
-})
-
 --- #选择英雄技能
 H_LUA_ABILITY_SELECT_HERO = hslk_ability({
     _parent = "Aneu",

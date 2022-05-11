@@ -1,15 +1,12 @@
 HL_ID = {}
 HL_ID_INIT = function()
     HL_ID = {
-        buff_swim = c2i("BPSE"), -- 默认眩晕状态
         unit_token = c2i(hslk.n2i("H_LUA_UNIT_TOKEN")),
         unit_token_leap = c2i(hslk.n2i("H_LUA_UNIT_TOKEN_LEAP")), --leap的token模式，需导入模型：SDK/hLua/token.mdx
         unit_token_ttg = c2i(hslk.n2i("H_LUA_UNIT_TOKEN_TTG")), --leap的token模式，需导入模型：SDK/hLua/token.mdx
         ability_invulnerable = c2i("Avul"), -- 默认无敌技能
         ability_item_slot = c2i("AInv"), -- 默认物品栏技能（英雄6格那个）默认全部认定这个技能为物品栏，如有需要自行更改
         ability_locust = c2i("Aloc"), -- 蝗虫技能
-        ability_break = {}, --眩晕[0.05~0.5]
-        ability_swim_un_limit = c2i(hslk.n2i("H_LUA_ABILITY_SWIM_UN_LIMIT")),
         ability_invisible = c2i(hslk.n2i("H_LUA_ABILITY_INVISIBLE")),
         ability_select_hero = c2i(hslk.n2i("H_LUA_ABILITY_SELECT_HERO")),
         texture_alert_circle_exclamation = c2i(hslk.n2i("H_LUA_TEXTURE_ALERT_CIRCLE_EXCLAMATION")), --- 警示圈模型!
@@ -41,12 +38,6 @@ HL_ID_INIT = function()
         },
         ablis_gradient = {},
     }
-
-    -- 眩晕[0.05-0.5]
-    for during = 1, 10, 1 do
-        local swDur = during * 0.05
-        HL_ID.ability_break[swDur] = c2i(hslk.n2i("H_LUA_ABILITY_BREAK_" .. swDur))
-    end
     -- 属性系统
     for i = 1, 9 do
         local v = math.floor(10 ^ (i - 1))
