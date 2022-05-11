@@ -7,7 +7,6 @@ HL_ID_INIT = function()
         ability_invulnerable = c2i("Avul"), -- 默认无敌技能
         ability_item_slot = c2i("AInv"), -- 默认物品栏技能（英雄6格那个）默认全部认定这个技能为物品栏，如有需要自行更改
         ability_locust = c2i("Aloc"), -- 蝗虫技能
-        ability_invisible = c2i(hslk.n2i("H_LUA_ABILITY_INVISIBLE")),
         ability_select_hero = c2i(hslk.n2i("H_LUA_ABILITY_SELECT_HERO")),
         texture_alert_circle_exclamation = c2i(hslk.n2i("H_LUA_TEXTURE_ALERT_CIRCLE_EXCLAMATION")), --- 警示圈模型!
         texture_alert_circle_x = c2i(hslk.n2i("H_LUA_TEXTURE_ALERT_CIRCLE_X")), --- 警示圈模型X

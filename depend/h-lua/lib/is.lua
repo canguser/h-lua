@@ -101,13 +101,6 @@ his.invincible = function(whichUnit)
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_invulnerable) > 0
 end
 
---- 是否隐身中
----@param whichUnit userdata
----@return boolean
-his.invisible = function(whichUnit)
-    return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_invisible) > 0
-end
-
 --- 是否英雄
 --- UNIT_TYPE_HERO是对应平衡常数的英雄列表
 --- hero和courier_hero是对应hslk._type，是本框架固有用法
@@ -119,18 +112,6 @@ his.hero = function(whichUnit)
         return false
     end
     return "hero" == (hslk.i2v(uid, "_type") or "common") or cj.IsUnitType(whichUnit, UNIT_TYPE_HERO)
-end
-
---- 是否框架默认信使
---- courier是对应 hslk._type，是本框架固有用法
----@param whichUnit userdata
----@return boolean
-his.courier = function(whichUnit)
-    local uid = hunit.getId(whichUnit)
-    if (uid == nil) then
-        return false
-    end
-    return "courier" == (hslk.i2v(uid, "_type") or "common")
 end
 
 --- 是否建筑
