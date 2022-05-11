@@ -57,7 +57,6 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	require(L, sdkData.HLua+"/const/unit.lua")
 	require(L, sdkData.HLua+"/const/orderStr.lua")
 	require(L, sdkData.HLua+"/foundation/color.lua")
-	require(L, sdkData.HLua+"/foundation/json.lua")
 	require(L, sdkData.HLua+"/foundation/array.lua")
 	require(L, sdkData.HLua+"/foundation/math.lua")
 	require(L, sdkData.HLua+"/foundation/string.lua")
@@ -65,6 +64,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	require(L, sdkData.HLua+"/foundation/table.lua")
 	require(L, sdkData.HLua+"/slk/pilot.lua")
 	// embeds
+	requireEmbed(L, sdkData.Embeds, "embeds/slk/json.lua")
 	requireEmbed(L, sdkData.Embeds, "embeds/slk/string.lua")
 	requireEmbed(L, sdkData.Embeds, "embeds/slk/table.lua")
 	requireEmbed(L, sdkData.Embeds, "embeds/slk/go.lua")

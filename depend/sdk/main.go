@@ -32,6 +32,6 @@ func main() {
 	case "kill":
 		cmd.Kill(sdkData)
 	default:
-		fmt.Println("Commands: <" + sdkData.Args[1] + "> not exist! Type 'help' for help.")
+		fmt.Println("命令: <" + sdkData.Args[1] + "> 不存在! 使用 'help' 查询帮助")
 	}
 }
