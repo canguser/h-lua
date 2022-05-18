@@ -163,15 +163,15 @@ end
 
 --- [JAPI]设置单位某个技能的冷却时间
 ---@param whichUnit userdata
----@param abilityID string|number
+---@param abilityId string|number
 ---@param coolDown number
-hskill.setCoolDown = function(whichUnit, abilityID, coolDown)
+hskill.setCoolDown = function(whichUnit, abilityId, coolDown)
     if (coolDown >= 9999) then
         coolDown = 9999
     elseif (coolDown < 0) then
         coolDown = 0
     end
-    hjapi.EXSetAbilityState(hjapi.EXGetUnitAbility(whichUnit, abilityID), 1, coolDown)
+    hjapi.EXSetAbilityState(hjapi.EXGetUnitAbility(whichUnit, abilityId), 1, coolDown)
 end
 
 --[[

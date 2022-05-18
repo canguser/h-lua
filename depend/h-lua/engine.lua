@@ -1177,9 +1177,8 @@ local cic = { c2i = {}, i2c = {} }
 ---@param idChar string
 ---@return number
 c2i = function(idChar)
-    if (idChar == nil or type(idChar) ~= "string") then
-        stack()
-        return
+    if (type(idChar) ~= "string") then
+        return idChar
     end
     local id = cic.c2i[idChar]
     if (id == nil) then
@@ -1194,10 +1193,8 @@ end
 ---@param id number
 ---@return string
 i2c = function(id)
-    if (id == nil or type(id) ~= "number") then
-        stack()
-        print(id)
-        return
+    if (type(id) ~= "number") then
+        return id
     end
     local idChar = cic.i2c[id]
     if (idChar == nil) then

@@ -1976,6 +1976,9 @@ end
 ---@param whichUnit userdata
 ---@param abilityID number string|integer
 hjapi.EXGetUnitAbility = function(whichUnit, abilityID)
+    if (type(abilityID) == "string") then
+        abilityID = c2i(abilityID)
+    end
     return hjapi.exec("EXGetUnitAbility", whichUnit, abilityID)
 end
 
