@@ -3,7 +3,7 @@ hskill = {}
 --- 获取属性加成,需要注册
 ---@param abilityId string|number
 ---@return table|nil
-hskill.getAttribute = function(abilityId)
+function getAttribute(abilityId)
     if (type(abilityId) == "number") then
         abilityId = i2c(abilityId)
     end
@@ -12,7 +12,7 @@ end
 
 --- 附加单位获得技能后的属性
 ---@protected
-hskill.addProperty = function(whichUnit, abilityId, level)
+function addProperty(whichUnit, abilityId, level)
     local attr = hskill.getAttribute(abilityId)
     if (attr ~= nil) then
         if (#attr > 0) then
@@ -24,7 +24,7 @@ hskill.addProperty = function(whichUnit, abilityId, level)
 end
 --- 削减单位获得技能后的属性
 ---@protected
-hskill.subProperty = function(whichUnit, abilityId, level)
+function subProperty(whichUnit, abilityId, level)
     local attr = hskill.getAttribute(abilityId)
     if (attr ~= nil) then
         if (#attr > 0) then
@@ -38,7 +38,7 @@ end
 --- 获取技能名称
 ---@param abilityId number|string
 ---@return string
-hskill.getName = function(abilityId)
+function getName(abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -51,7 +51,7 @@ end
 ---@param abilityId string|number
 ---@param level number
 ---@param during number
-hskill.add = function(whichUnit, abilityId, level, during)
+function add(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -82,7 +82,7 @@ end
 ---@param abilityId string|number
 ---@param level number
 ---@param during number
-hskill.set = function(whichUnit, abilityId, level, during)
+function set(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -111,7 +111,7 @@ end
 ---@param whichUnit userdata
 ---@param abilityId string|number
 ---@param delay number
-hskill.del = function(whichUnit, abilityId, delay)
+function del(whichUnit, abilityId, delay)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -136,7 +136,7 @@ end
 --- 设置技能的永久使用性
 ---@param whichUnit userdata
 ---@param abilityId string|number
-hskill.forever = function(whichUnit, abilityId)
+function forever(whichUnit, abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -147,7 +147,7 @@ end
 --- 是否拥有技能
 ---@param whichUnit userdata
 ---@param abilityId string|number
-hskill.has = function(whichUnit, abilityId)
+function has(whichUnit, abilityId)
     if (whichUnit == nil or abilityId == nil) then
         return false
     end
@@ -165,7 +165,7 @@ end
 ---@param whichUnit userdata
 ---@param abilityId string|number
 ---@param coolDown number
-hskill.setCoolDown = function(whichUnit, abilityId, coolDown)
+function setCoolDown(whichUnit, abilityId, coolDown)
     if (coolDown >= 9999) then
         coolDown = 9999
     elseif (coolDown < 0) then
@@ -180,14 +180,11 @@ end
         sourceUnit = nil, --伤害来源(可选)
         targetUnit = nil, --目标单位
         damage = 0, --实际伤害
-        damageString = "", --伤害漂浮字颜色
-        damageRGB = {255,255,255}, --伤害漂浮字颜色RGB
-        effect = nil, --伤害特效
         damageSrc = "unknown", --伤害来源请查看 CONST_DAMAGE_SRC
     }
 ]]
 ---@param options pilotDamage
-hskill.damage = function(options)
+function damage(options)
     local sourceUnit = options.sourceUnit
     local targetUnit = options.targetUnit
     local damage = options.damage or 0
@@ -220,8 +217,6 @@ hskill.damage = function(options)
     -- 最终伤害
     local lastDamage = 0
     local lastDamagePercent = 0.0
-    -- 文本显示
-    local effect = options.effect
     -- 计算单位是否无敌
     if (his.invincible(targetUnit) == true) then
         return
@@ -307,9 +302,6 @@ hskill.damage = function(options)
         end
         -- 扣血
         hunit.subCurLife(targetUnit, lastDamage)
-        if (type(effect) == "string" and string.len(effect) > 0) then
-            heffect.xyz(effect, hunit.x(targetUnit), hunit.y(targetUnit), hunit.z(targetUnit), 0)
-        end
         -- @触发伤害事件
         if (sourceUnit ~= nil) then
             hevent.trigger(
@@ -353,7 +345,9 @@ end
 ---@param whichUnit userdata
 ---@param during number
 ---@param effect string
-hskill.invulnerable = function(whichUnit, during, effect)
+---@param attach string
+---@return void
+function invulnerable(whichUnit, during, effect, attach)
     if (whichUnit == nil) then
         return
     end
@@ -362,7 +356,8 @@ hskill.invulnerable = function(whichUnit, during, effect)
     end
     cj.UnitAddAbility(whichUnit, HL_ID.ability_invulnerable)
     if (during > 0 and effect ~= nil) then
-        heffect.attach(effect, whichUnit, "origin", during)
+        attach = attach or "origin"
+        heffect.attach(effect, whichUnit, attach, during)
     end
     htime.setTimeout(during, function(t)
         t.destroy()
