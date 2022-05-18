@@ -83,6 +83,7 @@ function Array(params)
     end
 
     --- 遍历
+    --- 遍历过程中返回 false 则中断
     ---@alias noteArrayEach fun(key: "key", value: "value"):void
     ---@param action noteArrayEach | "function(key,value) end"
     this.forEach = function(action)

@@ -11,7 +11,7 @@ hsound = {
 ---@param volume number 音量[0-127](可选)
 ---@param pitch number 音高[0.10~2.00](可选)
 ---@return userdata|nil
-hsound.voiceCreate = function(path, duration, is3D, channel, volume, pitch)
+function hsound.voiceCreate(path, duration, is3D, channel, volume, pitch)
     if (duration == nil) then
         return
     end
@@ -36,7 +36,7 @@ end
 
 --- 播放非3D音效(推荐使用hsound.create创造)
 ---@param s userdata F5设定音效
-hsound.voice = function(s)
+function hsound.voice(s)
     if (s ~= nil) then
         cj.StartSound(s)
     end
@@ -44,7 +44,7 @@ end
 --- 播放3D音效对某个玩家
 ---@param s userdata
 ---@param whichPlayer userdata
-hsound.voice2Player = function(s, whichPlayer)
+function hsound.voice2Player(s, whichPlayer)
     if (s ~= nil and hplayer.loc() == whichPlayer) then
         cj.StartSound(s)
     end
@@ -53,7 +53,7 @@ end
 ---@param s userdata
 ---@param volumePercent number %
 ---@param u userdata
-hsound.voice2Unit = function(s, volumePercent, u)
+function hsound.voice2Unit(s, volumePercent, u)
     if (s ~= nil) then
         cj.AttachSoundToUnit(s, u)
         cj.SetSoundVolume(s, math.floor(volumePercent * 127 * 0.01))
@@ -65,7 +65,7 @@ end
 ---@param x number
 ---@param y number
 ---@param z number
-hsound.voice2XYZ = function(s, x, y, z)
+function hsound.voice2XYZ(s, x, y, z)
     if (s ~= nil) then
         cj.SetSoundPosition(s, x, y, z)
     end
@@ -75,7 +75,7 @@ end
 ---@param s userdata
 ---@param whichRect userdata
 ---@param during number 0=unLimit
-hsound.voice2Rect = function(s, whichRect, during)
+function hsound.voice2Rect(s, whichRect, during)
     if (s ~= nil) then
         during = during or 0
         local width = hrect.getWidth(whichRect)
@@ -93,7 +93,7 @@ end
 
 --- 停止BGM
 ---@param whichPlayer userdata|nil
-hsound.bgmStop = function(whichPlayer)
+function hsound.bgmStop(whichPlayer)
     if (whichPlayer == nil) then
         for i = 1, bj_MAX_PLAYERS, 1 do
             hcache.set(hplayer.players[i], CONST_CACHE.PLAYER_BGM_CURRENT, nil)
@@ -114,7 +114,7 @@ end
 --- 延时是每个玩家独立时间，当切换的BGM为同一首时，切换不会进行
 ---@param musicFileName string
 ---@param whichPlayer userdata|nil
-hsound.bgm = function(musicFileName, whichPlayer)
+function hsound.bgm(musicFileName, whichPlayer)
     if (musicFileName ~= nil and string.len(musicFileName) > 0) then
         if (whichPlayer ~= nil) then
             local bgmDelayTimer = hcache.get(whichPlayer, CONST_CACHE.PLAYER_BGM_DELAY_TIMER, nil)
@@ -165,7 +165,7 @@ end
 --- 设置BGM音量
 ---@param percent number 0-100%
 ---@param whichPlayer userdata|nil player
-hsound.bgmVolume = function(percent, whichPlayer)
+function hsound.bgmVolume(percent, whichPlayer)
     percent = percent or 50
     if (whichPlayer ~= nil) then
         if (hplayer.loc() == whichPlayer) then

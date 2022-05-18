@@ -44,7 +44,7 @@ end
 --- 根据值获取一个key
 ---@param t string
 ---@return string
-string.vkey = function(t)
+function string.vkey(t)
     if (type(t) == "string") then
         return t
     elseif (type(t) == "table") then
@@ -68,7 +68,7 @@ end
 --- 转义
 ---@param s string
 ---@return string
-string.addslashes = function(s)
+function string.addslashes(s)
     local in_char = { "\\", '"', "/", "\b", "\f", "\n", "\r", "\t" }
     local out_char = { "\\", '"', "/", "b", "f", "n", "r", "t" }
     for i, c in ipairs(in_char) do
@@ -80,7 +80,7 @@ end
 --- 反转义
 ---@param s string
 ---@return string
-string.stripslashes = function(s)
+function string.stripslashes(s)
     local in_char = { "\\", '"', "/", "b", "f", "n", "r", "t" }
     local out_char = { "\\", '"', "/", "\b", "\f", "\n", "\r", "\t" }
 
@@ -94,7 +94,7 @@ end
 ---@param delimeter string
 ---@param str string
 ---@return table
-string.explode = function(delimeter, str)
+function string.explode(delimeter, str)
     local res = {}
     local start, start_pos, end_pos = 1, 1, 1
     while true do
@@ -113,7 +113,7 @@ end
 ---@param delimeter string
 ---@param table table
 ---@return string
-string.implode = function(delimeter, table)
+function string.implode(delimeter, table)
     local str
     for _, v in ipairs(table) do
         if (str == nil) then
@@ -129,7 +129,7 @@ end
 ---@param str string
 ---@param size number 每隔[size]字符切一次
 ---@return string
-string.split = function(str, size)
+function string.split(str, size)
     local sp = {}
     local len = string.len(str)
     if (len <= 0) then
@@ -148,7 +148,7 @@ end
 ---@param str string
 ---@param pattern string
 ---@return number|boolean
-string.strpos = function(str, pattern)
+function string.strpos(str, pattern)
     if (str == nil or pattern == nil) then
         return false
     end
@@ -164,7 +164,7 @@ end
 ---@param str string
 ---@param pattern string
 ---@return table
-string.findAllPos = function(str, pattern)
+function string.findAllPos(str, pattern)
     if (str == nil or pattern == nil) then
         return
     end
@@ -188,7 +188,7 @@ end
 ---@param str string
 ---@param pattern string
 ---@return number
-string.findCount = function(str, pattern)
+function string.findCount(str, pattern)
     if (str == nil or pattern == nil) then
         return
     end
@@ -212,7 +212,7 @@ end
 ---@private
 ---@param val table
 ---@return string
-string.attrBuffKey = function(val)
+function string.attrBuffKey(val)
     local ks = {}
     local key = string.vkey(ks)
     ks = nil
@@ -229,7 +229,7 @@ local randChars = {
 --- 随机字符串
 ---@param n number
 ---@return string
-string.random = function(n)
+function string.random(n)
     n = math.floor(n or 0)
     if (n <= 0) then
         return ""

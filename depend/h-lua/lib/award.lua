@@ -5,7 +5,8 @@ haward = {
 
 --- 设置共享范围
 ---@param range number
-haward.setShareRange = function(range)
+---@return void
+function haward.setShareRange(range)
     haward.shareRange = math.round(range)
 end
 
@@ -14,14 +15,15 @@ end
 ---@param exp number
 ---@param gold number
 ---@param lumber number
-haward.forUnit = function(whichUnit, exp, gold, lumber)
+---@return void
+function haward.forUnit(whichUnit, exp, gold, lumber)
     if (whichUnit == nil) then
         return
     end
     local p = hunit.getOwner(whichUnit)
-    local realGold = cj.R2I(gold)
-    local realLumber = cj.R2I(lumber)
-    local realExp = cj.R2I(exp)
+    local realGold = math.ceil(gold)
+    local realLumber = math.ceil(lumber)
+    local realExp = math.ceil(exp)
     if (realExp >= 1 and his.hero(whichUnit)) then
         hunit.addExp(whichUnit, realExp, true)
     end
@@ -36,21 +38,24 @@ end
 --- 奖励单位经验
 ---@param whichUnit userdata
 ---@param exp number
-haward.forUnitExp = function(whichUnit, exp)
+---@return void
+function haward.forUnitExp(whichUnit, exp)
     return haward.forUnit(whichUnit, exp, 0, 0)
 end
 
 --- 奖励单位黄金
 ---@param whichUnit userdata
 ---@param gold number
-haward.forUnitGold = function(whichUnit, gold)
+---@return void
+function haward.forUnitGold(whichUnit, gold)
     return haward.forUnit(whichUnit, 0, gold, 0)
 end
 
 --- 奖励单位木头
 ---@param whichUnit userdata
 ---@param lumber number
-haward.forUnitLumber = function(whichUnit, lumber)
+---@return void
+function haward.forUnitLumber(whichUnit, lumber)
     return haward.forUnit(whichUnit, 0, 0, lumber)
 end
 
@@ -59,7 +64,8 @@ end
 ---@param exp number
 ---@param gold number
 ---@param lumber number
-haward.forGroup = function(whichUnit, exp, gold, lumber)
+---@return void
+function haward.forGroup(whichUnit, exp, gold, lumber)
     local g = hgroup.createByUnit(
         whichUnit,
         haward.shareRange,
@@ -84,9 +90,9 @@ haward.forGroup = function(whichUnit, exp, gold, lumber)
     if (gCount <= 0) then
         return
     end
-    local cutExp = cj.R2I(exp / gCount)
-    local cutGold = cj.R2I(gold / gCount)
-    local cutLumber = cj.R2I(lumber / gCount)
+    local cutExp = math.ceil(exp / gCount)
+    local cutGold = math.ceil(gold / gCount)
+    local cutLumber = math.ceil(lumber / gCount)
     if (exp > 0 and cutExp < 1) then
         cutExp = 1
     end
@@ -99,28 +105,32 @@ end
 --- 平分奖励英雄组（经验）
 ---@param whichUnit userdata
 ---@param exp number
-haward.forGroupExp = function(whichUnit, exp)
+---@return void
+function haward.forGroupExp(whichUnit, exp)
     haward.forGroup(whichUnit, exp, 0, 0)
 end
 
 --- 平分奖励英雄组（黄金）
 ---@param whichUnit userdata
 ---@param gold number
-haward.forGroupGold = function(whichUnit, gold)
+---@return void
+function haward.forGroupGold(whichUnit, gold)
     haward.forGroup(whichUnit, 0, gold, 0)
 end
 
 --- 平分奖励英雄组（木头）
 ---@param whichUnit userdata
 ---@param lumber number
-haward.forGroupLumber = function(whichUnit, lumber)
+---@return void
+function haward.forGroupLumber(whichUnit, lumber)
     haward.forGroup(whichUnit, 0, 0, lumber)
 end
 
 --- 平分奖励玩家组（黄金木头）
 ---@param gold number
 ---@param lumber number
-haward.forPlayer = function(gold, lumber)
+---@return void
+function haward.forPlayer(gold, lumber)
     if (hplayer.qty_current <= 0) then
         return
     end
@@ -140,12 +150,14 @@ end
 
 --- 平分奖励玩家组（黄金）
 ---@param gold number
-haward.forPlayerGold = function(gold)
+---@return void
+function haward.forPlayerGold(gold)
     haward.forPlayer(gold, 0)
 end
 
 --- 平分奖励玩家组（木头）
 ---@param lumber number
-haward.forPlayerLumber = function(lumber)
+---@return void
+function haward.forPlayerLumber(lumber)
     haward.forPlayer(0, lumber)
 end

@@ -4,29 +4,29 @@ hunit = {}
 --- 获取单位的头像
 ---@param uOrId userdata|string|number
 ---@return string
-hunit.getAvatar = function(uOrId)
+function hunit.getAvatar(uOrId)
     return hslk.i2v(hunit.getId(uOrId), "slk", "Art") or "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
 end
 
 --- 获取单位的物编白天视野
 ---@param uOrId userdata|string|number
 ---@return string
-hunit.getSight = function(uOrId)
+function hunit.getSight(uOrId)
     return math.floor(hslk.i2v(hunit.getId(uOrId), "slk", "sight")) or 0
 end
 
 --- 获取单位的物编黑夜视野
 ---@param uOrId userdata|string|number
 ---@return string
-hunit.getNSight = function(uOrId)
+function hunit.getNSight(uOrId)
     return math.floor(hslk.i2v(hunit.getId(uOrId), "slk", "nsight")) or 0
 end
 
 --- 获取单位的攻击1浮动
 --- 这是根据slk计算的浮动攻击，rand每次获取到的值可能不一样
 ---@param uOrId userdata|string|number
----@return table
-hunit.getAttackSides1 = function(uOrId)
+---@return number[2]
+function hunit.getAttackSides1(uOrId)
     local s = hslk.i2v(hunit.getId(uOrId), "slk")
     if (s == nil) then
         return 0
@@ -48,80 +48,90 @@ end
 --- 获取单位的最大生命值
 ---@param u userdata
 ---@return number
-hunit.getMaxLife = function(u)
+function hunit.getMaxLife(u)
     return cj.GetUnitState(u, UNIT_STATE_MAX_LIFE) or 0
 end
+
 --- 获取单位的当前生命
 ---@param u userdata
 ---@return number
-hunit.getCurLife = function(u)
+function hunit.getCurLife(u)
     return cj.GetUnitState(u, UNIT_STATE_LIFE)
 end
+
 --- 设置单位的当前生命
 ---@param u userdata
 ---@param val number
-hunit.setCurLife = function(u, val)
+function hunit.setCurLife(u, val)
     cj.SetUnitState(u, UNIT_STATE_LIFE, val)
 end
+
 --- 增加单位的当前生命
 ---@param u userdata
 ---@param val number
-hunit.addCurLife = function(u, val)
+function hunit.addCurLife(u, val)
     val = math.round(val, 2)
     if (val > 0) then
         hunit.setCurLife(u, hunit.getCurLife(u) + val)
     end
 end
+
 --- 减少单位的当前生命
 ---@param u userdata
 ---@param val number
-hunit.subCurLife = function(u, val)
+function hunit.subCurLife(u, val)
     hunit.setCurLife(u, hunit.getCurLife(u) - val)
 end
+
 --- 获取单位的最大魔法
 ---@param u userdata
 ---@return number
-hunit.getMaxMana = function(u)
+function hunit.getMaxMana(u)
     return cj.GetUnitState(u, UNIT_STATE_MAX_MANA) or 0
 end
+
 --- 获取单位的当前魔法
 ---@param u userdata
 ---@return number
-hunit.getCurMana = function(u)
+function hunit.getCurMana(u)
     return cj.GetUnitState(u, UNIT_STATE_MANA)
 end
+
 --- 设置单位的当前魔法
 ---@param u userdata
 ---@param val number
-hunit.setCurMana = function(u, val)
+function hunit.setCurMana(u, val)
     cj.SetUnitState(u, UNIT_STATE_MANA, val)
 end
+
 --- 增加单位的当前魔法
 ---@param u userdata
 ---@param val number
-hunit.addCurMana = function(u, val)
+function hunit.addCurMana(u, val)
     val = math.round(val, 2)
     if (val > 0) then
         hunit.setCurMana(u, hunit.getCurMana(u) + val)
     end
 end
+
 --- 减少单位的当前魔法
 ---@param u userdata
 ---@param val number
-hunit.subCurMana = function(u, val)
+function hunit.subCurMana(u, val)
     hunit.setCurMana(u, hunit.getCurMana(u) - val)
 end
 
 --- 获取单位百分比生命
 ---@param u userdata
 ---@return number %
-hunit.getCurLifePercent = function(u)
+function hunit.getCurLifePercent(u)
     return math.round(100 * (hunit.getCurLife(u) / hunit.getMaxLife(u)))
 end
+
 --- 设置单位百分比生命
 ---@param u userdata
 ---@param val number
-hunit.setCurLifePercent = function(u, val)
+function hunit.setCurLifePercent(u, val)
     local max = hunit.getMaxLife(u)
     local life = math.floor(max * val * 0.01)
     if (life < 0) then
@@ -129,16 +139,18 @@ hunit.setCurLifePercent = function(u, val)
     end
     hunit.setCurLife(u, life)
 end
+
 --- 获取单位百分比魔法
 ---@param u userdata
 ---@return number %
-hunit.getCurManaPercent = function(u)
+function hunit.getCurManaPercent(u)
     return math.round(100 * (hunit.getCurMana(u) / hunit.getMaxMana(u)))
 end
+
 --- 设置单位百分比魔法
 ---@param u userdata
 ---@param val number %
-hunit.setCurManaPercent = function(u, val)
+function hunit.setCurManaPercent(u, val)
     local max = hunit.getMaxMana(u)
     local mana = math.floor(max * val * 0.01)
     if (mana < 0) then
@@ -150,14 +162,14 @@ end
 --- 增加单位的经验值
 ---@param u userdata
 ---@param val number
-hunit.addExp = function(u, val, showEffect)
+function hunit.addExp(u, val, showEffect)
     if (u == nil or val == nil or val <= 0) then
         return
     end
     if (type(showEffect) ~= "boolean") then
         showEffect = false
     end
-    val = cj.R2I(val * hplayer.getExpRatio(hunit.getOwner(u)) / 100)
+    val = math.ceil(val * hplayer.getExpRatio(hunit.getOwner(u)) / 100)
     cj.AddHeroXP(u, val, showEffect)
     -- @触发事件
     hevent.trigger(u, CONST_EVENT.exp, { triggerUnit = u, value = val })
@@ -166,7 +178,7 @@ end
 --- 设置单位的生命周期
 ---@param u userdata
 ---@param life number
-hunit.setPeriod = function(u, life)
+function hunit.setPeriod(u, life)
     if (life > 0) then
         cj.UnitApplyTimedLife(u, c2i("BTLF"), life)
         if (hcache.exist(u) == false) then
@@ -181,7 +193,7 @@ end
 --- 无生命周期时为-1
 ---@param u userdata
 ---@return number
-hunit.getPeriod = function(u)
+function hunit.getPeriod(u)
     return hcache.get(u, CONST_CACHE.UNIT_PERIOD, -1)
 end
 
@@ -189,7 +201,7 @@ end
 --- 无生命周期时为-1
 ---@param u userdata
 ---@return number
-hunit.getPeriodRemain = function(u)
+function hunit.getPeriodRemain(u)
     local st = hcache.get(u, CONST_CACHE.UNIT_PERIOD_START_TIME, htime.count)
     local p = hcache.get(u, CONST_CACHE.UNIT_PERIOD, -1)
     if (p == -1) then
@@ -202,69 +214,98 @@ hunit.getPeriodRemain = function(u)
     return remain
 end
 
+--- 设置单位可飞，用于设置单位飞行高度之前
+---@param u userdata
+function hunit.setCanFly(u)
+    cj.UnitAddAbility(u, c2i("Arav"))
+    cj.UnitRemoveAbility(u, c2i("Arav"))
+end
+
+--- 获取单位飞行高度
+---@param u userdata
+---@return number
+function hunit.getFlyHeight(u)
+    return cj.GetUnitFlyHeight(u)
+end
+
+--- 设置单位飞行高度，用于设置单位可飞行之后
+---@param u userdata
+---@param height number
+---@param speed number
+function hunit.setFlyHeight(u, height, speed)
+    cj.SetUnitFlyHeight(u, height, speed)
+end
+
 --- 设置单位面向角度
 ---@param u userdata
 ---@param facing number
-hunit.setFacing = function(u, facing)
+function hunit.setFacing(u, facing)
     cj.SetUnitFacing(u, facing)
 end
 
 --- 获取单位面向角度
 ---@param u userdata
 ---@return number
-hunit.getFacing = function(u)
+function hunit.getFacing(u)
     return cj.GetUnitFacing(u)
 end
 
 --- 显示单位
 ---@param u userdata
-hunit.show = function(u)
+function hunit.show(u)
     cj.ShowUnit(u, true)
 end
 
 --- 隐藏单位
 ---@param u userdata
-hunit.hide = function(u)
+function hunit.hide(u)
     cj.ShowUnit(u, false)
 end
 
 --- 暂停单位
 ---@param u userdata
-hunit.pause = function(u)
+function hunit.pause(u)
     cj.PauseUnit(u, true)
 end
 
 --- 恢复暂停单位
 ---@param u userdata
-hunit.resume = function(u)
+function hunit.resume(u)
     cj.PauseUnit(u, false)
 end
 
 --- 获取单位X坐标
 ---@param u userdata
 ---@return number
-hunit.x = function(u)
+function hunit.x(u)
     return cj.GetUnitX(u)
 end
 
 --- 获取单位Y坐标
 ---@param u userdata
 ---@return number
-hunit.y = function(u)
+function hunit.y(u)
     return cj.GetUnitY(u)
 end
 
 --- 获取单位Z坐标
 ---@param u userdata
 ---@return number
-hunit.z = function(u)
-    return hjapi.GetZ(cj.GetUnitX(u), cj.GetUnitY(u))
+function hunit.z(u)
+    return hjapi.Z(cj.GetUnitX(u), cj.GetUnitY(u))
+end
+
+--- 获取单位H坐标
+---@param u userdata
+---@return number
+function hunit.h(u)
+    return hunit.z(u) + hunit.getFlyHeight(u)
 end
 
 --- 设置单位无敌
 ---@param u userdata
 ---@param flag boolean
-hunit.setInvulnerable = function(u, flag)
+function hunit.setInvulnerable(u, flag)
     if (flag == nil) then
         flag = true
     end
@@ -279,8 +320,8 @@ end
 ---@param whichUnit userdata
 ---@param speed number 0.00-1.00
 ---@param during number
-hunit.setAnimateSpeed = function(whichUnit, speed, during)
-    if (whichUnit == nil or his.deleted(whichUnit)) then
+function hunit.setAnimateSpeed(whichUnit, speed, during)
+    if (whichUnit == nil or his.unitDestroyed(whichUnit)) then
         return
     end
     during = during or 0
@@ -302,8 +343,8 @@ end
 ---@param green number 0-255
 ---@param blue number 0-255
 ---@param opacity number 不透明度 0.0-1.0
-hunit.setRGBA = function(whichUnit, red, green, blue, opacity)
-    if (whichUnit == nil or his.deleted(whichUnit)) then
+function hunit.setRGBA(whichUnit, red, green, blue, opacity)
+    if (whichUnit == nil or his.unitDestroyed(whichUnit)) then
         return
     end
     local uid = hunit.getId(whichUnit)
@@ -320,7 +361,7 @@ end
 --- 获取单位当前归属玩家
 ---@param whichUnit userdata
 ---@return userdata ownerPlayer
-hunit.getOwner = function(whichUnit)
+function hunit.getOwner(whichUnit)
     if (whichUnit == nil) then
         return
     end
@@ -332,7 +373,7 @@ end
 ---@param ownerPlayer userdata
 ---@param changeColor boolean
 ---@return void
-hunit.setOwner = function(whichUnit, ownerPlayer, changeColor)
+function hunit.setOwner(whichUnit, ownerPlayer, changeColor)
     if (whichUnit == nil or ownerPlayer == nil) then
         return
     end
@@ -347,7 +388,7 @@ end
 ---@param x number
 ---@param y number
 ---@param facing number|nil
-hunit.portal = function(whichUnit, x, y, facing)
+function hunit.portal(whichUnit, x, y, facing)
     if (whichUnit == nil or x == nil or y == nil) then
         return
     end
@@ -361,7 +402,7 @@ end
 --- 当动作为整型序号时，自动播放对应的序号行为(每种模型的序号并不一致)
 ---@param whichUnit userdata
 ---@param animate number | string
-hunit.animate = function(whichUnit, animate)
+function hunit.animate(whichUnit, animate)
     if (whichUnit == nil or animate == nil) then
         return
     end
@@ -378,7 +419,7 @@ end
 --- 但地图放置等这些单位就被忽略了，所以可以试用此方法补回
 ---@param u userdata
 ---@param options table
-hunit.embed = function(u, options)
+function hunit.embed(u, options)
     options = options or {}
     if (type(options.registerOrderEvent ~= "boolean")) then
         options.registerOrderEvent = false
@@ -393,7 +434,7 @@ hunit.embed = function(u, options)
     hcache.alloc(u)
     hcache.set(u, CONST_CACHE.UNIT_ANIMATE_SPEED, options.timeScale or 1.00)
     hcache.set(u, CONST_CACHE.ATTR, -1)
-    hevent.poolRed(u, hevent_default_actions.unit.damaged, function(tgr)
+    hevent.poolRed(u, hevent_binder.unit.damaged, function(tgr)
         cj.TriggerRegisterUnitEvent(tgr, u, EVENT_UNIT_DAMAGED)
     end)
     -- 物品系统
@@ -464,7 +505,7 @@ end
 ]]
 ---@param options pilotUnitCreate
 ---@return userdata|table 最后创建单位|单位组
-hunit.create = function(options)
+function hunit.create(options)
     if (options.qty == nil) then
         options.qty = 1
     end
@@ -499,9 +540,9 @@ hunit.create = function(options)
     if (options.facing ~= nil) then
         facing = options.facing
     elseif (options.facingX ~= nil and options.facingY ~= nil) then
-        facing = math.getDegBetweenXY(x, y, options.facingX, options.facingY)
+        facing = math.angle(x, y, options.facingX, options.facingY)
     elseif (options.facingUnit ~= nil) then
-        facing = math.getDegBetweenXY(x, y, hunit.x(options.facingUnit), hunit.y(options.facingUnit))
+        facing = math.angle(x, y, hunit.x(options.facingUnit), hunit.y(options.facingUnit))
     else
         facing = bj_UNIT_FACING
     end
@@ -584,7 +625,7 @@ hunit.create = function(options)
         end
         -- 持续时间 delete
         if (options.during ~= nil and options.during >= 0) then
-            hunit.del(u, options.during)
+            hunit.destroy(u, options.during)
         end
     end
     if (g ~= nil) then
@@ -597,7 +638,7 @@ end
 --- 获取单位ID字符串
 ---@param uOrId userdata|number|string
 ---@return string|nil
-hunit.getId = function(uOrId)
+function hunit.getId(uOrId)
     local id
     if (type(uOrId) == "userdata") then
         id = cj.GetUnitTypeId(uOrId)
@@ -616,21 +657,22 @@ end
 --- 获取单位的名称
 ---@param u userdata
 ---@return string
-hunit.getName = function(u)
+function hunit.getName(u)
     return cj.GetUnitName(u)
 end
 
 --- 获取单位的自定义值
 ---@param u userdata
 ---@return number
-hunit.getUserData = function(u)
+function hunit.getUserData(u)
     return cj.GetUnitUserData(u)
 end
+
 --- 设置单位的自定义值
 ---@param u userdata
 ---@param val number
 ---@param during number
-hunit.setUserData = function(u, val, during)
+function hunit.setUserData(u, val, during)
     local oldData = hunit.getUserData(u)
     val = math.ceil(val)
     cj.SetUnitUserData(u, val)
@@ -646,7 +688,7 @@ end
 --- 设置单位颜色,color可设置玩家索引[1-16],应用其对应的颜色 或 参考 PLAYER_COLOR_BLACK
 ---@param u userdata
 ---@param color any 阵营颜色
-hunit.setColor = function(u, color)
+function hunit.setColor(u, color)
     if (type(color) == "number") then
         cj.SetUnitColor(u, cj.ConvertPlayerColor(color - 1))
     elseif (color ~= nil) then
@@ -657,34 +699,35 @@ end
 --- 删除单位，延时<delay>秒
 ---@param targetUnit userdata
 ---@param delay number
-hunit.del = function(targetUnit, delay)
-    if (his.deleted(targetUnit)) then
+function hunit.destroy(targetUnit, delay)
+    if (his.unitDestroyed(targetUnit)) then
         return
     end
     if (delay == nil or delay <= 0) then
         hgroup.removeUnit(hgroup.GLOBAL, targetUnit)
-        hitem.delFromUnit(targetUnit)
+        hitem.destroyFromUnit(targetUnit)
         hevent.free(targetUnit)
         hcache.free(targetUnit)
         cj.RemoveUnit(targetUnit)
     else
         htime.setTimeout(delay, function(t)
             t.destroy()
-            if (his.deleted(targetUnit)) then
+            if (his.unitDestroyed(targetUnit)) then
                 return
             end
             hgroup.removeUnit(hgroup.GLOBAL, targetUnit)
-            hitem.delFromUnit(targetUnit)
+            hitem.destroyFromUnit(targetUnit)
             hevent.free(targetUnit)
             hcache.free(targetUnit)
             cj.RemoveUnit(targetUnit)
         end)
     end
 end
+
 --- 杀死单位，延时<delay>秒
 ---@param targetUnit userdata
 ---@param delay number
-hunit.kill = function(targetUnit, delay)
+function hunit.kill(targetUnit, delay)
     if (delay == nil or delay <= 0) then
         cj.KillUnit(targetUnit)
     else
@@ -694,10 +737,12 @@ hunit.kill = function(targetUnit, delay)
         end)
     end
 end
+
 --- 爆毁单位，延时<delay>秒
+--- 当需要播放单位爆炸死亡动画时，使用此方法替代kill令其死亡
 ---@param targetUnit userdata
 ---@param delay number
-hunit.exploded = function(targetUnit, delay)
+function hunit.exploded(targetUnit, delay)
     if (delay == nil or delay <= 0) then
         cj.SetUnitExploded(targetUnit, true)
         cj.KillUnit(targetUnit)
@@ -708,25 +753,4 @@ hunit.exploded = function(targetUnit, delay)
             cj.KillUnit(targetUnit)
         end)
     end
-end
-
---- 设置单位可飞，用于设置单位飞行高度之前
----@param u userdata
-hunit.setCanFly = function(u)
-    cj.UnitAddAbility(u, c2i("Arav"))
-    cj.UnitRemoveAbility(u, c2i("Arav"))
-end
-
---- 获取单位飞行高度
----@param u userdata
----@return number
-hunit.getFlyHeight = function(u)
-    return cj.GetUnitFlyHeight(u)
-end
---- 设置单位飞行高度，用于设置单位可飞行之后
----@param u userdata
----@param height number
----@param speed number
-hunit.setFlyHeight = function(u, height, speed)
-    cj.SetUnitFlyHeight(u, height, speed)
 end

@@ -5,14 +5,14 @@ hitemPool = {
 }
 
 ---@private
-hitemPool.poolName = function(poolName)
+function hitemPool.poolName(poolName)
     return '@' .. poolName
 end
 
 --- 将物品添加到物品池
 ---@param poolName string
 ---@param whichItem userdata
-hitemPool.insert = function(poolName, whichItem)
+function hitemPool.insert(poolName, whichItem)
     if (poolName == nil or whichItem == nil) then
         return
     end
@@ -29,7 +29,7 @@ end
 --- 将物品从物品池删除
 ---@param poolName string
 ---@param whichItem userdata
-hitemPool.delete = function(poolName, whichItem)
+function hitemPool.delete(poolName, whichItem)
     if (poolName == nil or whichItem == nil) then
         return
     end
@@ -42,7 +42,7 @@ end
 
 --- 将物品从所有物品池删除
 ---@param whichItem userdata
-hitemPool.free = function(whichItem)
+function hitemPool.free(whichItem)
     if (whichItem == nil) then
         return
     end
@@ -57,10 +57,11 @@ hitemPool.free = function(whichItem)
 end
 
 --- 遍历物品池
+--- 遍历过程中返回 false 则中断
 ---@alias ItemPoolForEach fun(enumItem: userdata, idx: number):void
 ---@param poolName string
 ---@param action ItemPoolForEach | "function(enumItem, idx) end"
-hitemPool.forEach = function(poolName, action)
+function hitemPool.forEach(poolName, action)
     if (poolName == nil) then
         return
     end

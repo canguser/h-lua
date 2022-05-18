@@ -1,4 +1,4 @@
-F6V_A = function(_v)
+function F6V_A(_v)
     _v._class = "ability"
     _v._type = _v._type or "common"
     if (_v._parent == nil) then
@@ -7,7 +7,7 @@ F6V_A = function(_v)
     return _v
 end
 
-F6V_U = function(_v)
+function F6V_U(_v)
     _v._class = "unit"
     _v._type = _v._type or "common"
     if (_v._parent == nil) then
@@ -16,7 +16,7 @@ F6V_U = function(_v)
     return _v
 end
 
-F6V_I_CD = function(_v)
+function F6V_I_CD(_v)
     if (_v._cooldown < 0) then
         _v._cooldown = 0
     end
@@ -46,7 +46,7 @@ F6V_I_CD = function(_v)
     return cdID
 end
 
-F6V_I = function(_v)
+function F6V_I(_v)
     _v._class = "item"
     _v._type = _v._type or "common"
     if (_v._cooldown ~= nil) then
@@ -64,13 +64,13 @@ F6V_I = function(_v)
     return _v
 end
 
-F6V_B = function(_v)
+function F6V_B(_v)
     _v._class = "buff"
     _v._type = _v._type or "common"
     return _v
 end
 
-F6V_UP = function(_v)
+function F6V_UP(_v)
     _v._class = "upgrade"
     _v._type = _v._type or "common"
     return _v

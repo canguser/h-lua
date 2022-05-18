@@ -17,7 +17,7 @@ hhero = {
 --- 没法获取则为UNK
 ---@param whichHero userdata
 ---@return string UNK|STR|AGI|INT
-hhero.getPrimary = function(whichHero)
+function hhero.getPrimary(whichHero)
     local primary = hslk.i2v(hunit.getId(whichHero), "slk", "Primary")
     if (primary == nil or primary == "_") then
         primary = "UNK"
@@ -28,14 +28,14 @@ end
 --- 获取英雄的类型文本
 ---@param whichHero userdata
 ---@return string 力量|敏捷|智力
-hhero.getPrimaryLabel = function(whichHero)
+function hhero.getPrimaryLabel(whichHero)
     return CONST_HERO_PRIMARY[hhero.getPrimary(whichHero)]
 end
 
 --- 获取英雄力量成长
 ---@param whichHero
 ---@return string
-hhero.getStrPlus = function(whichHero)
+function hhero.getStrPlus(whichHero)
     local val = hslk.i2v(hunit.getId(whichHero), "slk", "STRplus") or 0
     return math.round(val, 2)
 end
@@ -43,7 +43,7 @@ end
 --- 获取英雄敏捷成长
 ---@param whichHero
 ---@return string
-hhero.getAgiPlus = function(whichHero)
+function hhero.getAgiPlus(whichHero)
     local val = hslk.i2v(hunit.getId(whichHero), "slk", "AGIplus") or 0
     return math.round(val, 2)
 end
@@ -51,7 +51,7 @@ end
 --- 获取英雄智力成长
 ---@param whichHero
 ---@return string
-hhero.getIntPlus = function(whichHero)
+function hhero.getIntPlus(whichHero)
     local val = hslk.i2v(hunit.getId(whichHero), "slk", "INTplus") or 0
     return math.round(val, 2)
 end
@@ -59,7 +59,7 @@ end
 --- 获取英雄谓称
 ---@param whichHero
 ---@return string
-hhero.getProperName = function(whichHero)
+function hhero.getProperName(whichHero)
     return cj.GetHeroProperName(whichHero) or ""
 end
 
@@ -67,7 +67,7 @@ end
 ---@protected
 ---@param whichHero userdata
 ---@param lv number
-hhero.setPrevLevel = function(whichHero, lv)
+function hhero.setPrevLevel(whichHero, lv)
     hcache.set(whichHero, CONST_CACHE.HERO_PREV_LEVEL, lv)
 end
 
@@ -75,21 +75,21 @@ end
 ---@protected
 ---@param whichHero userdata
 ---@return number
-hhero.getPrevLevel = function(whichHero)
+function hhero.getPrevLevel(whichHero)
     return hcache.get(whichHero, CONST_CACHE.HERO_PREV_LEVEL, 0)
 end
 
 --- 获取英雄当前等级
 ---@param whichHero userdata
 ---@return number
-hhero.getCurLevel = function(whichHero)
+function hhero.getCurLevel(whichHero)
     return cj.GetHeroLevel(whichHero) or 1
 end
 --- 设置英雄当前的等级
 ---@paramu userdata
 ---@param newLevel number
 ---@param showEffect boolean
-hhero.setCurLevel = function(whichHero, newLevel, showEffect)
+function hhero.setCurLevel(whichHero, newLevel, showEffect)
     if (type(showEffect) ~= "boolean") then
         showEffect = false
     end
@@ -107,14 +107,14 @@ end
 --- 获取英雄当前经验值
 ---@param whichHero userdata
 ---@return number integer
-hhero.getExp = function(whichHero)
+function hhero.getExp(whichHero)
     return cj.GetHeroXP(whichHero) or 0
 end
 
 --- 获取英雄升级到某等级需要的总经验
 --- 根据地图的平衡常数计算[英雄EXP-需求|NeedHeroXP]项
 ---@return number integer
-hhero.getExpNeed = function(targetLevel)
+function hhero.getExpNeed(targetLevel)
     targetLevel = math.floor(targetLevel) or 1
     if (targetLevel <= 1) then
         return 0
@@ -139,7 +139,7 @@ end
 --- 获取英雄的尚未分配的技能点数量
 ---@param whichHero userdata
 ---@return number integer
-hhero.getSkillPoints = function(whichHero)
+function hhero.getSkillPoints(whichHero)
     return cj.GetHeroSkillPoints(whichHero) or 0
 end
 
@@ -147,7 +147,7 @@ end
 --- 超过7会有很多魔兽原生问题，例如英雄不会复活，左侧图标无法查看等
 ---@param whichPlayer userdata
 ---@param max number
-hhero.setPlayerAllowQty = function(whichPlayer, max)
+function hhero.setPlayerAllowQty(whichPlayer, max)
     max = math.floor(max)
     if (max < 1) then
         max = 1
@@ -161,13 +161,13 @@ end
 --- 获取玩家最大英雄数量
 ---@param whichPlayer userdata
 ---@return number
-hhero.getPlayerAllowQty = function(whichPlayer)
+function hhero.getPlayerAllowQty(whichPlayer)
     local index = hplayer.index(whichPlayer)
     return hhero.player_allow_qty[index] or 0
 end
 
 -- 设定选择英雄的出生地
-hhero.setBornXY = function(x, y)
+function hhero.setBornXY(x, y)
     hhero.bornX = x
     hhero.bornY = y
 end
@@ -178,9 +178,9 @@ end
 ---@param invulnerable number 复活后的无敌时间
 ---@param x number
 ---@param y number
-hhero.reborn = function(whichHero, delay, invulnerable, x, y)
+function hhero.reborn(whichHero, delay, invulnerable, x, y)
     if (his.hero(whichHero)) then
-        if (delay < 0.3 and his.deleted(whichHero) == false) then
+        if (delay < 0.3 and his.unitDestroyed(whichHero) == false) then
             cj.ReviveHero(whichHero, x, y, true)
             hcache.set(whichHero, CONST_CACHE.UNIT_DEAD, nil)
             hmonitor.listen(CONST_MONITOR.LIFE_BACK, whichHero)
@@ -195,7 +195,7 @@ hhero.reborn = function(whichHero, delay, invulnerable, x, y)
         else
             htime.setTimeout(delay, function(t)
                 t.destroy()
-                if (his.deleted(whichHero) == false) then
+                if (his.unitDestroyed(whichHero) == false) then
                     if (his.alive(whichHero)) then
                         return
                     end
@@ -228,12 +228,12 @@ end
         buildRowQty = 4, -- 每行构建的最大数目，例如一行最多4个酒馆
         tavernId = nil, -- 酒馆模式下，你可以自定义酒馆单位是哪一个(建议使用hslk创建酒馆，这样自动就有出售单位等必备技能)
         tavernUnitQty = 10, -- 酒馆模式下，一个酒馆最多拥有几种单位
-        onUnitSell = function, -- 酒馆模式时，购买单位的动作，默认是系统pickHero事件，你可自定义
+function         onUnitSell, -- 酒馆模式时，购买单位的动作，默认是系统pickHero事件，你可自定义
         direct = {1,1}, -- 生成方向，默认左下角开始到右上角结束
     }
 ]]
 ---@param options pilotHeroBuildSelector
-hhero.buildSelector = function(options)
+function hhero.buildSelector(options)
     local heroIds = options.heroes
     if (heroIds == nil or #heroIds <= 0) then
         heroIds = hslk.typeIds({ "hero", "hero_custom" })
@@ -351,7 +351,7 @@ hhero.buildSelector = function(options)
                         local p = hunit.getOwner(evtData.buyingUnit)
                         local soldUnit = evtData.soldUnit
                         local soldUid = cj.GetUnitTypeId(soldUnit)
-                        hunit.del(soldUnit, 0)
+                        hunit.destroy(soldUnit, 0)
                         local pIndex = hplayer.index(p)
                         if (#hhero.player_heroes[pIndex] >= hhero.player_allow_qty[pIndex]) then
                             echo("|cffffff80你已经选够~|r", p)
@@ -423,7 +423,7 @@ hhero.buildSelector = function(options)
         htime.setTimeout(during - 0.5, function(t)
             t.destroy()
             for _, hero in ipairs(hhero.selectorClearPool) do
-                hunit.del(hero)
+                hunit.destroy(hero)
             end
             hhero.selectorClearPool = {}
             for i = 1, hplayer.qty_max, 1 do

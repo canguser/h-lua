@@ -7,7 +7,7 @@ htextTag = {
 --- 删除漂浮字
 ---@param ttg userdata
 ---@param delay number
-htextTag.del = function(ttg, delay)
+function htextTag.destroy(ttg, delay)
     if (delay == nil or delay <= 0) then
         htextTag.qty = htextTag.qty - 1
         hcache.free(ttg)
@@ -21,6 +21,7 @@ htextTag.del = function(ttg, delay)
         end)
     end
 end
+
 --- 创建漂浮字
 ---@param msg string
 ---@param size number
@@ -28,7 +29,7 @@ end
 ---@param opacity number 不透明度，为0则不可见(0.0~1.0)
 ---@param during number 设置during为0则永久显示
 ---@return userdata
-htextTag.create = function(msg, size, color, opacity, during)
+function htextTag.create(msg, size, color, opacity, during)
     if (string.len(msg) <= 0 or during < 0) then
         return
     end
@@ -61,10 +62,11 @@ htextTag.create = function(msg, size, color, opacity, during)
         cj.SetTextTagPermanent(ttg, true)
     else
         cj.SetTextTagPermanent(ttg, false)
-        htextTag.del(ttg, during)
+        htextTag.destroy(ttg, during)
     end
     return ttg
 end
+
 --- 漂浮文字 - 默认 (在x,y)
 ---@param x number
 ---@param y number
@@ -75,11 +77,12 @@ end
 ---@param during number 设置during为0则永久显示
 ---@param zOffset number z轴高度偏移量
 ---@return userdata
-htextTag.create2XY = function(x, y, msg, size, color, opacity, during, zOffset)
+function htextTag.create2XY(x, y, msg, size, color, opacity, during, zOffset)
     local ttg = htextTag.create(msg, size, color, opacity, during)
     cj.SetTextTagPos(ttg, x - cj.StringLength(msg) * size * 0.5, y, zOffset)
     return ttg
 end
+
 --- 漂浮文字 - 默认 (在某单位头上)
 ---@param u userdata
 ---@param msg string
@@ -89,49 +92,49 @@ end
 ---@param during number 设置during为0则永久显示
 ---@param zOffset number z轴高度偏移量
 ---@return userdata
-htextTag.create2Unit = function(u, msg, size, color, opacity, during, zOffset)
+function htextTag.create2Unit(u, msg, size, color, opacity, during, zOffset)
     return htextTag.create2XY(hunit.x(u), hunit.y(u), msg, size, color, opacity, during, zOffset)
 end
 
 --- 获取漂浮字大小
 ---@param ttg userdata
 ---@return number|nil
-htextTag.getSize = function(ttg)
+function htextTag.getSize(ttg)
     return hcache.get(ttg, CONST_CACHE.TTG_SIZE)
 end
 
 --- 获取漂浮字颜色
 ---@param ttg userdata
 ---@return string|nil
-htextTag.getColor = function(ttg)
+function htextTag.getColor(ttg)
     return hcache.get(ttg, CONST_CACHE.TTG_COLOR)
 end
 
 --- 获取漂浮字内容
 ---@param ttg userdata
 ---@return string|nil
-htextTag.getMsg = function(ttg)
+function htextTag.getMsg(ttg)
     return hcache.get(ttg, CONST_CACHE.TTG_MSG)
 end
 
 --- 获取漂浮字透明度
 ---@param ttg userdata
 ---@return number|nil
-htextTag.getOpacity = function(ttg)
+function htextTag.getOpacity(ttg)
     return hcache.get(ttg, CONST_CACHE.TTG_OPACITY)
 end
 
 --- 获取漂浮字持续时间
 ---@param ttg userdata
 ---@return number|nil
-htextTag.getDuring = function(ttg)
+function htextTag.getDuring(ttg)
     return hcache.get(ttg, CONST_CACHE.TTG_DURING)
 end
 
 --- 设置漂浮字XY的偏移速度
 ---@param ttg userdata
 ---@return number|nil
-htextTag.setVelocity = function(ttg, xSpeed, ySpeed)
+function htextTag.setVelocity(ttg, xSpeed, ySpeed)
     cj.SetTextTagVelocity(ttg, xSpeed, ySpeed)
 end
 
@@ -140,7 +143,7 @@ end
 ---@param showType string | "'scale'" | "'shrink'" | "'toggle'"
 ---@param xSpeed number
 ---@param ySpeed number
-htextTag.style = function(ttg, showType, xSpeed, ySpeed)
+function htextTag.style(ttg, showType, xSpeed, ySpeed)
     if (ttg == nil) then
         return
     end
@@ -215,7 +218,7 @@ end
     }
 ]]
 ---@param options pilotEffectTTG
-htextTag.model = function(options)
+function htextTag.model(options)
     local msg = tostring(options.msg) or ""
     local width = options.width or 10
     local scale = options.scale or 0.25

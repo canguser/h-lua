@@ -7,7 +7,7 @@ math_deg2rad = math_pi / 180
 ---@param n number
 ---@param m number
 ---@return number
-math.random = function(n, m)
+function math.random(n, m)
     if (cj == nil) then
         if (m < n) then
             return math_random(m, n)
@@ -41,7 +41,7 @@ end
 ---@param dist number
 ---@param angle number
 ---@return number,number
-math.polarProjection = function(x, y, dist, angle)
+function math.polarProjection(x, y, dist, angle)
     local tx = x + dist * math.cos(angle * math_deg2rad)
     local ty = y + dist * math.sin(angle * math_deg2rad)
     if (tx < hrect.getMinX(hrect.playable())) then
@@ -61,7 +61,7 @@ end
 ---@param decimal number
 ---@param n number 小数最大截断位，默认2位
 ---@return number
-math.round = function(decimal, n)
+function math.round(decimal, n)
     n = math.floor(n or 2)
     if (n < 1) then
         return math.floor(decimal)
@@ -73,7 +73,7 @@ end
 ---@param value1 number 数字1
 ---@param value2 number 数字2
 ---@return number
-math.disparity = function(value1, value2)
+function math.disparity(value1, value2)
     if (value1 >= value2) then
         return value1 - value2
     end
@@ -84,7 +84,7 @@ end
 ---@param value number
 ---@param n number 小数最大截断位，默认2位
 ---@return string
-math.numberFormat = function(value, n)
+function math.numberFormat(value, n)
     n = math.floor(n or 2)
     if (n < 1) then
         n = 2
@@ -105,7 +105,7 @@ end
 --- 整型格式化
 ---@param value number
 ---@return string
-math.integerFormat = function(value)
+function math.integerFormat(value)
     if (value > 10000 * 100000000) then
         return math.floor(value / (10000 * 100000000)) .. "T"
     elseif (value > 10 * 100000000) then
@@ -126,19 +126,8 @@ end
 ---@param x2 number
 ---@param y2 number
 ---@return number
-math.getDegBetweenXY = function(x1, y1, x2, y2)
+function math.angle(x1, y1, x2, y2)
     return math.round((math_rad2deg * math.atan(y2 - y1, x2 - x1) + 360) % 360, 4)
-end
-
---- 获取两个单位间角度，如果其中一个单位为空 返回0
----@param u1 userdata
----@param u2 userdata
----@return number
-math.getDegBetweenUnit = function(u1, u2)
-    if (u1 == nil or u2 == nil) then
-        return 0
-    end
-    return math.getDegBetweenXY(hunit.x(u1), hunit.y(u1), hunit.x(u2), hunit.y(u2))
 end
 
 --- 获取两个坐标距离
@@ -147,18 +136,10 @@ end
 ---@param x2 number
 ---@param y2 number
 ---@return number
-math.getDistanceBetweenXY = function(x1, y1, x2, y2)
+function math.distance(x1, y1, x2, y2)
     local dx = x2 - x1
     local dy = y2 - y1
     return math.sqrt(dx * dx + dy * dy)
-end
-
---- 获取两个单位距离
----@param u1 userdata
----@param u2 userdata
----@return number
-math.getDistanceBetweenUnit = function(u1, u2)
-    return math.getDistanceBetweenXY(hunit.x(u1), hunit.y(u1), hunit.x(u2), hunit.y(u2))
 end
 
 --- 获取矩形区域内某角度距离边缘最大距离
@@ -166,7 +147,7 @@ end
 ---@param h number 区域宽
 ---@param deg number 角度
 ---@return number
-math.getMaxDistanceInRect = function(w, h, deg)
+function math.getMaxDistanceInRect(w, h, deg)
     w = w or 0
     h = h or 0
     if (w <= 0 or h <= 0) then
@@ -212,7 +193,7 @@ end
 --- 时间戳转日期对象
 ---@param timestamp number Unix时间戳
 ---@return table {Y:"年",m:"月",d:"日",H:"时",i:"分",s:"秒",w:"周[0-6]",W:"周[日-六]"}
-math.date = function(timestamp)
+function math.date(timestamp)
     local d = os.date("%Y|%m|%d|%H|%M|%S|%w", timestamp)
     d = string.explode("|", d)
     local W = { "日", "一", "二", "三", "四", "五", "六" }

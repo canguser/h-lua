@@ -1,7 +1,7 @@
 --- 克隆table
 ---@param org table
 ---@return table
-table.clone = function(org)
+function table.clone(org)
     local function copy(org1, res)
         for k, v in pairs(org1) do
             if type(v) ~= "table" then
@@ -20,7 +20,7 @@ end
 --- 合并table
 ---@vararg table
 ---@return table
-table.merge = function(...)
+function table.merge(...)
     local tempTable = {}
     local tables = { ... }
     if (tables == nil) then

@@ -1,14 +1,14 @@
 SLK_GO = {}
 SLK_ID_ALREADY = {}
 
-SLK_GO_INI = function(ini)
+function SLK_GO_INI(ini)
     local iniJson = json.parse(ini)
     for _, v in pairs(iniJson) do
         SLK_ID_ALREADY[v] = true
     end
 end
 
-SLK_GO_SET = function(data)
+function SLK_GO_SET(data)
     for k, v in pairs(data) do
         if (type(v) == "function") then
             data[k] = nil
@@ -28,7 +28,7 @@ local idPrefix = {
 local idLimit = 46655 -- zzz
 
 SLK_ID_COUNT = {}
-SLK_ID = function(_v)
+function SLK_ID(_v)
     local _parent = _v._parent
     local _class = _v._class
     local _id_force = _v._id_force
@@ -77,6 +77,6 @@ SLK_ID = function(_v)
     return sid
 end
 
-SLK_GO_JSON = function()
+function SLK_GO_JSON()
     return json.stringify(SLK_GO)
 end

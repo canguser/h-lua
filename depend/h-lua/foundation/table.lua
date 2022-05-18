@@ -1,10 +1,10 @@
--- 默认不支持pairs
+-- 不支持默认pairs
 
 --- 生成整数段
 ---@param n1 number integer
 ---@param n2 number integer
 ---@return table
-table.section = function(n1, n2)
+function table.section(n1, n2)
     n1 = math.floor(n1)
     n2 = math.floor(n2 or n1)
     local s = {}
@@ -67,7 +67,7 @@ end
 --- 洗牌
 ---@param arr table
 ---@return table
-table.shuffle = function(arr)
+function table.shuffle(arr)
     local shuffle = table.clone(arr)
     local length = #shuffle
     local temp
@@ -85,7 +85,7 @@ end
 --- 倒序
 ---@param arr table
 ---@return table
-table.reverse = function(arr)
+function table.reverse(arr)
     local r = {}
     for i = #arr, 1, -1 do
         if (type(arr[i]) == "table") then
@@ -101,7 +101,7 @@ end
 ---@param params any
 ---@param qty number integer
 ---@return table
-table.repeater = function(params, qty)
+function table.repeater(params, qty)
     qty = math.floor(qty or 1)
     local r = {}
     for _ = 1, qty do
@@ -113,7 +113,7 @@ end
 --- 克隆table
 ---@param org table
 ---@return table
-table.clone = function(org)
+function table.clone(org)
     local function copy(org1, res)
         for _, v in ipairs(org1) do
             if type(v) ~= "table" then
@@ -133,7 +133,7 @@ end
 --- 合并table
 ---@vararg table
 ---@return table
-table.merge = function(...)
+function table.merge(...)
     local tempTable = {}
     local tables = { ... }
     if (tables == nil) then
@@ -153,7 +153,7 @@ end
 ---@param arr table
 ---@param val any
 ---@return boolean
-table.includes = function(arr, val)
+function table.includes(arr, val)
     local isIn = false
     if (val == nil or #arr <= 0) then
         return isIn
@@ -171,7 +171,7 @@ end
 ---@param arr table
 ---@param val any
 ---@param qty number
-table.delete = function(arr, val, qty)
+function table.delete(arr, val, qty)
     qty = qty or -1
     local q = 0
     for k, v in ipairs(arr) do
@@ -190,7 +190,7 @@ end
 ---@param arr table
 ---@param key string
 ---@return table
-table.value = function(arr, key)
+function table.value(arr, key)
     local values = {}
     if (arr ~= nil and key ~= nil and #arr > 0) then
         for _, v in ipairs(arr) do
@@ -206,7 +206,7 @@ end
 ---@param obj table
 ---@param keyMap table
 ---@return table
-table.obj2arr = function(obj, keyMap)
+function table.obj2arr(obj, keyMap)
     if (keyMap == nil or type(keyMap) ~= "table" or #keyMap <= 0) then
         return {}
     end

@@ -3,7 +3,8 @@ hdialog = {}
 
 --- 自动根据key识别热键
 ---@param key string
-hdialog.hotkey = function(key)
+---@return number
+function hdialog.hotkey(key)
     if (key == nil) then
         return 0
     elseif (type(key) == "number") then
@@ -13,14 +14,6 @@ hdialog.hotkey = function(key)
     else
         return 0
     end
-end
-
---- 删除一个对话框
----@param whichDialog userdata
-hdialog.del = function(whichDialog)
-    hcache.free(whichDialog)
-    cj.DialogClear(whichDialog)
-    cj.DialogDestroy(whichDialog)
 end
 
 --[[
@@ -38,8 +31,8 @@ end
 ---@param whichPlayer userdata
 ---@param options pilotDialogCreate
 ---@param action dialogCreateAction | "function(btnValue) end"
----@return userdata
-hdialog.create = function(whichPlayer, options, action)
+---@return void
+function hdialog.create(whichPlayer, options, action)
     if (#options.buttons <= 0) then
         err("Dialog buttons is empty")
         return
@@ -65,7 +58,7 @@ hdialog.create = function(whichPlayer, options, action)
     hcache.alloc(d)
     hcache.set(d, CONST_CACHE.DIALOG_ACTION, action)
     hcache.set(d, CONST_CACHE.DIALOG_BUTTON, buttons)
-    hevent.poolRed(d, hevent_default_actions.dialog.click, function(tgr)
+    hevent.poolRed(d, hevent_binder.dialog.click, function(tgr)
         cj.TriggerRegisterDialogEvent(tgr, d)
     end)
     if (whichPlayer == nil) then

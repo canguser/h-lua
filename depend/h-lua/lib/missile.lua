@@ -47,16 +47,16 @@ function missile(options)
     local targetH = 0
     if (options.startX == nil or options.startY == nil) then
         options.startX, options.startY = math.polarProjection(hunit.x(sourceUnit), hunit.y(sourceUnit), 30, fac0)
-        sourceH = sourceH + hunit.getFlyHeight(sourceUnit) + hunit.z(sourceUnit)
+        sourceH = sourceH + hunit.h(sourceUnit)
     end
     if (options.targetX ~= nil and options.targetY ~= nil) then
-        targetH = hover + hjapi.GetZ(options.targetX, options.targetY)
-        fac0 = math.getDegBetweenXY(hunit.x(sourceUnit), hunit.y(sourceUnit), options.targetX, options.targetY)
-        dct0 = math.getDistanceBetweenXY(hunit.x(sourceUnit), hunit.y(sourceUnit), options.targetX, options.targetY)
+        targetH = hover + hjapi.Z(options.targetX, options.targetY)
+        fac0 = math.angle(hunit.x(sourceUnit), hunit.y(sourceUnit), options.targetX, options.targetY)
+        dct0 = math.distance(hunit.x(sourceUnit), hunit.y(sourceUnit), options.targetX, options.targetY)
     else
-        targetH = hover + hunit.getFlyHeight(targetUnit) + hunit.z(targetUnit)
-        fac0 = math.getDegBetweenUnit(sourceUnit, targetUnit)
-        dct0 = math.getDistanceBetweenUnit(sourceUnit, targetUnit)
+        targetH = hover + hunit.h(targetUnit)
+        fac0 = math.angle(hunit.x(sourceUnit), hunit.y(sourceUnit), hunit.x(targetUnit), hunit.y(targetUnit))
+        dct0 = math.distance(hunit.x(sourceUnit), hunit.y(sourceUnit), hunit.x(targetUnit), hunit.y(targetUnit))
     end
     if (dct0 < 300) then
         height = dct0 / 2
@@ -129,7 +129,7 @@ function missile(options)
         shakeDirect = -1
     end
     htime.setInterval(frequency, function(curTimer)
-        if (arrowToken == nil or his.deleted(sourceUnit) or (targetUnit ~= nil and his.deleted(targetUnit))) then
+        if (arrowToken == nil or his.unitDestroyed(sourceUnit) or (targetUnit ~= nil and his.unitDestroyed(targetUnit))) then
             curTimer.destroy()
             ending(ax, ay, false)
             return
@@ -144,13 +144,13 @@ function missile(options)
         else
             tx = hunit.x(targetUnit)
             ty = hunit.y(targetUnit)
-            dct = math.getDistanceBetweenXY(options.startX, options.startY, hunit.x(targetUnit), hunit.y(targetUnit))
+            dct = math.distance(options.startX, options.startY, hunit.x(targetUnit), hunit.y(targetUnit))
         end
         local fac
         if (shake ~= nil and shake ~= 0) then
-            fac = math.getDegBetweenXY(ax, ay, tx, ty) + shake * 75 * shakeDirect * math.getDistanceBetweenXY(ax, ay, tx, ty) / dct
+            fac = math.angle(ax, ay, tx, ty) + shake * 75 * shakeDirect * math.distance(ax, ay, tx, ty) / dct
         else
-            fac = math.getDegBetweenXY(ax, ay, tx, ty)
+            fac = math.angle(ax, ay, tx, ty)
         end
         local nx, ny = math.polarProjection(ax, ay, speed, fac)
         if (acceleration ~= 0) then
@@ -174,7 +174,7 @@ function missile(options)
         ax = nx
         ay = ny
         fac0 = fac
-        local curD = math.getDistanceBetweenXY(ax, ay, tx, ty)
+        local curD = math.distance(ax, ay, tx, ty)
         if (curD < dct) then
             local halfD = dct / 2
             local rot = 0
@@ -185,7 +185,7 @@ function missile(options)
                 rot = rotateY1i * (2 - di)
             else
                 curH = curH - gravity2 * dg
-                rot = 1.2 * rotateY2i * (2 - di)
+                rot = rotateY2i * (2 - di)
             end
             if (fac0 > 90 and fac0 < 270) then
                 rot = -rot

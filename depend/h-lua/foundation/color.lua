@@ -5,7 +5,7 @@ hcolor = {}
 ---@param str string
 ---@param color string hex
 ---@return string
-hcolor.hex = function(str, color)
+function hcolor.hex(str, color)
     if (str == nil or str == '' or color == nil) then
         return str
     end
@@ -16,7 +16,7 @@ end
 ---@param str string
 ---@param color string|function
 ---@return string
-hcolor.mixed = function(str, color)
+function hcolor.mixed(str, color)
     if (str == nil or str == '' or color == nil) then
         return str
     end
@@ -32,7 +32,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.gold = function(str)
+function hcolor.gold(str)
     return hcolor.hex(str, "ffcc00")
 end
 
@@ -40,7 +40,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.white = function(str)
+function hcolor.white(str)
     return hcolor.hex(str, "ffffff")
 end
 
@@ -48,7 +48,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.black = function(str)
+function hcolor.black(str)
     return hcolor.hex(str, "000000")
 end
 
@@ -56,7 +56,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.grey = function(str)
+function hcolor.grey(str)
     return hcolor.hex(str, "c0c0c0")
 end
 
@@ -64,7 +64,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.greyDeep = function(str)
+function hcolor.greyDeep(str)
     return hcolor.hex(str, "969696")
 end
 
@@ -72,7 +72,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.redLight = function(str)
+function hcolor.redLight(str)
     return hcolor.hex(str, "ff8080")
 end
 
@@ -80,7 +80,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.red = function(str)
+function hcolor.red(str)
     return hcolor.hex(str, "ff3939")
 end
 
@@ -88,7 +88,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.greenLight = function(str)
+function hcolor.greenLight(str)
     return hcolor.hex(str, "ccffcc")
 end
 
@@ -96,7 +96,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.green = function(str)
+function hcolor.green(str)
     return hcolor.hex(str, "80ff00")
 end
 
@@ -104,7 +104,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.yellowLight = function(str)
+function hcolor.yellowLight(str)
     return hcolor.hex(str, "ffffcc")
 end
 
@@ -112,7 +112,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.yellow = function(str)
+function hcolor.yellow(str)
     return hcolor.hex(str, "ffff00")
 end
 
@@ -120,7 +120,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.orangeLight = function(str)
+function hcolor.orangeLight(str)
     return hcolor.hex(str, "ffd88c")
 end
 
@@ -128,7 +128,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.orange = function(str)
+function hcolor.orange(str)
     return hcolor.hex(str, "ffc24b")
 end
 
@@ -136,7 +136,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.skyLight = function(str)
+function hcolor.skyLight(str)
     return hcolor.hex(str, "ccffff")
 end
 
@@ -144,7 +144,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.sky = function(str)
+function hcolor.sky(str)
     return hcolor.hex(str, "80ffff")
 end
 
@@ -152,7 +152,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.seaLight = function(str)
+function hcolor.seaLight(str)
     return hcolor.hex(str, "99ccff")
 end
 
@@ -160,7 +160,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.sea = function(str)
+function hcolor.sea(str)
     return hcolor.hex(str, "00ccff")
 end
 
@@ -168,7 +168,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.purpleLight = function(str)
+function hcolor.purpleLight(str)
     return hcolor.hex(str, "ee82ee")
 end
 
@@ -176,7 +176,7 @@ end
 ---@public
 ---@param str string
 ---@return string
-hcolor.purple = function(str)
+function hcolor.purple(str)
     return hcolor.hex(str, "ff59ff")
 end
 
@@ -192,7 +192,7 @@ end
     }
 ]]
 ---@type fun(str:string,containColor:nil|string|function,options:table):string
-hcolor.format = function(str, containColor, options)
+function hcolor.format(str, containColor, options)
     local poses = string.findAllPos(str, '%%s')
     local builder = {}
     if (#poses > 0) then

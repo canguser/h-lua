@@ -4,7 +4,7 @@ hquest = {}
 --- 删除任务
 ---@param q userdata
 ---@param delay number
-hquest.del = function(q, delay)
+function hquest.destroy(q, delay)
     if (delay == nil or delay <= 0) then
         cj.DestroyQuest(q)
     else
@@ -27,7 +27,7 @@ end
 ]]
 ---@param options pilotQuestCreate
 ---@return userdata
-hquest.create = function(options)
+function hquest.create(options)
     local side = options.side or "left"
     local title = options.title
     local content = options.content
@@ -60,30 +60,30 @@ hquest.create = function(options)
         cj.QuestSetCompleted(q, false)
     end
     if (options.during ~= nil and options.during > 0) then
-        hquest.del(q, options.during)
+        hquest.destroy(q, options.during)
     end
     return q
 end
 
 --- 令F9按钮闪烁
-hquest.flash = function()
+function hquest.flash()
     cj.FlashQuestDialogButton()
 end
 
 --- 设置任务为完成
 ---@param q userdata
-hquest.setCompleted = function(q)
+function hquest.setCompleted(q)
     cj.QuestSetCompleted(q, true)
 end
 
 --- 设置任务为失败
 ---@param q userdata
-hquest.setFailed = function(q)
+function hquest.setFailed(q)
     cj.QuestSetFailed(q, true)
 end
 
 --- 设置任务为被发现
 ---@param q userdata
-hquest.setDiscovered = function(q)
+function hquest.setDiscovered(q)
     cj.QuestSetDiscovered(q, true)
 end

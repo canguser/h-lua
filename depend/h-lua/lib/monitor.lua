@@ -12,7 +12,7 @@ hmonitor = {
 ---@param frequency number 周期间隔，每个周期会把受监听对象回调
 ---@param action monAction | "function(object) end" 监听操作
 ---@param ignoreFilter nil|monRemoveFilter | "function(object) end" 移除监听对象的适配条件
-hmonitor.create = function(key, frequency, action, ignoreFilter)
+function hmonitor.create(key, frequency, action, ignoreFilter)
     if (type(key) ~= "string" or type(frequency) ~= "number" or type(action) ~= "function") then
         return
     end
@@ -37,7 +37,7 @@ end
 
 --- 毁灭一个监听器
 ---@param key string 唯一key
-hmonitor.destroy = function(key)
+function hmonitor.destroy(key)
     if (hmonitor._monitors[key] ~= nil) then
         hmonitor._monitors[key].timer.destroy()
         hmonitor._monitors[key] = nil
@@ -48,7 +48,7 @@ end
 ---@param key string 唯一key
 ---@param obj any 监听对象
 ---@return boolean
-hmonitor.isListening = function(key, obj)
+function hmonitor.isListening(key, obj)
     if (hmonitor._monitors[key] ~= nil) then
         return hmonitor._monitors[key].arr.keyExists(obj)
     end
@@ -58,7 +58,7 @@ end
 --- 监听对象
 ---@param key string 唯一key
 ---@param obj any 监听对象
-hmonitor.listen = function(key, obj)
+function hmonitor.listen(key, obj)
     local monitor = hmonitor._monitors[key]
     if (monitor ~= nil) then
         monitor.arr.set(obj, 1)
@@ -71,7 +71,7 @@ end
 ---@protected
 ---@param key string 唯一key
 ---@param obj any 监听对象
-hmonitor.ignore = function(key, obj)
+function hmonitor.ignore(key, obj)
     local monitor = hmonitor._monitors[key]
     if (monitor ~= nil) then
         monitor.arr.splice(obj)

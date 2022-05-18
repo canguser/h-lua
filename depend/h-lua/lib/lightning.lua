@@ -20,12 +20,12 @@ hlightning = {
 --- 删除闪电
 ---@param lightning userdata
 ---@param delay number
-hlightning.del = function(lightning, delay)
+function hlightning.destroy(lightning, delay)
     delay = delay or 0
     if (delay > 0) then
         htime.setTimeout(delay, function(t)
             t.destroy()
-            hlightning.del(lightning)
+            cj.DestroyLightning(lightning)
         end)
     else
         cj.DestroyLightning(lightning)
@@ -42,13 +42,13 @@ end
 ---@param z2 number
 ---@param during number 大于0时延时删除
 ---@return userdata
-hlightning.xyz2xyz = function(lightningType, x1, y1, z1, x2, y2, z2, during)
+function hlightning.xyz2xyz(lightningType, x1, y1, z1, x2, y2, z2, during)
     if (hlightning.enable ~= true) then
         return
     end
     local lightning = cj.AddLightningEx(lightningType, true, x1, y1, z1, x2, y2, z2)
     if (during > 0) then
-        hlightning.del(lightning, during)
+        hlightning.destroy(lightning, during)
     end
     return lightning
 end
@@ -59,7 +59,7 @@ end
 ---@param loc2 userdata
 ---@param during number 大于0时延时删除
 ---@return userdata
-hlightning.loc2loc = function(lightningType, loc1, loc2, during)
+function hlightning.loc2loc(lightningType, loc1, loc2, during)
     return hlightning.xyz2xyz(
         lightningType,
         cj.GetLocationX(loc1),
@@ -78,7 +78,7 @@ end
 ---@param unit2 userdata
 ---@param during number 大于0时延时删除
 ---@return userdata
-hlightning.unit2unit = function(lightningType, unit1, unit2, during)
+function hlightning.unit2unit(lightningType, unit1, unit2, during)
     local loc1 = cj.GetUnitLoc(unit1)
     local loc2 = cj.GetUnitLoc(unit2)
     local l = hlightning.loc2loc(lightningType, loc1, loc2, during)

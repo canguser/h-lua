@@ -4,7 +4,7 @@ hcache = { _c_ = {}, _p_ = {} }
 ---@param handle any
 ---@param key any
 ---@return boolean
-hcache.exist = function(handle, key)
+function hcache.exist(handle, key)
     if (handle == nil) then
         return false
     end
@@ -18,7 +18,8 @@ hcache.exist = function(handle, key)
 end
 
 ---@param handle any
-hcache.alloc = function(handle)
+---@return void
+function hcache.alloc(handle)
     if (handle == nil) then
         stack()
         return
@@ -29,7 +30,8 @@ hcache.alloc = function(handle)
 end
 
 ---@param handle any
-hcache.protect = function(handle)
+---@return void
+function hcache.protect(handle)
     if (hcache._p_[handle] == nil) then
         hcache._p_[handle] = true
     end
@@ -38,13 +40,14 @@ end
 ---@protected
 ---@param handle any
 ---@return boolean
-hcache.protected = function(handle)
+function hcache.protected(handle)
     return hcache._p_[handle] ~= nil
 end
 
 ---@param handle any
 ---@param key any
-hcache.free = function(handle, key)
+---@return void
+function hcache.free(handle, key)
     if (handle == nil) then
         return
     end
@@ -60,7 +63,8 @@ end
 ---@param handle any
 ---@param key any
 ---@param value any|nil
-hcache.set = function(handle, key, value)
+---@return void
+function hcache.set(handle, key, value)
     if (handle == nil) then
         return
     end
@@ -72,7 +76,8 @@ end
 ---@param handle any
 ---@param key any
 ---@param default any|nil
-hcache.get = function(handle, key, default)
+---@return any
+function hcache.get(handle, key, default)
     if (handle == nil) then
         return
     end

@@ -18,7 +18,7 @@ hweather = {
 --- 删除天气
 ---@param w userdata
 ---@param delay number
-hweather.del = function(w, delay)
+function hweather.destroy(w, delay)
     delay = delay or 0
     if (delay <= 0) then
         cj.EnableWeatherEffect(w, false)
@@ -43,7 +43,8 @@ end
     }
 ]]
 ---@param options pilotWeatherCreate
-hweather.create = function(options)
+---@return userdata
+function hweather.create(options)
     if (options.whichRect == nil) then
         if (options.w == nil or options.h == nil or options.w <= 0 or options.h <= 0) then
             err("hweather.create -w-h")
@@ -59,18 +60,16 @@ hweather.create = function(options)
         return nil
     end
     options.during = options.during or 0
-    local w
-    if (options.whichRect ~= nil) then
-        w = cj.AddWeatherEffect(options.whichRect, options.type)
-    else
-        local r = hrect.create(options.x, options.y, options.w, options.h)
-        w = cj.AddWeatherEffect(r, options.type)
+    if (options.whichRect == nil) then
+        options.whichRect = hrect.create(options.x, options.y, options.w, options.h)
         if (options.during > 0) then
-            hrect.del(r, options.during)
+            hrect.destroy(options.whichRect, options.during)
         end
     end
+    local w = cj.AddWeatherEffect(options.whichRect, options.type)
     cj.EnableWeatherEffect(w, true)
     if (options.during > 0) then
-        hweather.del(w, options.during)
+        hweather.destroy(w, options.during)
     end
+    return w
 end

@@ -3,7 +3,7 @@ hskill = {}
 --- 获取属性加成,需要注册
 ---@param abilityId string|number
 ---@return table|nil
-function getAttribute(abilityId)
+function hskill.getAttribute(abilityId)
     if (type(abilityId) == "number") then
         abilityId = i2c(abilityId)
     end
@@ -12,7 +12,7 @@ end
 
 --- 附加单位获得技能后的属性
 ---@protected
-function addProperty(whichUnit, abilityId, level)
+function hskill.addProperty(whichUnit, abilityId, level)
     local attr = hskill.getAttribute(abilityId)
     if (attr ~= nil) then
         if (#attr > 0) then
@@ -24,7 +24,7 @@ function addProperty(whichUnit, abilityId, level)
 end
 --- 削减单位获得技能后的属性
 ---@protected
-function subProperty(whichUnit, abilityId, level)
+function hskill.subProperty(whichUnit, abilityId, level)
     local attr = hskill.getAttribute(abilityId)
     if (attr ~= nil) then
         if (#attr > 0) then
@@ -38,7 +38,7 @@ end
 --- 获取技能名称
 ---@param abilityId number|string
 ---@return string
-function getName(abilityId)
+function hskill.getName(abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -51,7 +51,7 @@ end
 ---@param abilityId string|number
 ---@param level number
 ---@param during number
-function add(whichUnit, abilityId, level, during)
+function hskill.add(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -72,7 +72,7 @@ function add(whichUnit, abilityId, level, during)
         hskill.addProperty(whichUnit, id, level)
         htime.setTimeout(during, function(t)
             t.destroy()
-            hskill.del(whichUnit, id)
+            hskill.destroy(whichUnit, id)
         end)
     end
 end
@@ -82,7 +82,7 @@ end
 ---@param abilityId string|number
 ---@param level number
 ---@param during number
-function set(whichUnit, abilityId, level, during)
+function hskill.set(whichUnit, abilityId, level, during)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -111,7 +111,7 @@ end
 ---@param whichUnit userdata
 ---@param abilityId string|number
 ---@param delay number
-function del(whichUnit, abilityId, delay)
+function hskill.destroy(whichUnit, abilityId, delay)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -136,7 +136,7 @@ end
 --- 设置技能的永久使用性
 ---@param whichUnit userdata
 ---@param abilityId string|number
-function forever(whichUnit, abilityId)
+function hskill.forever(whichUnit, abilityId)
     local id = abilityId
     if (type(abilityId) == "string") then
         id = c2i(id)
@@ -147,7 +147,7 @@ end
 --- 是否拥有技能
 ---@param whichUnit userdata
 ---@param abilityId string|number
-function has(whichUnit, abilityId)
+function hskill.has(whichUnit, abilityId)
     if (whichUnit == nil or abilityId == nil) then
         return false
     end
@@ -165,7 +165,7 @@ end
 ---@param whichUnit userdata
 ---@param abilityId string|number
 ---@param coolDown number
-function setCoolDown(whichUnit, abilityId, coolDown)
+function hskill.setCoolDown(whichUnit, abilityId, coolDown)
     if (coolDown >= 9999) then
         coolDown = 9999
     elseif (coolDown < 0) then
@@ -181,76 +181,61 @@ end
         targetUnit = nil, --目标单位
         damage = 0, --实际伤害
         damageSrc = "unknown", --伤害来源请查看 CONST_DAMAGE_SRC
+        effect = string, --特效路径
     }
 ]]
 ---@param options pilotDamage
-function damage(options)
-    local sourceUnit = options.sourceUnit
-    local targetUnit = options.targetUnit
-    local damage = options.damage or 0
-    if (damage < 0.125) then
+function hskill.damage(options)
+    options.damage = options.damage or 0
+    if (options.damage < 0.125) then
         return
     end
-    if (targetUnit == nil) then
+    if (options.targetUnit == nil) then
         return
     end
-    if (his.dead(options.targetUnit) or his.deleted(targetUnit)) then
+    if (his.dead(options.targetUnit) or his.unitDestroyed(options.targetUnit)) then
         return
     end
-    if (his.deleted(targetUnit)) then
+    if (his.unitDestroyed(options.targetUnit)) then
         return
     end
-    if (sourceUnit ~= nil and his.deleted(sourceUnit)) then
+    if (options.sourceUnit ~= nil and his.unitDestroyed(options.sourceUnit)) then
         return
     end
     if (options.damageSrc == nil) then
         options.damageSrc = CONST_DAMAGE_SRC.unknown
     end
     --双方attr get
-    if (hattribute.get(targetUnit) == nil) then
+    if (hattribute.get(options.targetUnit) == nil) then
         return
     end
-    if (sourceUnit ~= nil and hattribute.get(sourceUnit) == nil) then
+    if (options.sourceUnit ~= nil and hattribute.get(options.sourceUnit) == nil) then
         return
     end
-    local damageSrc = options.damageSrc or CONST_DAMAGE_SRC.unknown
+    --- 对接伤害过程
+    damaging.actions.forEach(function(_, callFunc)
+        callFunc(options)
+        return options.damage > 0
+    end)
     -- 最终伤害
-    local lastDamage = 0
-    local lastDamagePercent = 0.0
-    -- 计算单位是否无敌
-    if (his.invincible(targetUnit) == true) then
-        return
-    end
-    -- 伤害计算
-    lastDamage = damage
-    if (lastDamage > 0) then
-        -- 计算护甲
-        local defend = hattr.get(targetUnit, "defend")
-        if (defend ~= 0) then
-            lastDamage = lastDamage - defend
-        end
-        -- 合计 lastDamagePercent
-        lastDamage = lastDamage * (1 + lastDamagePercent)
-    end
-    -- 上面都是先行计算
-    if (lastDamage > 0.125 and his.deleted(targetUnit) == false) then
+    if (options.damage > 0.125 and his.unitDestroyed(options.targetUnit) == false) then
         -- 设置单位|玩家正在受伤
-        local isBeDamagingTimer = hcache.get(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
+        local isBeDamagingTimer = hcache.get(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
         if (isBeDamagingTimer ~= nil) then
             isBeDamagingTimer.destroy()
-            hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
+            hcache.set(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
         end
-        hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING, true)
+        hcache.set(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING, true)
         hcache.set(
-            targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER,
+            options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER,
             htime.setTimeout(3.5, function(t)
                 t.destroy()
-                hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
-                hcache.set(targetUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
+                hcache.set(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
+                hcache.set(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
             end)
         )
-        local targetPlayer = hunit.getOwner(targetUnit)
-        hplayer.addBeDamage(targetPlayer, lastDamage)
+        local targetPlayer = hunit.getOwner(options.targetUnit)
+        hplayer.addBeDamage(targetPlayer, options.damage)
         local isPlayerBeDamagingTimer = hcache.get(targetPlayer, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
         if (isPlayerBeDamagingTimer ~= nil) then
             isPlayerBeDamagingTimer.destroy()
@@ -266,25 +251,25 @@ function damage(options)
             end)
         )
         -- 设置单位|玩家正在造成伤害
-        if (sourceUnit ~= nil and his.deleted(sourceUnit) == false) then
-            local isDamagingTimer = hcache.get(sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
+        if (options.sourceUnit ~= nil and his.unitDestroyed(options.sourceUnit) == false) then
+            local isDamagingTimer = hcache.get(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
             if (isDamagingTimer ~= nil) then
                 isDamagingTimer.destroy()
-                hcache.set(sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
+                hcache.set(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
             end
-            hcache.set(sourceUnit, CONST_CACHE.ATTR_DAMAGING, true)
-            hevent.setLastDamage(sourceUnit, targetUnit)
+            hcache.set(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING, true)
+            hevent.setLastDamage(options.sourceUnit, options.targetUnit)
             hcache.set(
-                sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER,
+                options.sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER,
                 htime.setTimeout(3.5, function(t)
                     t.destroy()
-                    hcache.set(sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
-                    hcache.set(sourceUnit, CONST_CACHE.ATTR_DAMAGING, false)
-                    hevent.setLastDamage(sourceUnit, nil)
+                    hcache.set(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
+                    hcache.set(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING, false)
+                    hevent.setLastDamage(options.sourceUnit, nil)
                 end)
             )
-            local sourcePlayer = hunit.getOwner(sourceUnit)
-            hplayer.addDamage(sourcePlayer, lastDamage)
+            local sourcePlayer = hunit.getOwner(options.sourceUnit)
+            hplayer.addDamage(sourcePlayer, options.damage)
             local isPlayerDamagingTimer = hcache.get(sourcePlayer, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
             if (isPlayerDamagingTimer ~= nil) then
                 isPlayerDamagingTimer.destroy()
@@ -301,41 +286,40 @@ function damage(options)
             )
         end
         -- 扣血
-        hunit.subCurLife(targetUnit, lastDamage)
+        hunit.subCurLife(options.targetUnit, options.damage)
+        if (type(options.effect) == "string") then
+            heffect.xyz(options.effect, hunit.x(options.targetUnit), hunit.y(options.targetUnit), hunit.z(options.targetUnit), 0)
+        end
         -- @触发伤害事件
         if (sourceUnit ~= nil) then
-            hevent.trigger(
-                sourceUnit,
-                CONST_EVENT.damage,
-                {
-                    triggerUnit = sourceUnit,
-                    targetUnit = targetUnit,
-                    damage = lastDamage,
-                    damageSrc = damageSrc,
-                }
-            )
+            hevent.trigger(options.sourceUnit, CONST_EVENT.damage, {
+                triggerUnit = options.sourceUnit,
+                targetUnit = options.targetUnit,
+                damage = options.damage,
+                damageSrc = options.damageSrc,
+            })
         end
         -- @触发被伤害事件
-        hevent.trigger(targetUnit, CONST_EVENT.beDamage, {
-            triggerUnit = targetUnit,
-            sourceUnit = sourceUnit,
-            damage = lastDamage,
-            damageSrc = damageSrc,
+        hevent.trigger(options.targetUnit, CONST_EVENT.beDamage, {
+            triggerUnit = options.targetUnit,
+            sourceUnit = options.sourceUnit,
+            damage = options.damage,
+            damageSrc = options.damageSrc,
         })
-        if (damageSrc == CONST_DAMAGE_SRC.attack) then
-            if (sourceUnit ~= nil) then
+        if (options.damageSrc == CONST_DAMAGE_SRC.attack) then
+            if (options.sourceUnit ~= nil) then
                 -- @触发攻击事件
-                hevent.trigger(sourceUnit, CONST_EVENT.attack, {
-                    triggerUnit = sourceUnit,
-                    targetUnit = targetUnit,
-                    damage = lastDamage,
+                hevent.trigger(options.sourceUnit, CONST_EVENT.attack, {
+                    triggerUnit = options.sourceUnit,
+                    targetUnit = options.targetUnit,
+                    damage = options.damage,
                 })
             end
             -- @触发被攻击事件
-            hevent.trigger(targetUnit, CONST_EVENT.beAttack, {
-                triggerUnit = targetUnit,
-                attackUnit = sourceUnit,
-                damage = lastDamage,
+            hevent.trigger(options.targetUnit, CONST_EVENT.beAttack, {
+                triggerUnit = options.targetUnit,
+                attackUnit = options.sourceUnit,
+                damage = options.damage,
             })
         end
     end
@@ -347,7 +331,7 @@ end
 ---@param effect string
 ---@param attach string
 ---@return void
-function invulnerable(whichUnit, during, effect, attach)
+function hskill.invulnerable(whichUnit, during, effect, attach)
     if (whichUnit == nil) then
         return
     end

@@ -5,13 +5,13 @@ hsyncCache = {
 hsync = {}
 
 ---@private
-hsync.key = function()
+function hsync.key()
     hsyncCache.syncIdx = hsyncCache.syncIdx + 1
     return "syk" .. hsyncCache.syncIdx
 end
 
 ---@private
-hsync.mix = function(key, array)
+function hsync.mix(key, array)
     array = array or {}
     if (type(array) ~= "table") then
         array = {}
@@ -21,13 +21,13 @@ hsync.mix = function(key, array)
 end
 
 ---@private
-hsync.call = function(key, callback, array)
+function hsync.call(key, callback, array)
     hsyncCache.callback[key] = callback
     return hsync.mix(key, array)
 end
 
 ---@private
-hsync.init = function()
+function hsync.init()
     local trig = cj.CreateTrigger()
     hjapi.DzTriggerRegisterSyncData(trig, "hsync", false)
     cj.TriggerAddAction(trig, function()
@@ -51,7 +51,7 @@ end
 --- 与onSend配套，hsync.onSend 接数据
 ---@param key string 自定义回调key
 ---@param array table<string> 支持string、number
-hsync.send = function(key, array)
+function hsync.send(key, array)
     if (key == nil) then
         return
     end
@@ -63,7 +63,7 @@ end
 ---@alias onHSync fun(syncData: {triggerPlayer:"触发玩家",triggerKey:"触发索引",triggerData:"数组数据"}):void
 ---@param key string 自定义回调key
 ---@param callback onHSync | "function(syncData) end" 同步响应回调
-hsync.onSend = function(key, callback)
+function hsync.onSend(key, callback)
     key = key or hsync.key()
     hsync.call(key, callback)
 end

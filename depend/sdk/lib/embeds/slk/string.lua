@@ -11,7 +11,7 @@ local convertChars = {
 ---@param dec number
 ---@param cvt number 2|8|10|16|36 默认16
 ---@return string
-string.convert = function(dec, cvt)
+function string.convert(dec, cvt)
     if (dec == 0) then
         return "0"
     end

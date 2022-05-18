@@ -153,7 +153,7 @@ hcmd._cds["-repick"] = {
                 table.insert(hhero.selectorClearPool, new)
                 table.insert(hhero.selectorPool, new)
             end
-            hunit.del(u, 0)
+            hunit.destroy(u, 0)
         end
         hhero.player_heroes[pIndex] = {}
         echo("已为您 |cffffff80repick|r 了 " .. "|cffffff80" .. qty .. "|r 个单位", p)
@@ -214,7 +214,8 @@ hcmd._cds["-d"] = {
 --- -d [+|-][NUMBER] 升降视距；例：-d +100 / -d -50
 ---@param commands table<string> 例 {"-apm","-gg"}
 ---@param playerIndexes table<number> 例 {1,2,3}
-hcmd.conf = function(commands, playerIndexes)
+---@return void
+function hcmd.conf(commands, playerIndexes)
     if (type(commands) ~= "table" or type(playerIndexes) ~= "table") then
         return
     end

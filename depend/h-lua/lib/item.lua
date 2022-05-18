@@ -4,27 +4,27 @@ hitem = {}
 --- 获取物品X坐标
 ---@param it userdata
 ---@return number
-hitem.x = function(it)
+function hitem.x(it)
     return cj.GetItemX(it)
 end
 
 --- 获取物品Y坐标
 ---@param it userdata
 ---@return number
-hitem.y = function(it)
+function hitem.y(it)
     return cj.GetItemY(it)
 end
 
 --- 获取物品Z坐标
 ---@param it userdata
 ---@return number
-hitem.z = function(it)
-    return hjapi.GetZ(cj.GetItemX(it), cj.GetItemY(it))
+function hitem.z(it)
+    return hjapi.Z(cj.GetItemX(it), cj.GetItemY(it))
 end
 
 -- 清理物品缓存数据
 ---@protected
-hitem.free = function(whichItem)
+function hitem.free(whichItem)
     hitemPool.free(whichItem)
     hevent.free(whichItem)
     hcache.free(whichItem)
@@ -34,7 +34,7 @@ end
 ---@param whichUnit userdata
 ---@param whichItem userdata
 ---@param triggerData table
-hitem.used = function(whichUnit, whichItem, triggerData)
+function hitem.used(whichUnit, whichItem, triggerData)
     triggerData = triggerData or {}
     triggerData.triggerUnit = whichUnit
     triggerData.triggerItem = whichItem
@@ -44,8 +44,8 @@ end
 --- 删除物品，可延时
 ---@param it userdata
 ---@param delay number
-hitem.del = function(it, delay)
-    if (his.destroy(it)) then
+function hitem.destroy(it, delay)
+    if (his.itemDestroyed(it)) then
         return
     end
     delay = delay or 0
@@ -56,7 +56,7 @@ hitem.del = function(it, delay)
     else
         htime.setTimeout(delay, function(t)
             t.destroy()
-            if (his.destroy(it)) then
+            if (his.itemDestroyed(it)) then
                 return
             end
             hitem.free(it)
@@ -67,11 +67,11 @@ hitem.del = function(it, delay)
 end
 
 ---@protected
-hitem.delFromUnit = function(whichUnit)
+function hitem.destroyFromUnit(whichUnit)
     if (whichUnit ~= nil) then
         hitem.forEach(whichUnit, function(enumItem)
             if (enumItem ~= nil) then
-                hitem.del(enumItem)
+                hitem.destroy(enumItem)
             end
         end)
     end
@@ -80,7 +80,7 @@ end
 --- 获取物品ID字符串
 ---@param itOrId userdata|number|string
 ---@return string|nil
-hitem.getId = function(itOrId)
+function hitem.getId(itOrId)
     local id
     if (type(itOrId) == "userdata") then
         id = cj.GetItemTypeId(itOrId)
@@ -99,7 +99,7 @@ end
 --- 获取物品名称
 ---@param itOrId userdata|string|number
 ---@return string
-hitem.getName = function(itOrId)
+function hitem.getName(itOrId)
     local n = ""
     if (type(itOrId) == "userdata") then
         n = cj.GetItemName(itOrId)
@@ -112,77 +112,77 @@ end
 -- 获取物品的图标路径
 ---@param itOrId userdata|string|number
 ---@return string
-hitem.getArt = function(itOrId)
+function hitem.getArt(itOrId)
     return hslk.i2v(hitem.getId(itOrId), "slk", "Art")
 end
 
 --- 获取物品的模型路径
 ---@param itOrId userdata|string|number
 ---@return string
-hitem.getFile = function(itOrId)
+function hitem.getFile(itOrId)
     return hslk.i2v(hitem.getId(itOrId), "slk", "file")
 end
 
 --- 获取物品的分类
 ---@param itOrId userdata|string|number
 ---@return string
-hitem.getClass = function(itOrId)
+function hitem.getClass(itOrId)
     return hslk.i2v(hitem.getId(itOrId), "slk", "class")
 end
 
 --- 获取物品所需的金币
 ---@param itOrId userdata|string|number
 ---@return number
-hitem.getGoldCost = function(itOrId)
+function hitem.getGoldCost(itOrId)
     return math.floor(hslk.i2v(hitem.getId(itOrId), "slk", "goldcost") or 0)
 end
 
 --- 获取物品所需的木头
 ---@param itOrId userdata|string|number
 ---@return number
-hitem.getLumberCost = function(itOrId)
+function hitem.getLumberCost(itOrId)
     return math.floor(hslk.i2v(hitem.getId(itOrId), "slk", "lumbercost") or 0)
 end
 
 --- 获取物品是否可以使用
 ---@param itOrId userdata|string|number
 ---@return boolean
-hitem.getIsUsable = function(itOrId)
+function hitem.getIsUsable(itOrId)
     return "1" == hslk.i2v(hitem.getId(itOrId), "slk", "usable")
 end
 
 --- 获取物品是否自动使用
 ---@param itOrId userdata|string|number
 ---@return boolean
-hitem.getIsPowerUp = function(itOrId)
+function hitem.getIsPowerUp(itOrId)
     return "1" == hslk.i2v(hitem.getId(itOrId), "slk", "powerup")
 end
 
 --- 获取物品是否使用后自动消失
 ---@param itOrId userdata|string|number
 ---@return boolean
-hitem.getIsPerishable = function(itOrId)
+function hitem.getIsPerishable(itOrId)
     return "1" == hslk.i2v(hitem.getId(itOrId), "slk", "perishable")
 end
 
 --- 获取物品是否可卖
 ---@param itOrId userdata|string|number
 ---@return boolean
-hitem.getIsSellAble = function(itOrId)
+function hitem.getIsSellAble(itOrId)
     return "1" == hslk.i2v(hitem.getId(itOrId), "slk", "sellable")
 end
 
 --- 获取物品的属性加成
 ---@param itOrId userdata|string|number
 ---@return table
-hitem.getAttribute = function(itOrId)
+function hitem.getAttribute(itOrId)
     return hslk.i2v(hitem.getId(itOrId), "_attr") or {}
 end
 
 --- 获取物品的等级
 ---@param it userdata
 ---@return number
-hitem.getLevel = function(it)
+function hitem.getLevel(it)
     if (it ~= nil) then
         return cj.GetItemLevel(it)
     end
@@ -193,7 +193,7 @@ end
 --- 框架会自动强制最低件数为1
 ---@param it userdata
 ---@return number
-hitem.getCharges = function(it)
+function hitem.getCharges(it)
     if (it == nil) then
         return 0
     end
@@ -203,7 +203,7 @@ end
 --- 设置物品的使用次数
 ---@param it userdata
 ---@param charges number
-hitem.setCharges = function(it, charges)
+function hitem.setCharges(it, charges)
     if (it ~= nil and charges >= 0) then
         cj.SetItemCharges(it, charges)
     end
@@ -212,7 +212,7 @@ end
 --- 获取某单位身上空格物品栏数量
 ---@param whichUnit userdata
 ---@return number
-hitem.getEmptySlot = function(whichUnit)
+function hitem.getEmptySlot(whichUnit)
     local qty = cj.UnitInventorySize(whichUnit)
     local it
     for i = 0, 5, 1 do
@@ -225,11 +225,12 @@ hitem.getEmptySlot = function(whichUnit)
 end
 
 --- 循环获取某单位6格物品
+--- 遍历过程中返回 false 则中断
 ---@alias SlotForEach fun(enumItem: userdata,slotIndex: number):void
 ---@param whichUnit userdata
 ---@param action SlotForEach | "function(enumItem, slotIndex) end"
 ---@return number
-hitem.forEach = function(whichUnit, action)
+function hitem.forEach(whichUnit, action)
     local it
     for i = 0, 5, 1 do
         it = cj.UnitItemInSlot(whichUnit, i)
@@ -242,7 +243,7 @@ end
 
 --- 附加单位获得物品后的属性
 ---@protected
-hitem.addProperty = function(whichUnit, itId, charges)
+function hitem.addProperty(whichUnit, itId, charges)
     if (whichUnit == nil or itId == nil) then
         return
     end
@@ -251,7 +252,7 @@ end
 
 --- 削减单位获得物品后的属性
 ---@protected
-hitem.subProperty = function(whichUnit, itId, charges)
+function hitem.subProperty(whichUnit, itId, charges)
     if (whichUnit == nil or itId == nil) then
         return
     end
@@ -271,7 +272,7 @@ end
 ]]
 ---@param options pilotItemCreate
 ---@return userdata|nil
-hitem.create = function(options)
+function hitem.create(options)
     if (options.id == nil) then
         err("hitem create -it-id")
         return
@@ -308,7 +309,7 @@ hitem.create = function(options)
     end
     local it
     -- 如果不是创建给单位，又或者单位已经不存在了，直接返回
-    if (options.whichUnit == nil or his.deleted(options.whichUnit) or his.dead(options.whichUnit)) then
+    if (options.whichUnit == nil or his.unitDestroyed(options.whichUnit) or his.dead(options.whichUnit)) then
         -- 掉在地上
         it = cj.CreateItem(id, x, y)
         cj.SetItemCharges(it, charges)
@@ -316,7 +317,7 @@ hitem.create = function(options)
         if (options.whichUnit ~= nil and during > 0) then
             htime.setTimeout(during, function(t)
                 t.destroy()
-                hitem.del(it, 0)
+                hitem.destroy(it, 0)
             end)
         end
     else
@@ -330,7 +331,7 @@ end
 --- 使一个单位的所有物品给另一个单位
 ---@param origin userdata
 ---@param target userdata
-hitem.give = function(origin, target)
+function hitem.give(origin, target)
     if (origin == nil or target == nil) then
         return
     end
@@ -343,14 +344,14 @@ hitem.give = function(origin, target)
                 whichUnit = target
             })
         end
-        hitem.del(it, 0)
+        hitem.destroy(it, 0)
     end
 end
 
 --- 操作物品给一个单位
 ---@param it userdata
 ---@param targetUnit userdata
-hitem.pick = function(it, targetUnit)
+function hitem.pick(it, targetUnit)
     if (it == nil or targetUnit == nil) then
         return
     end
@@ -360,7 +361,7 @@ end
 --- 复制一个单位的所有物品给另一个单位
 ---@param origin userdata
 ---@param target userdata
-hitem.copy = function(origin, target)
+function hitem.copy(origin, target)
     if (origin == nil or target == nil) then
         return
     end
@@ -379,8 +380,8 @@ end
 --- 令一个单位把物品扔在地上
 ---@param origin userdata
 ---@param slot nil|number 物品位置
-hitem.drop = function(origin, slot)
-    if (origin == nil or his.deleted(origin) or his.dead(origin)) then
+function hitem.drop(origin, slot)
+    if (origin == nil or his.unitDestroyed(origin) or his.dead(origin)) then
         return
     end
     if (slot == nil) then
@@ -404,16 +405,16 @@ end
 ---@param y number
 ---@param w number
 ---@param h number
-hitem.pickRect = function(u, x, y, w, h)
-    if (u == nil or his.deleted(u) or his.dead(u)) then
+function hitem.pickRect(u, x, y, w, h)
+    if (u == nil or his.unitDestroyed(u) or his.dead(u)) then
         return
     end
     local items = {}
     hitemPool.forEach(CONST_CACHE.ITEM_POOL_PICK, function(enumItem)
         local xi = cj.GetItemX(enumItem)
         local yi = cj.GetItemY(enumItem)
-        local d = math.getDistanceBetweenXY(x, y, xi, yi)
-        local deg = math.getDegBetweenXY(x, y, xi, yi)
+        local d = math.distance(x, y, xi, yi)
+        local deg = math.angle(x, y, xi, yi)
         local distance = math.getMaxDistanceInRect(w, h, deg)
         if (d <= distance) then
             table.insert(items, enumItem)
@@ -426,15 +427,15 @@ end
 ---@param x number
 ---@param y number
 ---@param r number
-hitem.pickRound = function(u, x, y, r)
-    if (u == nil or his.deleted(u) or his.dead(u)) then
+function hitem.pickRound(u, x, y, r)
+    if (u == nil or his.unitDestroyed(u) or his.dead(u)) then
         return
     end
     local items = {}
     hitemPool.forEach(CONST_CACHE.ITEM_POOL_PICK, function(enumItem)
         local xi = cj.GetItemX(enumItem)
         local yi = cj.GetItemY(enumItem)
-        local d = math.getDistanceBetweenXY(x, y, xi, yi)
+        local d = math.distance(x, y, xi, yi)
         if (d <= r) then
             table.insert(items, enumItem)
         end

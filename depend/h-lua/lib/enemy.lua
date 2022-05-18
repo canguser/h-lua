@@ -22,7 +22,7 @@ henemy = {
 ---@param playerIndexes table 归于此敌人的玩家索引 1-12，如{1,2,3}
 ---@param isShareSight boolean 是否与玩家共享视野
 ---@return number 返回队伍序号，从1开始累加
-henemy.set = function(name, color, playerIndexes, isShareSight)
+function henemy.set(name, color, playerIndexes, isShareSight)
     name = name or ("enemy-" .. (1 + #henemy.conf))
     color = color or PLAYER_COLOR_BLACK
     playerIndexes = playerIndexes or {}
@@ -48,7 +48,7 @@ end
 --- 根据队伍号最优化自动获取一个敌人玩家,默认第一个队伍
 ---@param createQty number 可设定创建单位数，更精准调用，默认权重 1
 ---@return userdata 敌人玩家
-henemy.getPlayer = function(createQty, teamNo)
+function henemy.getPlayer(createQty, teamNo)
     teamNo = teamNo or 1
     if (henemy.conf[teamNo] == nil) then
         return
@@ -78,7 +78,7 @@ end
 --- 设置敌人是否共享视野
 ---@param teamNo number
 ---@return boolean
-henemy.isShareSight = function(teamNo)
+function henemy.isShareSight(teamNo)
     teamNo = teamNo or 1
     if (henemy.conf[teamNo] == nil) then
         return false
@@ -118,8 +118,8 @@ end
     }
 ]]
 ---@param options pilotEnemyCreate
----@return userdata|table 最后创建单位|单位组
-henemy.create = function(options)
+---@return userdata|userdata[] 最后创建单位|单位组
+function henemy.create(options)
     if (#henemy.conf <= 0) then
         return
     end

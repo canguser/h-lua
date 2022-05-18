@@ -11,7 +11,7 @@ hevent_pool_dyn = {}
 hevent_reaction = {}
 
 ---@protected
-hevent.free = function(handle)
+function hevent.free(handle)
     local poolRegister = hcache.get(handle, CONST_CACHE.EVENT_POOL)
     if (poolRegister ~= nil) then
         poolRegister:forEach(function(key, poolIndex)
@@ -43,7 +43,7 @@ end
 ---@param conditionFunc number
 ---@param regEvent function
 ---@return void
-hevent.pool = function(conditionFunc, regEvent)
+function hevent.pool(conditionFunc, regEvent)
     if (type(regEvent) ~= "function") then
         return
     end
@@ -63,7 +63,7 @@ end
 --- 分配触发到回调注册
 --- 触发池的action是不会被同一个handle注册两次的，与on事件并不相同
 ---@protected
-hevent.poolRed = function(handle, conditionAction, regEvent)
+function hevent.poolRed(handle, conditionAction, regEvent)
     if (type(regEvent) ~= 'function') then
         return
     end
@@ -97,7 +97,7 @@ end
 ---@param evt string 事件类型
 ---@vararg any
 ---@return void
-hevent.reaction = function(evt, ...)
+function hevent.reaction(evt, ...)
     local opt = { ... }
     ---@type string 关联反应标识符
     local key
@@ -123,7 +123,7 @@ end
 
 --- set最后一位伤害的单位关系
 ---@protected
-hevent.setLastDamage = function(sourceUnit, targetUnit)
+function hevent.setLastDamage(sourceUnit, targetUnit)
     if (sourceUnit ~= nil) then
         hcache.set(sourceUnit, CONST_CACHE.EVENT_LAST_DMG_TARGET, targetUnit)
         hcache.set(hunit.getOwner(sourceUnit), CONST_CACHE.EVENT_LAST_DMG_TARGET_PLAYER, targetUnit)
@@ -135,19 +135,19 @@ end
 
 --- 最后一位伤害的单位
 ---@protected
-hevent.getUnitLastDamageSource = function(whichUnit)
+function hevent.getUnitLastDamageSource(whichUnit)
     return hcache.get(whichUnit, CONST_CACHE.EVENT_LAST_DMG_SRC)
 end
 
 --- 获取单位最后一次伤害的目标单位
 ---@protected
-hevent.getUnitLastDamageTarget = function(whichUnit)
+function hevent.getUnitLastDamageTarget(whichUnit)
     return hcache.get(whichUnit, CONST_CACHE.EVENT_LAST_DMG_TARGET)
 end
 
 --- 获取玩家最后一次伤害的目标单位
 ---@protected
-hevent.getPlayerLastDamageTarget = function(whichPlayer)
+function hevent.getPlayerLastDamageTarget(whichPlayer)
     return hcache.get(whichPlayer, CONST_CACHE.EVENT_LAST_DMG_TARGET_PLAYER)
 end
 
@@ -155,7 +155,7 @@ end
 ---@param evt string 事件类型
 ---@param init boolean
 ---@return nil|table<string,Array>|Array
-hevent.data = function(handle, evt, init)
+function hevent.data(handle, evt, init)
     if (handle == nil) then
         return
     end
@@ -183,7 +183,7 @@ end
 ---@param evt string 事件类型
 ---@param key string|nil
 ---@return void
-hevent.unregister = function(handle, evt, key)
+function hevent.unregister(handle, evt, key)
     if (handle == nil or evt == nil) then
         return
     end
@@ -205,7 +205,7 @@ end
 ---@param evt string 事件类型字符
 ---@vararg string|function
 ---@return void
-hevent.register = function(handle, evt, ...)
+function hevent.register(handle, evt, ...)
     if (handle == nil) then
         return
     end
@@ -236,7 +236,7 @@ end
 ---@param handle any
 ---@param key string 事件类型
 ---@param triggerData table
-hevent.trigger = function(handle, key, triggerData)
+function hevent.trigger(handle, key, triggerData)
     if (handle == nil or key == nil) then
         return
     end
@@ -280,256 +280,283 @@ end
 
 
 --- 准备被攻击
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onBeAttackReady fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onBeAttackReady | "function(evtData) end"
----@return any
-hevent.onBeAttackReady = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.beAttackReady, callFunc)
+---@return void
+function hevent.onBeAttackReady(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.beAttackReady, callFunc)
 end
 
 --- 造成攻击
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onAttack fun(evtData: {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害"}):void
 ---@param whichUnit userdata
 ---@param callFunc onAttack | "function(evtData) end"
----@return any
-hevent.onAttack = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.attack, callFunc)
+---@return void
+function hevent.onAttack(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.attack, callFunc)
 end
 
 --- 承受攻击
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onBeAttack fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害"}):void
 ---@param whichUnit userdata
 ---@param callFunc onBeAttack | "function(evtData) end"
----@return any
-hevent.onBeAttack = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.beAttack, callFunc)
+---@return void
+function hevent.onBeAttack(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.beAttack, callFunc)
 end
 
 --- 学习技能
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillStudy fun(evtData: {triggerUnit:"学习单位",learnedSkill:"学习技能ID字符串"}):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillStudy | "function(evtData) end"
----@return any
-hevent.onSkillStudy = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillStudy, callFunc)
+---@return void
+function hevent.onSkillStudy(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillStudy, callFunc)
 end
 
 --- 准备施放技能
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillReady fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillReady | "function(evtData) end"
----@return any
-hevent.onSkillReady = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillReady, callFunc)
+---@return void
+function hevent.onSkillReady(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillReady, callFunc)
 end
 
 --- 开始施放技能
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillCast fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillCast | "function(evtData) end"
----@return any
-hevent.onSkillCast = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillCast, callFunc)
+---@return void
+function hevent.onSkillCast(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillCast, callFunc)
 end
 
 --- 停止施放技能
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillStop fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillStop | "function(evtData) end"
----@return any
-hevent.onSkillStop = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillStop, callFunc)
+---@return void
+function hevent.onSkillStop(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillStop, callFunc)
 end
 
 --- 发动技能效果
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillEffectData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetItem:"获取目标物品",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@alias onSkillEffect fun(evtData: onSkillEffectData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillEffect | "function(evtData) end"
----@return any
-hevent.onSkillEffect = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillEffect, callFunc)
+---@return void
+function hevent.onSkillEffect(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillEffect, callFunc)
 end
 
 --- 施放技能结束
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSkillFinish fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillFinish | "function(evtData) end"
----@return any
-hevent.onSkillFinish = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.skillFinish, callFunc)
+---@return void
+function hevent.onSkillFinish(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.skillFinish, callFunc)
 end
 
 --- 单位使用物品
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemUsed fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
 ---@param whichUnit userdata
 ---@param callFunc onItemUsed | "function(evtData) end"
----@return any
-hevent.onItemUsed = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.itemUsed, callFunc)
+---@return void
+function hevent.onItemUsed(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.itemUsed, callFunc)
 end
 
 --- 丢弃(传递)物品
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemDrop fun(evtData: {triggerUnit:"丢弃单位",targetUnit:"获得单位（如果有）",triggerItem:"触发物品"}):void
 ---@param whichUnit userdata
 ---@param callFunc onItemDrop | "function(evtData) end"
----@return any
-hevent.onItemDrop = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.itemDrop, callFunc)
+---@return void
+function hevent.onItemDrop(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.itemDrop, callFunc)
 end
 
 --- 获得物品
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemGet fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品"}):void
 ---@param whichUnit userdata
 ---@param callFunc onItemGet | "function(evtData) end"
----@return any
-hevent.onItemGet = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.itemGet, callFunc)
+---@return void
+function hevent.onItemGet(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.itemGet, callFunc)
 end
 
 --- 抵押物品（玩家把物品扔给商店）
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemPawn fun(evtData: {triggerUnit:"触发单位",soldItem:"抵押物品",buyingUnit:"抵押商店",soldGold:"抵押获得黄金",soldLumber:"抵押获得木头"}):void
 ---@param whichUnit userdata
 ---@param callFunc onItemPawn | "function(evtData) end"
----@return any
-hevent.onItemPawn = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.itemPawn, callFunc)
+---@return void
+function hevent.onItemPawn(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.itemPawn, callFunc)
 end
 
 --- 出售物品(商店卖给玩家)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemSell fun(evtData: {triggerUnit:"售卖单位",soldItem:"售卖物品",buyingUnit:"购买单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onItemSell | "function(evtData) end"
----@return any
-hevent.onItemSell = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.itemSell, callFunc)
+---@return void
+function hevent.onItemSell(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.itemSell, callFunc)
 end
 
 --- 出售单位(商店卖给玩家)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onUnitSell fun(evtData: {triggerUnit:"商店单位",soldUnit:"被售卖单位",buyingUnit:"购买单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onUnitSell | "function(evtData) end"
----@return any
-hevent.onUnitSell = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.unitSell, callFunc)
+---@return void
+function hevent.onUnitSell(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.unitSell, callFunc)
 end
 
 --- 物品被破坏
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onItemDestroy fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品"}):void
 ---@param whichItem userdata
 ---@param callFunc onItemDestroy | "function(evtData) end"
----@return any
-hevent.onItemDestroy = function(whichItem, callFunc)
-    hevent.poolRed(whichItem, hevent_default_actions.item.destroy, function(tgr)
+---@return void
+function hevent.onItemDestroy(whichItem, callFunc)
+    hevent.poolRed(whichItem, hevent_binder.item.destroy, function(tgr)
         cj.TriggerRegisterDeathEvent(tgr, whichItem)
     end)
-    return hevent.register(whichItem, CONST_EVENT.itemDestroy, callFunc)
+    hevent.register(whichItem, CONST_EVENT.itemDestroy, callFunc)
 end
 
 --- 造成伤害
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onDamage fun(evtData: {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源"}):void
 ---@param whichUnit userdata
 ---@param callFunc onDamage | "function(evtData) end"
----@return any
-hevent.onDamage = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.damage, callFunc)
+---@return void
+function hevent.onDamage(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.damage, callFunc)
 end
 
 --- 承受伤害
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onBeDamageData {triggerUnit:"被伤害单位",sourceUnit:"伤害来自单位",damage:"伤害",damageSrc:"伤害来源"}
 ---@alias onBeDamage fun(evtData: onBeDamageData):void
 ---@param whichUnit userdata
 ---@param callFunc onBeDamage | "function(evtData) end"
----@return any
-hevent.onBeDamage = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.beDamage, callFunc)
+---@return void
+function hevent.onBeDamage(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.beDamage, callFunc)
 end
 
 --- 死亡时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onDead fun(evtData: {triggerUnit:"死亡单位",killUnit:"凶手单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onDead | "function(evtData) end"
----@return any
-hevent.onDead = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.dead, callFunc)
+---@return void
+function hevent.onDead(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.dead, callFunc)
 end
 
 --- 杀敌时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onKill fun(evtData: {triggerUnit:"凶手单位",targetUnit:"死亡单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onKill | "function(evtData) end"
----@return any
-hevent.onKill = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.kill, callFunc)
+---@return void
+function hevent.onKill(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.kill, callFunc)
 end
 
 --- 复活时(必须使用 hunit.reborn 方法才能嵌入到事件系统)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onReborn fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onReborn | "function(evtData) end"
----@return any
-hevent.onReborn = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.reborn, callFunc)
+---@return void
+function hevent.onReborn(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.reborn, callFunc)
 end
 
 --- 获得经验时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onExpData {triggerUnit:"触发单位",value:"获取了多少经验值"}
 ---@alias onExp fun(evtData: onExpData):void
 ---@param whichUnit userdata
 ---@param callFunc onLevelUp | "function(evtData) end"
----@return any
-hevent.onExp = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.exp, callFunc)
+---@return void
+function hevent.onExp(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.exp, callFunc)
 end
 
 --- 提升等级时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onLevelUp fun(evtData: {triggerUnit:"触发单位",value:"获取提升了多少级"}):void
 ---@param whichUnit userdata
 ---@param callFunc onLevelUp | "function(evtData) end"
----@return any
-hevent.onLevelUp = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.levelUp, callFunc)
+---@return void
+function hevent.onLevelUp(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.levelUp, callFunc)
 end
 
 --- 建筑升级开始时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeStart fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeStart | "function(evtData) end"
----@return any
-hevent.onUpgradeStart = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.upgradeStart, callFunc)
+---@return void
+function hevent.onUpgradeStart(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.upgradeStart, callFunc)
 end
 
 --- 建筑升级取消时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeCancel fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeCancel | "function(evtData) end"
----@return any
-hevent.onUpgradeCancel = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.upgradeCancel, callFunc)
+---@return void
+function hevent.onUpgradeCancel(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.upgradeCancel, callFunc)
 end
 
 --- 建筑升级完成时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeFinish fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeFinish | "function(evtData) end"
----@return any
-hevent.onUpgradeFinish = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.upgradeFinish, callFunc)
+---@return void
+function hevent.onUpgradeFinish(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.upgradeFinish, callFunc)
 end
 
 --- 进入某单位（whichUnit）半径范围内
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onEnterUnitRange fun(evtData: {centerUnit:"被进入范围的中心单位",triggerUnit:"进入范围的单位",radius:"设定的半径范围"}):void
 ---@param whichUnit userdata
 ---@param radius number
 ---@param callFunc onEnterUnitRange | "function(evtData) end"
----@return any
-hevent.onEnterUnitRange = function(whichUnit, radius, callFunc)
+---@return void
+function hevent.onEnterUnitRange(whichUnit, radius, callFunc)
     local key = CONST_EVENT.enterUnitRange
     local func = hcache.get(whichUnit, CONST_CACHE.EVENT_ON_ENTER_RANGE .. radius, nil)
     if (func == nil) then
-        func = function()
+        function func()
             hevent.trigger(whichUnit, key, {
                 centerUnit = whichUnit,
                 triggerUnit = cj.GetTriggerUnit(),
@@ -541,22 +568,23 @@ hevent.onEnterUnitRange = function(whichUnit, radius, callFunc)
     hevent.poolRed(whichUnit, cj.Condition(func), function(tgr)
         cj.TriggerRegisterUnitInRange(tgr, whichUnit, radius, nil)
     end)
-    return hevent.register(whichUnit, key, callFunc)
+    hevent.register(whichUnit, key, callFunc)
 end
 
 --- 进入某区域
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onEnterRect fun(evtData: {triggerRect:"被进入的矩形区域",triggerUnit:"进入矩形区域的单位"}):void
 ---@param whichRect userdata
 ---@param callFunc onEnterRect | "function(evtData) end"
----@return any
-hevent.onEnterRect = function(whichRect, callFunc)
+---@return void
+function hevent.onEnterRect(whichRect, callFunc)
     if (false == hcache.exist(whichRect)) then
         hcache.alloc(whichRect)
     end
     local key = CONST_EVENT.enterRect
     local onEnterRectAction = hcache.get(whichRect, CONST_CACHE.EVENT_ON_ENTER_RECT)
     if (onEnterRectAction == nil) then
-        onEnterRectAction = function()
+        function onEnterRectAction()
             hevent.trigger(whichRect, key, {
                 triggerRect = whichRect,
                 triggerUnit = cj.GetTriggerUnit()
@@ -569,22 +597,23 @@ hevent.onEnterRect = function(whichRect, callFunc)
         cj.RegionAddRect(rectRegion, whichRect)
         cj.TriggerRegisterEnterRegion(tgr, rectRegion, nil)
     end)
-    return hevent.register(whichRect, key, callFunc)
+    hevent.register(whichRect, key, callFunc)
 end
 
 --- 离开某区域
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onLeaveRect fun(evtData: {triggerRect:"被离开的矩形区域",triggerUnit:"离开矩形区域的单位"}):void
 ---@param whichRect userdata
 ---@param callFunc onLeaveRect | "function(evtData) end"
----@return any
-hevent.onLeaveRect = function(whichRect, callFunc)
+---@return void
+function hevent.onLeaveRect(whichRect, callFunc)
     if (false == hcache.exist(whichRect)) then
         hcache.alloc(whichRect)
     end
     local key = CONST_EVENT.leaveRect
     local onLeaveRectAction = hcache.get(whichRect, CONST_CACHE.EVENT_ON_LEAVE_RECT)
     if (onLeaveRectAction == nil) then
-        onLeaveRectAction = function()
+        function onLeaveRectAction()
             hevent.trigger(whichRect, key, {
                 triggerRect = whichRect,
                 triggerUnit = cj.GetTriggerUnit()
@@ -597,44 +626,48 @@ hevent.onLeaveRect = function(whichRect, callFunc)
         cj.RegionAddRect(rectRegion, whichRect)
         cj.TriggerRegisterLeaveRegion(tgr, rectRegion, nil)
     end)
-    return hevent.register(whichRect, key, callFunc)
+    hevent.register(whichRect, key, callFunc)
 end
 
 --- 任意建筑建造开始时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onConstructStart fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructStart | "function(evtData) end"
----@return any
-hevent.onConstructStart = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.constructStart, callFunc)
+---@return void
+function hevent.onConstructStart(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.constructStart, callFunc)
 end
 
 --- 任意建筑建造取消时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onConstructCancel fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructCancel | "function(evtData) end"
----@return any
-hevent.onConstructCancel = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.constructCancel, callFunc)
+---@return void
+function hevent.onConstructCancel(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.constructCancel, callFunc)
 end
 
 --- 任意建筑建造完成时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onConstructFinish fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructFinish | "function(evtData) end"
----@return any
-hevent.onConstructFinish = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.constructFinish, callFunc)
+---@return void
+function hevent.onConstructFinish(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.constructFinish, callFunc)
 end
 
 --- 当聊天时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onChat fun(evtData: {triggerPlayer:"聊天的玩家",chatString:"聊天的内容",matchedString:"匹配命中的内容"}):void
 ---@param whichPlayer userdata
 ---@param pattern string 支持正则
 ---@param callFunc onChat | "function(evtData) end"
----@return any
-hevent.onChat = function(whichPlayer, pattern, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.chat, function(evtData)
+---@return void
+function hevent.onChat(whichPlayer, pattern, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.chat, function(evtData)
         local m = string.match(evtData.chatString, pattern)
         if (m ~= nil) then
             evtData.matchedString = m
@@ -644,75 +677,83 @@ hevent.onChat = function(whichPlayer, pattern, callFunc)
 end
 
 --- 按ESC
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onEsc fun(evtData: {triggerPlayer:"触发玩家"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onEsc | "function(evtData) end"
----@return any
-hevent.onEsc = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.esc, callFunc)
+---@return void
+function hevent.onEsc(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.esc, callFunc)
 end
 
 --- 玩家选择单位(点击了qty次)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onSelection fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
 ---@param whichPlayer userdata
 ---@param qty number
 ---@param callFunc onSelection | "function(evtData) end"
----@return any
-hevent.onSelection = function(whichPlayer, qty, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.selection .. "#" .. qty, callFunc)
+---@return void
+function hevent.onSelection(whichPlayer, qty, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.selection .. "#" .. qty, callFunc)
 end
 
 --- 玩家取消选择单位
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onDeSelection fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onDeSelection | "function(evtData) end"
----@return any
-hevent.onDeSelection = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.deSelection, callFunc)
+---@return void
+function hevent.onDeSelection(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.deSelection, callFunc)
 end
 
 --- 玩家离开游戏事件(注意这是全局事件)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onPlayerLeave fun(evtData: {triggerPlayer:"触发玩家"}):void
 ---@param callFunc onPlayerLeave | "function(evtData) end"
----@return any
-hevent.onPlayerLeave = function(callFunc)
-    return hevent.register("global", CONST_EVENT.playerLeave, callFunc)
+---@return void
+function hevent.onPlayerLeave(callFunc)
+    hevent.register("global", CONST_EVENT.playerLeave, callFunc)
 end
 
 --- 玩家资源变动
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onPlayerResourceChangeData {triggerPlayer:"触发玩家",triggerUnit:"触发单位",type:"资源类型",value:"变化值"}
 ---@alias onPlayerResourceChange fun(evtData: onPlayerResourceChangeData):void
 ---@param callFunc onPlayerResourceChange | "function(evtData) end"
----@return any
-hevent.onPlayerResourceChange = function(callFunc)
-    return hevent.register("global", CONST_EVENT.playerResourceChange, callFunc)
+---@return void
+function hevent.onPlayerResourceChange(callFunc)
+    hevent.register("global", CONST_EVENT.playerResourceChange, callFunc)
 end
 
 --- 任意单位经过hero方法被玩家所挑选为英雄时(注意这是全局事件)
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onPickHero fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
 ---@param callFunc onPickHero | "function(evtData) end"
----@return any
-hevent.onPickHero = function(callFunc)
-    return hevent.register("global", CONST_EVENT.pickHero, callFunc)
+---@return void
+function hevent.onPickHero(callFunc)
+    hevent.register("global", CONST_EVENT.pickHero, callFunc)
 end
 
 --- 可破坏物死亡
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onDestructableDestroy fun(evtData: {triggerDestructable:"被破坏的可破坏物"}):void
 ---@param whichDestructable userdata
 ---@param callFunc onDestructableDestroy | "function(evtData) end"
----@return any
-hevent.onDestructableDestroy = function(whichDestructable, callFunc)
-    hevent.poolRed(whichDestructable, hevent_default_actions.destructable.destroy, function(tgr)
+---@return void
+function hevent.onDestructableDestroy(whichDestructable, callFunc)
+    hevent.poolRed(whichDestructable, hevent_binder.destructable.destroy, function(tgr)
         cj.TriggerRegisterDeathEvent(tgr, whichDestructable)
     end)
-    return hevent.register(whichDestructable, CONST_EVENT.destructableDestroy, callFunc)
+    hevent.register(whichDestructable, CONST_EVENT.destructableDestroy, callFunc)
 end
 
 --- 全图当前可破坏物死亡
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onMapDestructableDestroy fun(evtData: {triggerDestructable:"被破坏的可破坏物"}):void
 ---@param callFunc onMapDestructableDestroy | "function(evtData) end"
----@return any
-hevent.onMapDestructableDestroy = function(callFunc)
+---@return void
+function hevent.onMapDestructableDestroy(callFunc)
     local tgr = cj.CreateTrigger()
     cj.TriggerAddCondition(tgr, cj.Condition(function()
         callFunc({ triggerDestructable = cj.GetTriggerDestructable() })
@@ -724,29 +765,32 @@ end
 
 --- 当单位发布驻扎(H)命令
 --- 只有真人玩家的单位有此事件
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onHoldOn fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onHoldOn | "function(evtData) end"
----@return any
-hevent.onHoldOn = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.holdOn, callFunc)
+---@return void
+function hevent.onHoldOn(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.holdOn, callFunc)
 end
 
 --- 当单位发布停止(S)命令
 --- 只有真人玩家的单位有此事件
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onStop fun(evtData: {triggerUnit:"触发单位"}):void
 ---@param whichUnit userdata
 ---@param callFunc onStop | "function(evtData) end"
----@return any
-hevent.onStop = function(whichUnit, callFunc)
-    return hevent.register(whichUnit, CONST_EVENT.stop, callFunc)
+---@return void
+function hevent.onStop(whichUnit, callFunc)
+    hevent.register(whichUnit, CONST_EVENT.stop, callFunc)
 end
 
 --- 任意单位改变所有者时
+--- * 使用默认key default，如有需要请自行直接使用register方法注册
 ---@alias onUnitChangeOwner fun(evtData: {triggerUnit:"被改变所有者的单位",prevOwner:"原所有者"}):void
 ---@param whichPlayer userdata
 ---@param callFunc onUnitChangeOwner | "function(evtData) end"
----@return any
-hevent.onUnitChangeOwner = function(whichPlayer, callFunc)
-    return hevent.register(whichPlayer, CONST_EVENT.changeOwner, callFunc)
+---@return void
+function hevent.onUnitChangeOwner(whichPlayer, callFunc)
+    hevent.register(whichPlayer, CONST_EVENT.changeOwner, callFunc)
 end

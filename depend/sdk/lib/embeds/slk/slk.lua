@@ -1,15 +1,15 @@
-hslk_conf = function(conf)
+function hslk_conf(conf)
     F6_CONF_SET(conf)
 end
 
-hslk_ability = function(_v)
+function hslk_ability(_v)
     _v = F6V_A(_v)
     _v._id = SLK_ID(_v)
     SLK_GO_SET(_v)
     return _v
 end
 
-hslk_ability_empty = function(_v)
+function hslk_ability_empty(_v)
     _v._parent = "Aamk"
     _v._type = "empty"
     _v.levels = _v.levels or 1
@@ -27,14 +27,14 @@ hslk_ability_empty = function(_v)
     return _v
 end
 
-hslk_unit = function(_v)
+function hslk_unit(_v)
     _v = F6V_U(_v)
     _v._id = SLK_ID(_v)
     SLK_GO_SET(_v)
     return _v
 end
 
-hslk_hero = function(_v)
+function hslk_hero(_v)
     _v._parent = "Hpal"
     _v._type = "hero"
     _v = F6V_U(_v)
@@ -43,21 +43,21 @@ hslk_hero = function(_v)
     return _v
 end
 
-hslk_item = function(_v)
+function hslk_item(_v)
     _v = F6V_I(_v)
     _v._id = SLK_ID(_v)
     SLK_GO_SET(_v)
     return _v
 end
 
-hslk_buff = function(_v)
+function hslk_buff(_v)
     _v = F6V_B(_v)
     _v._id = SLK_ID(_v)
     SLK_GO_SET(_v)
     return _v
 end
 
-hslk_upgrade = function(_v)
+function hslk_upgrade(_v)
     _v = F6V_UP(_v)
     _v._id = SLK_ID(_v)
     SLK_GO_SET(_v)

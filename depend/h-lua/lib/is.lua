@@ -5,7 +5,7 @@ his = {}
 --- 常用来判断电脑AI是否开启
 ---@param whichPlayer userdata
 ---@return boolean
-his.computer = function(whichPlayer)
+function his.computer(whichPlayer)
     return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_COMPUTER or cj.GetPlayerSlotState(whichPlayer) ~= PLAYER_SLOT_STATE_PLAYING
 end
 
@@ -13,21 +13,21 @@ end
 --- 常用来判断该是否玩家可填补位置
 ---@param whichPlayer userdata
 ---@return boolean
-his.playerSite = function(whichPlayer)
+function his.playerSite(whichPlayer)
     return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_USER
 end
 
 --- 是否正在游戏
 ---@param whichPlayer userdata
 ---@return boolean
-his.playing = function(whichPlayer)
+function his.playing(whichPlayer)
     return cj.GetPlayerSlotState(whichPlayer) == PLAYER_SLOT_STATE_PLAYING
 end
 
 --- 是否中立玩家（包括中立敌对 中立被动 中立受害 中立特殊）
 ---@param whichPlayer userdata
 ---@return boolean
-his.neutral = function(whichPlayer)
+function his.neutral(whichPlayer)
     local flag = false
     if (whichPlayer == nil) then
         flag = false
@@ -46,7 +46,7 @@ end
 --- 是否在某玩家真实视野内
 ---@param whichUnit userdata
 ---@return boolean
-his.detected = function(whichUnit, whichPlayer)
+function his.detected(whichUnit, whichPlayer)
     if (whichUnit == nil or whichPlayer == nil) then
         return false
     end
@@ -59,7 +59,7 @@ end
 ---@param whichUnit userdata
 ---@param slotId number
 ---@return boolean
-his.hasSlot = function(whichUnit, slotId)
+function his.hasSlot(whichUnit, slotId)
     if (slotId == nil) then
         slotId = HL_ID.ability_item_slot
     end
@@ -69,44 +69,44 @@ end
 --- 单位是否可攻击
 ---@param whichUnit userdata
 ---@return boolean
-his.canAttack = function(whichUnit)
+function his.canAttack(whichUnit)
     return "0" ~= (hslk.i2v(hunit.getId(whichUnit), "slk", "weapsOn") or "0")
 end
 
 --- 是否死亡
 ---@param whichUnit userdata
 ---@return boolean
-his.dead = function(whichUnit)
+function his.dead(whichUnit)
     return (true == hcache.get(whichUnit, CONST_CACHE.UNIT_DEAD)) or cj.IsUnitType(whichUnit, UNIT_TYPE_DEAD) or (cj.GetUnitState(whichUnit, UNIT_STATE_LIFE) <= 0)
 end
 
 --- 是否生存
 ---@param whichUnit userdata
 ---@return boolean
-his.alive = function(whichUnit)
+function his.alive(whichUnit)
     return false == his.dead(whichUnit)
 end
 
 --- 单位是否已被删除
 ---@param whichUnit userdata
 ---@return boolean
-his.deleted = function(whichUnit)
+function his.unitDestroyed(whichUnit)
     return cj.GetUnitTypeId(whichUnit) == 0 or (his.dead(whichUnit) and false == hcache.exist(whichUnit))
 end
 
 --- 是否无敌
 ---@param whichUnit userdata
 ---@return boolean
-his.invincible = function(whichUnit)
+function his.invincible(whichUnit)
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_invulnerable) > 0
 end
 
 --- 是否英雄
 --- UNIT_TYPE_HERO是对应平衡常数的英雄列表
---- hero和courier_hero是对应hslk._type，是本框架固有用法
+--- hero对应hslk._type，是本框架固有用法
 ---@param whichUnit userdata
 ---@return boolean
-his.hero = function(whichUnit)
+function his.hero(whichUnit)
     local uid = hunit.getId(whichUnit)
     if (uid == nil) then
         return false
@@ -117,84 +117,84 @@ end
 --- 是否建筑
 ---@param whichUnit userdata
 ---@return boolean
-his.structure = function(whichUnit)
+function his.structure(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_STRUCTURE)
 end
 
 --- 是否镜像
 ---@param whichUnit userdata
 ---@return boolean
-his.illusion = function(whichUnit)
+function his.illusion(whichUnit)
     return cj.IsUnitIllusion(whichUnit)
 end
 
 --- 是否地面单位
 ---@param whichUnit userdata
 ---@return boolean
-his.ground = function(whichUnit)
+function his.ground(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_GROUND)
 end
 
 --- 是否空中单位
 ---@param whichUnit userdata
 ---@return boolean
-his.air = function(whichUnit)
+function his.air(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_FLYING)
 end
 
 --- 是否近战
 ---@param whichUnit userdata
 ---@return boolean
-his.melee = function(whichUnit)
+function his.melee(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
 end
 
 --- 是否远程
 ---@param whichUnit userdata
 ---@return boolean
-his.ranged = function(whichUnit)
+function his.ranged(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
 end
 
 --- 是否召唤
 ---@param whichUnit userdata
 ---@return boolean
-his.summoned = function(whichUnit)
+function his.summoned(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_SUMMONED)
 end
 
 --- 是否机械
 ---@param whichUnit userdata
 ---@return boolean
-his.mechanical = function(whichUnit)
+function his.mechanical(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MECHANICAL)
 end
 
 --- 是否古树
 ---@param whichUnit userdata
 ---@return boolean
-his.ancient = function(whichUnit)
+function his.ancient(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_ANCIENT)
 end
 
 --- 是否自爆工兵
 ---@param whichUnit userdata
 ---@return boolean
-his.sapper = function(whichUnit)
+function his.sapper(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_SAPPER)
 end
 
 --- 是否虚无状态
 ---@param whichUnit userdata
 ---@return boolean
-his.ethereal = function(whichUnit)
+function his.ethereal(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_ETHEREAL)
 end
 
 --- 是否魔法免疫
 ---@param whichUnit userdata
 ---@return boolean
-his.immune = function(whichUnit)
+function his.immune(whichUnit)
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MAGIC_IMMUNE)
 end
 
@@ -202,56 +202,56 @@ end
 ---@param whichUnit userdata
 ---@param whichRace userdata 参考 blizzard:^RACE
 ---@return boolean
-his.race = function(whichUnit, whichRace)
+function his.race(whichUnit, whichRace)
     return cj.IsUnitRace(whichUnit, whichRace)
 end
 
 --- 是否蝗虫
 ---@param whichUnit userdata
 ---@return boolean
-his.locust = function(whichUnit)
+function his.locust(whichUnit)
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_locust) > 0
 end
 
 --- 是否正在受伤
 ---@param whichUnit userdata
 ---@return boolean
-his.beDamaging = function(whichUnit)
+function his.beDamaging(whichUnit)
     return hcache.get(whichUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
 end
 
 --- 是否正在造成伤害
 ---@param whichUnit userdata
 ---@return boolean
-his.damaging = function(whichUnit)
+function his.damaging(whichUnit)
     return hcache.get(whichUnit, CONST_CACHE.ATTR_DAMAGING, false)
 end
 
 --- 玩家是否正在受伤
 ---@param whichPlayer userdata
 ---@return boolean
-his.playerBeDamaging = function(whichPlayer)
+function his.playerBeDamaging(whichPlayer)
     return hcache.get(whichPlayer, CONST_CACHE.ATTR_BE_DAMAGING, false)
 end
 
 --- 玩家是否正在造成伤害
 ---@param whichPlayer userdata
 ---@return boolean
-his.playerDamaging = function(whichPlayer)
+function his.playerDamaging(whichPlayer)
     return hcache.get(whichPlayer, CONST_CACHE.ATTR_DAMAGING, false)
 end
 
 --- 是否处在水面
 ---@param whichUnit userdata
 ---@return boolean
-his.water = function(whichUnit)
+function his.water(whichUnit)
     return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == false
 end
 
 --- 是否处于地面
 ---@param whichUnit userdata
 ---@return boolean
-his.floor = function(whichUnit)
+function his.floor(whichUnit)
     return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == true
 end
 
@@ -259,7 +259,7 @@ end
 ---@param whichUnit userdata
 ---@param otherUnit userdata
 ---@return boolean
-his.unit = function(whichUnit, otherUnit)
+function his.unit(whichUnit, otherUnit)
     return cj.IsUnit(whichUnit, otherUnit)
 end
 
@@ -267,7 +267,7 @@ end
 ---@param whichUnit userdata
 ---@param otherUnit userdata
 ---@return boolean
-his.enemy = function(whichUnit, otherUnit)
+function his.enemy(whichUnit, otherUnit)
     return cj.IsUnitEnemy(whichUnit, hunit.getOwner(otherUnit))
 end
 
@@ -275,7 +275,7 @@ end
 ---@param whichUnit userdata
 ---@param otherUnit userdata
 ---@return boolean
-his.ally = function(whichUnit, otherUnit)
+function his.ally(whichUnit, otherUnit)
     return cj.IsUnitAlly(whichUnit, hunit.getOwner(otherUnit))
 end
 
@@ -283,7 +283,7 @@ end
 ---@param whichUnit userdata
 ---@param whichPlayer userdata
 ---@return boolean
-his.enemyPlayer = function(whichUnit, whichPlayer)
+function his.enemyPlayer(whichUnit, whichPlayer)
     return cj.IsUnitEnemy(whichUnit, whichPlayer)
 end
 
@@ -291,19 +291,19 @@ end
 ---@param whichUnit userdata
 ---@param whichPlayer userdata
 ---@return boolean
-his.allyPlayer = function(whichUnit, whichPlayer)
+function his.allyPlayer(whichUnit, whichPlayer)
     return cj.IsUnitAlly(whichUnit, whichPlayer)
 end
 
 --- 玩家是否有贴图在展示
 ---@param whichPlayer userdata
 ---@return boolean
-his.marking = function(whichPlayer)
+function his.marking(whichPlayer)
     return hcache.get(whichPlayer, CONST_CACHE.PLAYER_MARKING) == true
 end
 
 --- 是否在区域内
-his.inRect = function(whichRect, x, y)
+function his.inRect(whichRect, x, y)
     return (x < hrect.getMaxX(whichRect) and x > hrect.getMinX(whichRect) and y < hrect.getMaxY(whichRect) and y > hrect.getMinY(whichRect))
 end
 
@@ -312,7 +312,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-his.borderRect = function(whichRect, x, y)
+function his.borderRect(whichRect, x, y)
     local flag = false
     if (x >= hrect.getMaxX(whichRect) or x <= hrect.getMinX(whichRect)) then
         flag = true
@@ -327,7 +327,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-his.borderMap = function(x, y)
+function his.borderMap(x, y)
     return his.borderRect(hrect.playable(), x, y)
 end
 
@@ -335,14 +335,14 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-his.borderCamera = function(x, y)
+function his.borderCamera(x, y)
     return his.borderRect(hrect.camera(), x, y)
 end
 
 --- 物品是否已被销毁
 ---@param whichItem userdata
 ---@return boolean
-his.destroy = function(whichItem)
+function his.itemDestroyed(whichItem)
     return cj.GetItemTypeId(whichItem) == 0
 end
 
@@ -350,7 +350,7 @@ end
 ---@param whichUnit userdata
 ---@param whichItemId number|string
 ---@return boolean
-his.hasItem = function(whichUnit, whichItemId)
+function his.hasItem(whichUnit, whichItemId)
     local f = false
     if (type(whichItemId) == "string") then
         whichItemId = c2i(whichItemId)

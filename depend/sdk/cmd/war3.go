@@ -28,26 +28,77 @@ func war3mapJ(sdkData lib.SdkData, createSrc string) {
 func war3Lua(sdkData lib.SdkData, createSrc string) {
 	projectName := ProjectName(sdkData)
 	tmpMapDir := sdkData.Temp + "/" + createSrc + "/map"
-	proDir := sdkData.Projects + "/" + projectName
-	projectSlkDir := tmpMapDir + "/project-slk"
-	projectSlkDir, _ = filepath.Abs(projectSlkDir)
 	fmt.Println("请稍候...")
 	if createSrc == "_test" {
-		lib.CopyFile(sdkData.HLua+"/console/test.lua", tmpMapDir+"/h-lua-console.lua")
+		lib.CopyFile(sdkData.HLua+"/builtIn/console/test.lua", tmpMapDir+"/h-lua-console.lua")
 	} else if createSrc == "_build" {
-		lib.CopyFile(sdkData.HLua+"/console/build.lua", tmpMapDir+"/h-lua-console.lua")
+		lib.CopyFile(sdkData.HLua+"/builtIn/console/build.lua", tmpMapDir+"/h-lua-console.lua")
 	} else if createSrc == "_dist" {
-		lib.CopyFile(sdkData.HLua+"/console/dist.lua", tmpMapDir+"/h-lua-console.lua")
+		lib.CopyFile(sdkData.HLua+"/builtIn/console/dist.lua", tmpMapDir+"/h-lua-console.lua")
 	}
-	lib.CopyPath(sdkData.HLua+"/slk", tmpMapDir+"/h-lua-slk")
-	lib.CopyPath(proDir+"/hslk", projectSlkDir)
 	cliFile := tmpMapDir + "/h-lua-cli.lua"
 	lib.CopyEmbed(sdkData.Embeds, "embeds/slk/cli.lua", cliFile)
 	cliLuaC, _ := lib.FileGetContents(cliFile)
-	// 加载 项目 slk - 跟在cliSystem之后
-	systemStr := "require 'h-lua-slk.system'"
-	requireStr := systemStr
-	err := filepath.Walk(projectSlkDir, func(path string, info fs.FileInfo, err error) error {
+
+	// <Require>
+	var requireStr []string
+
+	// hl-const\foundation
+	hluaLibs := []string{"const", "foundation"}
+	for _, l := range hluaLibs {
+		lp := sdkData.HLua + "/" + l
+		is, _ := lib.IsDir(lp)
+		if is {
+			lp, _ = filepath.Abs(lp)
+			err := filepath.Walk(lp, func(path string, info fs.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+				pLen := len(path)
+				if path[pLen-4:pLen] == ".lua" {
+					requireRelation := strings.Replace(path, lp, "", 1)
+					requireRelation = requireRelation[1:]
+					requireRelation = strings.Replace(requireRelation, ".lua", "", -1)
+					requireRelation = strings.Replace(requireRelation, "\\", ".", -1)
+					requireRelation = strings.Replace(requireRelation, "/", ".", -1)
+					requireStr = append(requireStr, "require '"+l+"."+requireRelation+"'")
+				}
+				return nil
+			})
+			if err != nil {
+				lib.Panic(err)
+			}
+		}
+	}
+
+	// hl-slk
+	hlSlkDir := tmpMapDir + "/h-lua-slk"
+	hlSlkDir, _ = filepath.Abs(hlSlkDir)
+	lib.CopyPath(sdkData.HLua+"/slk", hlSlkDir)
+	err := filepath.Walk(hlSlkDir, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		pLen := len(path)
+		if path[pLen-4:pLen] == ".lua" {
+			requireRelation := strings.Replace(path, hlSlkDir, "", 1)
+			requireRelation = requireRelation[1:]
+			requireRelation = strings.Replace(requireRelation, ".lua", "", -1)
+			requireRelation = strings.Replace(requireRelation, "\\", ".", -1)
+			requireRelation = strings.Replace(requireRelation, "/", ".", -1)
+			requireStr = append(requireStr, "require 'h-lua-slk."+requireRelation+"'")
+		}
+		return nil
+	})
+	if err != nil {
+		lib.Panic(err)
+	}
+	// project
+	proDir := sdkData.Projects + "/" + projectName
+	projectSlkDir := tmpMapDir + "/project-slk"
+	projectSlkDir, _ = filepath.Abs(projectSlkDir)
+	lib.CopyPath(proDir+"/hslk", projectSlkDir)
+	err = filepath.Walk(projectSlkDir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -58,14 +109,14 @@ func war3Lua(sdkData lib.SdkData, createSrc string) {
 			requireRelation = strings.Replace(requireRelation, ".lua", "", -1)
 			requireRelation = strings.Replace(requireRelation, "\\", ".", -1)
 			requireRelation = strings.Replace(requireRelation, "/", ".", -1)
-			requireStr += "\nrequire 'project-slk." + requireRelation + "'"
+			requireStr = append(requireStr, "require 'project-slk."+requireRelation+"'")
 		}
 		return nil
 	})
 	if err != nil {
 		lib.Panic(err)
 	}
-	cliLuaC = strings.Replace(cliLuaC, systemStr, requireStr, 1)
+	cliLuaC = strings.Replace(cliLuaC, "HLUA_CLI_REQUIRE = 20220518", strings.Join(requireStr, "\n"), 1)
 	if createSrc == "_test" {
 		testHead := "package.path = package.path .. \";" + strings.Replace(sdkData.HLua, "\\", "/", -1) + "/?.lua\"\n"
 		testHead += "package.path = package.path .. \";" + strings.Replace(sdkData.Projects, "\\", "/", -1) + "/" + projectName + "/?.lua\"\n"
@@ -79,9 +130,7 @@ func war3Lua(sdkData lib.SdkData, createSrc string) {
 		lib.CopyPath(sdkData.HLua+"/const", tmpMapDir+"/const")
 		lib.CopyPath(sdkData.HLua+"/foundation", tmpMapDir+"/foundation")
 		lib.CopyPath(sdkData.HLua+"/lib", tmpMapDir+"/lib")
-		lib.CopyFile(sdkData.HLua+"/engine.lua", tmpMapDir+"/engine.lua")
-		lib.CopyFile(sdkData.HLua+"/blizzard.lua", tmpMapDir+"/blizzard.lua")
-		lib.CopyFile(sdkData.HLua+"/echo.lua", tmpMapDir+"/echo.lua")
+		lib.CopyPath(sdkData.HLua+"/builtIn", tmpMapDir+"/builtIn")
 		lib.CopyFile(sdkData.HLua+"/h-lua.lua", tmpMapDir+"/h-lua.lua")
 		fmt.Println("Lua(框架：h-lua)已全部打包！")
 	}

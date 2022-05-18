@@ -14,7 +14,7 @@ htexture = {
 }
 
 ---@private
-htexture.cinematicFilterGeneric = function(duration, bmode, tex, red0, green0, blue0, trans0, red1, green1, blue1, trans1)
+function htexture.cinematicFilterGeneric(duration, bmode, tex, red0, green0, blue0, trans0, red1, green1, blue1, trans1)
     if JassGlobals.bj_cineFadeContinueTimer ~= nil then
         cj.DestroyTimer(JassGlobals.bj_cineFadeContinueTimer)
     end
@@ -50,7 +50,7 @@ end
 ---@param red number 0-255
 ---@param green number 0-255
 ---@param blue number 0-255
-htexture.mark = function(path, during, whichPlayer, red, green, blue)
+function htexture.mark(path, during, whichPlayer, red, green, blue)
     if (path == nil) then
         return
     end
@@ -112,7 +112,7 @@ end
 ---@param during number 持续时间，警示圈不允许永久存在，during默认为3秒
 ---@param token number 马甲单位ID,默认叹号！马甲单位原始直径应为128px（刚好一小格）
 ---@param color  userdata 警示圈马甲单位的颜色,仅支持玩家队伍色，参考 blizzard:^PLAYER_COLOR_?
-htexture.alertCircle = function(diameter, x, y, during, token, color)
+function htexture.alertCircle(diameter, x, y, during, token, color)
     if (diameter == nil or diameter < 64) then
         return
     end
@@ -133,5 +133,5 @@ htexture.alertCircle = function(diameter, x, y, during, token, color)
     local u = cj.CreateUnit(hplayer.player_passive, token, x, y, 270)
     cj.SetUnitColor(u, color)
     cj.SetUnitScale(u, modelScale, modelScale, modelScale)
-    hunit.del(u, during)
+    hunit.destroy(u, during)
 end

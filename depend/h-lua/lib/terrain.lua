@@ -26,7 +26,7 @@ hterrain = {}
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.type = function(x, y)
+function hterrain.type(x, y)
     return cj.GetTerrainType(x, y)
 end
 
@@ -36,7 +36,7 @@ end
 ---@see variable TERRAIN_?
 ---@param whichType number
 ---@return boolean
-hterrain.isType = function(x, y, whichType)
+function hterrain.isType(x, y, whichType)
     return whichType == hterrain.type(x, y)
 end
 
@@ -44,7 +44,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isBlighted = function(x, y)
+function hterrain.isBlighted(x, y)
     return cj.IsPointBlighted(x, y)
 end
 
@@ -52,7 +52,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkable = function(x, y)
+function hterrain.isWalkable(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_WALKABILITY)
 end
 
@@ -60,7 +60,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkableFly = function(x, y)
+function hterrain.isWalkableFly(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_FLYABILITY)
 end
 
@@ -68,7 +68,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkableWater = function(x, y)
+function hterrain.isWalkableWater(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_FLOATABILITY)
 end
 
@@ -76,7 +76,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkableAmphibious = function(x, y)
+function hterrain.isWalkableAmphibious(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_AMPHIBIOUSPATHING)
 end
 
@@ -84,7 +84,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkableBlight = function(x, y)
+function hterrain.isWalkableBlight(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_BLIGHTPATHING)
 end
 
@@ -92,7 +92,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkableBuild = function(x, y)
+function hterrain.isWalkableBuild(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_BUILDABILITY)
 end
 
@@ -100,7 +100,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWalkablePeonHarvest = function(x, y)
+function hterrain.isWalkablePeonHarvest(x, y)
     return not cj.IsTerrainPathable(x, y, PATHING_TYPE_PEONHARVESTPATHING)
 end
 
@@ -108,7 +108,7 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isWater = function(x, y)
+function hterrain.isWater(x, y)
     return hterrain.isWalkableWater(x, y)
 end
 
@@ -117,6 +117,6 @@ end
 ---@param x number
 ---@param y number
 ---@return boolean
-hterrain.isGround = function(x, y)
+function hterrain.isGround(x, y)
     return not hterrain.isWalkableWater(x, y)
 end

@@ -3,7 +3,8 @@ hcamera = {}
 --- 重置镜头
 ---@param whichPlayer userdata
 ---@param during number
-hcamera.reset = function(whichPlayer, during)
+---@return void
+function hcamera.reset(whichPlayer, during)
     if (whichPlayer == nil or hplayer.loc() == whichPlayer) then
         cj.ResetToGameCamera(during)
     end
@@ -12,10 +13,11 @@ end
 --- 应用镜头
 ---@param whichPlayer userdata
 ---@param during number
----@param camerasetup userdata
-hcamera.apply = function(whichPlayer, during, camerasetup)
+---@param cameraSetup userdata
+---@return void
+function hcamera.apply(whichPlayer, during, cameraSetup)
     if (whichPlayer == nil or hplayer.loc() == whichPlayer) then
-        cj.CameraSetupApplyForceDuration(camerasetup, true, during)
+        cj.CameraSetupApplyForceDuration(cameraSetup, true, during)
     end
 end
 
@@ -24,7 +26,8 @@ end
 ---@param during number
 ---@param x number
 ---@param y number
-hcamera.toXY = function(whichPlayer, during, x, y)
+---@return void
+function hcamera.toXY(whichPlayer, during, x, y)
     if (whichPlayer == nil or hplayer.loc() == whichPlayer) then
         cj.PanCameraToTimed(x, y, during)
     end
@@ -34,7 +37,8 @@ end
 ---@param whichPlayer userdata
 ---@param during number
 ---@param whichUnit userdata
-hcamera.toUnit = function(whichPlayer, during, whichUnit)
+---@return void
+function hcamera.toUnit(whichPlayer, during, whichUnit)
     if (whichUnit == nil) then
         return
     end
@@ -46,7 +50,8 @@ end
 --- 锁定镜头
 ---@param whichPlayer userdata
 ---@param whichUnit userdata
-hcamera.lock = function(whichPlayer, whichUnit)
+---@return void
+function hcamera.lock(whichPlayer, whichUnit)
     if (whichPlayer ~= nil or hplayer.loc() == whichPlayer) then
         if (his.alive(whichUnit) == true) then
             cj.SetCameraTargetController(whichUnit, 0, 0, false)
@@ -59,7 +64,8 @@ end
 --- 更改镜头距离
 ---@param whichPlayer userdata
 ---@param diffDistance number
-hcamera.changeDistance = function(whichPlayer, diffDistance)
+---@return void
+function hcamera.changeDistance(whichPlayer, diffDistance)
     if (type(diffDistance) ~= "number") then
         diffDistance = 0
     end
@@ -85,7 +91,8 @@ end
 ---@param whichType string | "'shake'" | "'quake'"
 ---@param during number 持续时间
 ---@param scale number 振幅
-hcamera.shock = function(whichPlayer, whichType, during, scale)
+---@return void
+function hcamera.shock(whichPlayer, whichType, during, scale)
     if (whichPlayer == nil) then
         return
     end

@@ -2,17 +2,19 @@
 hgroup = { GLOBAL = {} }
 
 --- 遍历单位组
+--- 遍历过程中返回 false 则中断
 ---@alias GroupForEach fun(enumUnit: userdata, idx: number):void
 ---@param whichGroup table
 ---@param action GroupForEach | "function(enumUnit, idx) end"
-hgroup.forEach = function(whichGroup, action)
+---@return void
+function hgroup.forEach(whichGroup, action)
     if (whichGroup == nil) then
         return
     end
     if (#whichGroup > 0) then
         if (type(action) == "function") then
             for idx, eu in ipairs(whichGroup) do
-                if (his.deleted(eu) == false) then
+                if (his.unitDestroyed(eu) == false) then
                     local res = action(eu, idx)
                     if (type(res) == "boolean" and res == false) then
                         break
@@ -29,7 +31,7 @@ end
 --- 统计单位组当前单位数
 ---@param whichGroup table
 ---@return number
-hgroup.count = function(whichGroup)
+function hgroup.count(whichGroup)
     if (whichGroup == nil) then
         return 0
     end
@@ -40,7 +42,7 @@ end
 ---@param whichGroup table
 ---@param whichUnit userdata
 ---@return boolean
-hgroup.includes = function(whichGroup, whichUnit)
+function hgroup.includes(whichGroup, whichUnit)
     if (whichGroup == nil or whichUnit == nil) then
         return false
     end
@@ -50,7 +52,7 @@ end
 --- 判断单位组是否为空
 ---@param whichGroup table
 ---@return boolean
-hgroup.isEmpty = function(whichGroup)
+function hgroup.isEmpty(whichGroup)
     if (whichGroup == nil or #whichGroup == 0) then
         return true
     end
@@ -60,7 +62,8 @@ end
 --- 单位组添加单位
 ---@param whichGroup table
 ---@param whichUnit userdata
-hgroup.addUnit = function(whichGroup, whichUnit)
+---@return void
+function hgroup.addUnit(whichGroup, whichUnit)
     if (hgroup.includes(whichGroup, whichUnit) == false) then
         table.insert(whichGroup, whichUnit)
     end
@@ -68,7 +71,8 @@ end
 --- 单位组删除单位
 ---@param whichGroup table
 ---@param whichUnit userdata
-hgroup.removeUnit = function(whichGroup, whichUnit)
+---@return void
+function hgroup.removeUnit(whichGroup, whichUnit)
     if (hgroup.includes(whichGroup, whichUnit) == true) then
         table.delete(whichGroup, whichUnit)
     end
@@ -80,19 +84,19 @@ end
 ---@param y number
 ---@param radius number
 ---@param filterFunc GroupFilter | "function(filterUnit) end"
----@return table
-hgroup.createByXY = function(x, y, radius, filterFunc)
+---@return userdata[]
+function hgroup.createByXY(x, y, radius, filterFunc)
     if (#hgroup.GLOBAL == 0) then
         return {}
     end
     local g = {}
     for idx, filterUnit in ipairs(hgroup.GLOBAL) do
-        if (his.deleted(filterUnit)) then
+        if (his.unitDestroyed(filterUnit)) then
             table.remove(hgroup.GLOBAL, idx)
             idx = idx - 1
         end
         -- 排除超过距离的单位
-        if (radius >= math.getDistanceBetweenXY(x, y, hunit.x(filterUnit), hunit.y(filterUnit))) then
+        if (radius >= math.distance(x, y, hunit.x(filterUnit), hunit.y(filterUnit))) then
             if (filterFunc ~= nil) then
                 if (filterFunc(filterUnit) == true) then
                     table.insert(g, filterUnit)
@@ -109,22 +113,22 @@ end
 ---@param u userdata
 ---@param radius number
 ---@param filterFunc GroupFilter | "function(filterUnit) end"
----@return userdata
-hgroup.createByUnit = function(u, radius, filterFunc)
+---@return userdata[]
+function hgroup.createByUnit(u, radius, filterFunc)
     return hgroup.createByXY(hunit.x(u), hunit.y(u), radius, filterFunc)
 end
 
 --- 创建单位组,以区域为范围选择
 ---@param r userdata
 ---@param filterFunc GroupFilter | "function(filterUnit) end"
----@return userdata
-hgroup.createByRect = function(r, filterFunc)
+---@return userdata[]
+function hgroup.createByRect(r, filterFunc)
     if (#hgroup.GLOBAL == 0) then
         return {}
     end
     local g = {}
     for idx, filterUnit in ipairs(hgroup.GLOBAL) do
-        if (his.deleted(filterUnit)) then
+        if (his.unitDestroyed(filterUnit)) then
             table.remove(hgroup.GLOBAL, idx)
             idx = idx - 1
         end
@@ -147,7 +151,8 @@ end
 ---@param x number
 ---@param y number
 ---@return userdata 单位
-hgroup.getClosest = function(whichGroup, x, y)
+---@return void
+function hgroup.getClosest(whichGroup, x, y)
     if (whichGroup == nil or x == nil or y == nil) then
         return
     end
@@ -157,7 +162,7 @@ hgroup.getClosest = function(whichGroup, x, y)
     local closeDist = 99999
     local closeUnit
     hgroup.forEach(whichGroup, function(eu)
-        local dist = math.getDistanceBetweenXY(x, y, hunit.x(eu), hunit.y(eu))
+        local dist = math.distance(x, y, hunit.x(eu), hunit.y(eu))
         if (dist < closeDist) then
             closeUnit = eu
         end
@@ -171,7 +176,8 @@ end
 ---@param y number
 ---@param eff string
 ---@param isFollow boolean
-hgroup.portal = function(whichGroup, x, y, eff, isFollow)
+---@return void
+function hgroup.portal(whichGroup, x, y, eff, isFollow)
     if (whichGroup == nil or x == nil or y == nil) then
         return
     end
@@ -189,7 +195,8 @@ end
 --- 指挥单位组所有单位做动作
 ---@param whichGroup userdata
 ---@param animate string | number
-hgroup.animate = function(whichGroup, animate)
+---@return void
+function hgroup.animate(whichGroup, animate)
     if (whichGroup == nil or animate == nil) then
         return
     end
@@ -202,22 +209,15 @@ end
 
 --- 清空单位组
 ---@param whichGroup userdata
----@param isDestroy boolean 是否同时删除单位组
 ---@param isDestroyUnit boolean 是否同时删除单位组里面的单位
----@todo 删除isDestroy无意义
----
-hgroup.clear = function(whichGroup, isDestroy, isDestroyUnit)
+---@return void
+function hgroup.clear(whichGroup, isDestroyUnit)
     if (whichGroup == nil) then
         return
     end
     if (isDestroyUnit == true) then
         hgroup.forEach(whichGroup, function(eu)
-            hunit.del(eu)
+            hunit.destroy(eu)
         end)
-    end
-    if (isDestroy == true) then
-        whichGroup = nil
-    else
-        whichGroup = {}
     end
 end

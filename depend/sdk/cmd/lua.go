@@ -42,7 +42,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	L := lua.NewState()
 	defer L.Close()
 	//
-	require(L, sdkData.HLua+"/console/hslk.lua")
+	require(L, sdkData.HLua+"/builtIn/console/go.lua")
 	require(L, sdkData.HLua+"/const/abilityTarget.lua")
 	require(L, sdkData.HLua+"/const/attribute.lua")
 	require(L, sdkData.HLua+"/const/ubertip.lua")

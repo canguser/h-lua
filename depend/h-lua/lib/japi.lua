@@ -7,12 +7,12 @@ hjapi = {
 ---@type table<string,any>
 hjapi._cache = hjapi._cache or {
     ["DzLoadToc"] = {},
-    ["GetZ"] = {},
+    ["Z"] = {},
     ["tagIdx"] = 0,
 }
 
 ---@private
-hjapi.echo = function(msg)
+function hjapi.echo(msg)
     if (hjapi._tips[msg] == nil) then
         hjapi._tips[msg] = 1
         if (DEBUGGING) then
@@ -26,7 +26,7 @@ end
 ---@private
 ---@param method string
 ---@return boolean
-hjapi.has = function(method)
+function hjapi.has(method)
     if (type(method) ~= 'string') then
         return false
     end
@@ -40,7 +40,7 @@ end
 ---@param method string
 ---@vararg any
 ---@return any
-hjapi.exec = function(method, ...)
+function hjapi.exec(method, ...)
     if (type(method) ~= 'string') then
         return false
     end
@@ -53,32 +53,16 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------
 
-hjapi.DzAPI_CommonFunc_GetARGBColorValue = function(...)
-    return hjapi.exec("DzAPI_CommonFunc_GetARGBColorValue", ...)
-end
-
-hjapi.DzAPI_CommonFunc_GetARGBColorValuePercent = function(...)
-    return hjapi.exec("DzAPI_CommonFunc_GetARGBColorValuePercent", ...)
-end
-
-hjapi.DzAPI_CommonFunc_SetARGBColorValue = function(...)
-    return hjapi.exec("DzAPI_CommonFunc_SetARGBColorValue", ...)
-end
-
-hjapi.DzAPI_CommonFunc_SetARGBColorValuePercent = function(...)
-    return hjapi.exec("DzAPI_CommonFunc_SetARGBColorValuePercent", ...)
-end
-
-hjapi.DzAPI_Map_ChangeStoreItemCoolDown = function(...)
+function hjapi.DzAPI_Map_ChangeStoreItemCoolDown(...)
     return hjapi.exec("DzAPI_Map_ChangeStoreItemCoolDown", ...)
 end
 
-hjapi.DzAPI_Map_ChangeStoreItemCount = function(...)
+function hjapi.DzAPI_Map_ChangeStoreItemCount(...)
     return hjapi.exec("DzAPI_Map_ChangeStoreItemCount", ...)
 end
 
 ---@return string
-hjapi.DzAPI_Map_GetActivityData = function()
+function hjapi.DzAPI_Map_GetActivityData()
     return hjapi.exec("DzAPI_Map_GetActivityData", nil)
 end
 
@@ -86,14 +70,14 @@ end
 --- 获取创建地图的游戏时间
 --- 时间换算为时间戳
 ---@return number
-hjapi.DzAPI_Map_GetGameStartTime = function()
+function hjapi.DzAPI_Map_GetGameStartTime()
     return hjapi.exec("DzAPI_Map_GetGameStartTime", nil)
 end
 
 --- 获取公会名称
 ---@param whichPlayer userdata
 ---@return string
-hjapi.DzAPI_Map_GetGuildName = function(whichPlayer)
+function hjapi.DzAPI_Map_GetGuildName(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetGuildName", whichPlayer)
 end
 
@@ -101,7 +85,7 @@ end
 --- 获取公会职责 Member=10 Admin=20 Leader=30
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetGuildRole = function(whichPlayer)
+function hjapi.DzAPI_Map_GetGuildRole(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetGuildRole", whichPlayer)
 end
 
@@ -109,7 +93,7 @@ end
 --- 取值1~25，青铜V是1级
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetLadderLevel = function(whichPlayer)
+function hjapi.DzAPI_Map_GetLadderLevel(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetLadderLevel", whichPlayer)
 end
 
@@ -117,14 +101,14 @@ end
 --- 排名>1000的获取值为0
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetLadderRank = function(whichPlayer)
+function hjapi.DzAPI_Map_GetLadderRank(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetLadderRank", whichPlayer)
 end
 
 --- 获取全局服务器存档值
 ---@param key string
 ---@return number
-hjapi.DzAPI_Map_GetMapConfig = function(key)
+function hjapi.DzAPI_Map_GetMapConfig(key)
     return hjapi.exec("DzAPI_Map_GetMapConfig", key)
 end
 
@@ -132,7 +116,7 @@ end
 --- 获取玩家地图等级【RPG大厅限定】
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetMapLevel = function(whichPlayer)
+function hjapi.DzAPI_Map_GetMapLevel(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetMapLevel", whichPlayer)
 end
 
@@ -140,27 +124,27 @@ end
 --- 排名>100的获取值为0
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetMapLevelRank = function(whichPlayer)
+function hjapi.DzAPI_Map_GetMapLevelRank(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetMapLevelRank", whichPlayer)
 end
 
 --- 获取天梯和匹配的模式
 --- 返回数值与作者之家设置对应
-hjapi.DzAPI_Map_GetMatchType = function()
+function hjapi.DzAPI_Map_GetMatchType()
     return hjapi.exec("DzAPI_Map_GetMatchType", nil)
 end
 
 --- 获取玩家平台VIP标志
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetPlatformVIP = function(whichPlayer)
+function hjapi.DzAPI_Map_GetPlatformVIP(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetPlatformVIP", whichPlayer)
 end
 
 --- 玩家是否平台VIP
 ---@param whichPlayer userdata
 ---@return boolean
-hjapi.DzAPI_Map_IsPlatformVIP = function(whichPlayer)
+function hjapi.DzAPI_Map_IsPlatformVIP(whichPlayer)
     local res = hjapi.DzAPI_Map_GetPlatformVIP(whichPlayer)
     if (type(res) == "number") then
         return math.floor(res) > 0
@@ -173,7 +157,7 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@return string
-hjapi.DzAPI_Map_GetPublicArchive = function(whichPlayer, key)
+function hjapi.DzAPI_Map_GetPublicArchive(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_GetPublicArchive", whichPlayer, key)
 end
 
@@ -181,27 +165,27 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@return string
-hjapi.DzAPI_Map_GetServerArchiveDrop = function(whichPlayer, key)
+function hjapi.DzAPI_Map_GetServerArchiveDrop(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_GetServerArchiveDrop", whichPlayer, key)
 end
 
 ---@param whichPlayer userdata
 ---@param key string
 ---@return number
-hjapi.DzAPI_Map_GetServerArchiveEquip = function(whichPlayer, key)
+function hjapi.DzAPI_Map_GetServerArchiveEquip(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_GetServerArchiveEquip", whichPlayer, key)
 end
 
 ---@param whichPlayer userdata
 ---@param key string
 ---@return string
-hjapi.DzAPI_Map_GetServerValue = function(whichPlayer, key)
+function hjapi.DzAPI_Map_GetServerValue(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_GetServerValue", whichPlayer, key)
 end
 
 ---@param whichPlayer userdata
 ---@return number
-hjapi.DzAPI_Map_GetServerValueErrorCode = function(whichPlayer)
+function hjapi.DzAPI_Map_GetServerValueErrorCode(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetServerValueErrorCode", whichPlayer)
 end
 
@@ -209,7 +193,7 @@ end
 --- 如果返回false代表读取失败,反之成功,之后游戏里平台不会再发送“服务器保存失败”的信息，所以希望地图作者在游戏开始给玩家发下信息服务器存档是否正确读取。
 ---@param whichPlayer userdata
 ---@return boolean
-hjapi.GetPlayerServerValueSuccess = function(whichPlayer)
+function hjapi.GetPlayerServerValueSuccess(whichPlayer)
     local res = hjapi.DzAPI_Map_GetServerValueErrorCode(whichPlayer)
     if (type(res) == "number") then
         return math.floor(res) == 0
@@ -217,7 +201,7 @@ hjapi.GetPlayerServerValueSuccess = function(whichPlayer)
     return false
 end
 
-hjapi.DzAPI_Map_GetUserID = function(...)
+function hjapi.DzAPI_Map_GetUserID(...)
     return hjapi.exec("DzAPI_Map_GetUserID", ...)
 end
 
@@ -226,47 +210,47 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@return boolean
-hjapi.DzAPI_Map_HasMallItem = function(whichPlayer, key)
+function hjapi.DzAPI_Map_HasMallItem(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_HasMallItem", whichPlayer, key)
 end
 
 --- 判断是否是蓝V
 ---@param whichPlayer userdata
 ---@return boolean
-hjapi.DzAPI_Map_IsBlueVIP = function(whichPlayer)
+function hjapi.DzAPI_Map_IsBlueVIP(whichPlayer)
     return hjapi.exec("DzAPI_Map_IsBlueVIP", whichPlayer)
 end
 
 --- 判断地图是否在RPG天梯
 ---@return boolean
-hjapi.DzAPI_Map_IsRPGLadder = function()
+function hjapi.DzAPI_Map_IsRPGLadder()
     return hjapi.exec("DzAPI_Map_IsRPGLadder", nil)
 end
 
 --- 判断当前地图是否rpg大厅来的
 ---@return boolean
-hjapi.DzAPI_Map_IsRPGLobby = function()
+function hjapi.DzAPI_Map_IsRPGLobby()
     return hjapi.exec("DzAPI_Map_IsRPGLobby", nil)
 end
 
 --- 判断是否是红V
 ---@param whichPlayer userdata
 ---@return boolean
-hjapi.DzAPI_Map_IsRedVIP = function(whichPlayer)
+function hjapi.DzAPI_Map_IsRedVIP(whichPlayer)
     return hjapi.exec("DzAPI_Map_IsRedVIP", whichPlayer)
 end
 
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_Ladder_SetPlayerStat = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_Ladder_SetPlayerStat(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_Ladder_SetPlayerStat", whichPlayer, key, value)
 end
 
 --- 天梯提交玩家排名
 ---@param whichPlayer userdata
 ---@param value number
-hjapi.DzAPI_Map_Ladder_SubmitPlayerRank = function(whichPlayer, value)
+function hjapi.DzAPI_Map_Ladder_SubmitPlayerRank(whichPlayer, value)
     return hjapi.DzAPI_Map_Ladder_SetPlayerStat(whichPlayer, "RankIndex", math.floor(value))
 end
 
@@ -274,21 +258,21 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_Ladder_SetStat = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_Ladder_SetStat(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_Ladder_SetStat", whichPlayer, key, value)
 end
 
 --- 天梯提交获得称号
 ---@param whichPlayer userdata
 ---@param value string
-hjapi.DzAPI_Map_Ladder_SubmitTitle = function(whichPlayer, value)
+function hjapi.DzAPI_Map_Ladder_SubmitTitle(whichPlayer, value)
     return hjapi.DzAPI_Map_Ladder_SetStat(whichPlayer, value, "1")
 end
 
 --- 设置玩家额外分
 ---@param whichPlayer userdata
 ---@param value string
-hjapi.DzAPI_Map_Ladder_SubmitPlayerExtraExp = function(whichPlayer, value)
+function hjapi.DzAPI_Map_Ladder_SubmitPlayerExtraExp(whichPlayer, value)
     return hjapi.DzAPI_Map_Ladder_SetStat(whichPlayer, "ExtraExp", math.floor(value))
 end
 
@@ -297,14 +281,14 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_MissionComplete = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_MissionComplete(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_MissionComplete", whichPlayer, key, value)
 end
 
 --- 触发boss击杀
 ---@param whichPlayer userdata
 ---@param key string
-hjapi.DzAPI_Map_OrpgTrigger = function(whichPlayer, key)
+function hjapi.DzAPI_Map_OrpgTrigger(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_OrpgTrigger", whichPlayer, key)
 end
 
@@ -313,7 +297,7 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_SavePublicArchive = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_SavePublicArchive(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_SavePublicArchive", whichPlayer, key, value)
 end
 
@@ -321,7 +305,7 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_SaveServerValue = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_SaveServerValue(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_SaveServerValue", whichPlayer, key, value)
 end
 
@@ -330,7 +314,7 @@ end
 ---@param whichPlayer userdata
 ---@param key string
 ---@param value string
-hjapi.DzAPI_Map_Stat_SetStat = function(whichPlayer, key, value)
+function hjapi.DzAPI_Map_Stat_SetStat(whichPlayer, key, value)
     return hjapi.exec("DzAPI_Map_Stat_SetStat", whichPlayer, key, value)
 end
 
@@ -340,15 +324,15 @@ end
 ---@param eventKey string
 ---@param eventType string
 ---@param value number integer
-hjapi.DzAPI_Map_Statistics = function(whichPlayer, eventKey, eventType, value)
+function hjapi.DzAPI_Map_Statistics(whichPlayer, eventKey, eventType, value)
     return hjapi.exec("DzAPI_Map_Statistics", whichPlayer, eventKey, eventType, value)
 end
 
-hjapi.DzAPI_Map_ToggleStore = function(...)
+function hjapi.DzAPI_Map_ToggleStore(...)
     return hjapi.exec("DzAPI_Map_ToggleStore", ...)
 end
 
-hjapi.DzAPI_Map_UpdatePlayerHero = function(...)
+function hjapi.DzAPI_Map_UpdatePlayerHero(...)
     return hjapi.exec("DzAPI_Map_UpdatePlayerHero", ...)
 end
 
@@ -356,353 +340,17 @@ end
 --- 仅对局数消耗型商品有效
 ---@param whichPlayer userdata
 ---@param key string
-hjapi.DzAPI_Map_UseConsumablesItem = function(whichPlayer, key)
+function hjapi.DzAPI_Map_UseConsumablesItem(whichPlayer, key)
     return hjapi.exec("DzAPI_Map_UseConsumablesItem", whichPlayer, key)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayItemID = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayItemID", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayReal", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayString = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayString", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayTechID = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayTechID", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataArrayUnitID = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataArrayUnitID", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataRequires = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataRequires", ...)
-end
-
-hjapi.DzAPI_UnitType_CountUnitTypeDataRequiresamount = function(...)
-    return hjapi.exec("DzAPI_UnitType_CountUnitTypeDataRequiresamount", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_PreventOrReguirePlace = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_PreventOrReguirePlace", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_PreventOrReguirePlaceCheck = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_PreventOrReguirePlaceCheck", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_Primary = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_Primary", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_TargetTypeCheck = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_TargetTypeCheck", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_TargetTypeSeries = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_TargetTypeSeries", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_armor = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_armor", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_atkType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_atkType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_buffType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_buffType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_deathType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_deathType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_defType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_defType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_movetp = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_movetp", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_race = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_race", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_regenType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_regenType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_type = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_type", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_typeCheck = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_typeCheck", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_warpsOn = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_warpsOn", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_weapTp = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_weapTp", ...)
-end
-
-hjapi.DzAPI_UnitType_GetEnum_weapType = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetEnum_weapType", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayItemID = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayItemID", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayReal", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayString = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayString", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayTechID = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayTechID", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataArrayUnitID = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataArrayUnitID", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataInt = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataInt", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataReal", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataRequires = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataRequires", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataRequiresamount = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataRequiresamount", ...)
-end
-
-hjapi.DzAPI_UnitType_GetUnitTypeDataString = function(...)
-    return hjapi.exec("DzAPI_UnitType_GetUnitTypeDataString", ...)
-end
-
-hjapi.DzAPI_UnitType_GettUnitTypeDataRequirescount = function(...)
-    return hjapi.exec("DzAPI_UnitType_GettUnitTypeDataRequirescount", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayItemID = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayItemID", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayReal", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayString = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayString", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayTechID = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayTechID", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataArrayUnitID = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataArrayUnitID", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataRequires = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataRequires", ...)
-end
-
-hjapi.DzAPI_UnitType_ResizeUnitTypeDataRequiresamount = function(...)
-    return hjapi.exec("DzAPI_UnitType_ResizeUnitTypeDataRequiresamount", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_PreventOrReguirePlace = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_PreventOrReguirePlace", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_PreventOrReguirePlaceModify = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_PreventOrReguirePlaceModify", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_Primary = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_Primary", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_TargetTypeModify = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_TargetTypeModify", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_TargetTypeSeries = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_TargetTypeSeries", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_armor = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_armor", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_atkType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_atkType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_buffType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_buffType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_deathType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_deathType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_defType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_defType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_movetp = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_movetp", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_race = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_race", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_regenType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_regenType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_type = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_type", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_typeModify = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_typeModify", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_warpsOn = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_warpsOn", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_weapTp = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_weapTp", ...)
-end
-
-hjapi.DzAPI_UnitType_SetEnum_weapType = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetEnum_weapType", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayAbilID = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayAbilID", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayItemID = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayItemID", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayReal", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayString = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayString", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayTechID = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayTechID", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataArrayUnitID = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataArrayUnitID", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataBoolean = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataBoolean", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataInt = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataInt", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataReal = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataReal", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataRequires = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataRequires", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataRequiresamount = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataRequiresamount", ...)
-end
-
-hjapi.DzAPI_UnitType_SetUnitTypeDataString = function(...)
-    return hjapi.exec("DzAPI_UnitType_SetUnitTypeDataString", ...)
-end
-
-hjapi.DzAPI_UnitstateToInteger = function(...)
-    return hjapi.exec("DzAPI_UnitstateToInteger", ...)
 end
 
 --- 触发点击frame
 ---@param frameId number integer
-hjapi.DzClickFrame = function(frameId)
+function hjapi.DzClickFrame(frameId)
     return hjapi.exec("DzClickFrame", frameId)
 end
 
-hjapi.DzConvertWorldPosition = function(...)
+function hjapi.DzConvertWorldPosition(...)
     return hjapi.exec("DzConvertWorldPosition", ...)
 end
 
@@ -712,7 +360,7 @@ end
 ---@param parent number integer
 ---@param id number integer
 ---@return number integer
-hjapi.DzCreateFrame = function(frame, parent, id)
+function hjapi.DzCreateFrame(frame, parent, id)
     return hjapi.exec("DzCreateFrame", frame, parent, id)
 end
 
@@ -724,7 +372,7 @@ end
 ---@param template string
 ---@param id number integer
 ---@return number integer
-hjapi.DzCreateFrameByTagName = function(frameType, name, parent, template, id)
+function hjapi.DzCreateFrameByTagName(frameType, name, parent, template, id)
     return math.floor(hjapi.exec("DzCreateFrameByTagName", frameType, name, parent, template, id) or 0)
 end
 
@@ -735,7 +383,7 @@ end
 ---@param tag string 自定义tag名称(def:cache.tagIdx)
 ---@param id number integer(def:0)
 ---@return number|nil
-hjapi.FrameTag = function(fdfType, fdfName, parent)
+function hjapi.FrameTag(fdfType, fdfName, parent)
     if (fdfType == nil or fdfName == nil) then
         return
     end
@@ -749,18 +397,14 @@ end
 ---@param parent number integer
 ---@param id number integer
 ---@return number integer
-hjapi.DzCreateSimpleFrame = function(frame, parent, id)
+function hjapi.DzCreateSimpleFrame(frame, parent, id)
     return hjapi.exec("DzCreateSimpleFrame", frame, parent, id)
-end
-
-hjapi.DzDebugString = function(...)
-    return hjapi.exec("DzDebugString", ...)
 end
 
 --- 销毁
 --- 销毁一个被重复创建过的Frame会导致游戏崩溃，重复创建同名Frame请使用Tag创建
 ---@param frameId number integer
-hjapi.DzDestroyFrame = function(frameId)
+function hjapi.DzDestroyFrame(frameId)
     return hjapi.exec("DzDestroyFrame", frameId)
 end
 
@@ -768,135 +412,39 @@ end
 ---@param d userdata destructable
 ---@param x number floor(2)
 ---@param y number floor(2)
-hjapi.DzDestructablePosition = function(d, x, y)
+function hjapi.DzDestructablePosition(d, x, y)
     return hjapi.exec("DzDestructablePosition", d, x, y)
-end
-
-hjapi.DzDotaInfo_IsPlayerRandom = function(...)
-    return hjapi.exec("DzDotaInfo_IsPlayerRandom", ...)
-end
-
-hjapi.DzDotaInfo_IsRepicked = function(...)
-    return hjapi.exec("DzDotaInfo_IsRepicked", ...)
-end
-
-hjapi.DzDotaInfo_Item = function(...)
-    return hjapi.exec("DzDotaInfo_Item", ...)
-end
-
-hjapi.DzDotaInfo_Item_HE = function(...)
-    return hjapi.exec("DzDotaInfo_Item_HE", ...)
-end
-
-hjapi.DzDotaInfo_Item_TM = function(...)
-    return hjapi.exec("DzDotaInfo_Item_TM", ...)
 end
 
 --- 原生 - 使用宽屏模式
 ---@param enable boolean
-hjapi.DzEnableWideScreen = function(enable)
+function hjapi.DzEnableWideScreen(enable)
     return hjapi.exec("DzEnableWideScreen", enable)
-end
-
-hjapi.DzEvent_Building_Cancel = function(...)
-    return hjapi.exec("DzEvent_Building_Cancel", ...)
-end
-
-hjapi.DzEvent_Building_Dead = function(...)
-    return hjapi.exec("DzEvent_Building_Dead", ...)
-end
-
-hjapi.DzEvent_Building_Finish = function(...)
-    return hjapi.exec("DzEvent_Building_Finish", ...)
-end
-
-hjapi.DzEvent_Building_Start = function(...)
-    return hjapi.exec("DzEvent_Building_Start", ...)
-end
-
-hjapi.DzEvent_Hero_Dead = function(...)
-    return hjapi.exec("DzEvent_Hero_Dead", ...)
-end
-
-hjapi.DzEvent_Hero_Level = function(...)
-    return hjapi.exec("DzEvent_Hero_Level", ...)
-end
-
-hjapi.DzEvent_Item_Drop = function(...)
-    return hjapi.exec("DzEvent_Item_Drop", ...)
-end
-
-hjapi.DzEvent_Item_Pickup = function(...)
-    return hjapi.exec("DzEvent_Item_Pickup", ...)
-end
-
-hjapi.DzEvent_Item_Sell = function(...)
-    return hjapi.exec("DzEvent_Item_Sell", ...)
-end
-
-hjapi.DzEvent_Item_Use = function(...)
-    return hjapi.exec("DzEvent_Item_Use", ...)
-end
-
-hjapi.DzEvent_Tech_Cancel = function(...)
-    return hjapi.exec("DzEvent_Tech_Cancel", ...)
-end
-
-hjapi.DzEvent_Tech_Finish = function(...)
-    return hjapi.exec("DzEvent_Tech_Finish", ...)
-end
-
-hjapi.DzEvent_Tech_Start = function(...)
-    return hjapi.exec("DzEvent_Tech_Start", ...)
-end
-
-hjapi.DzEvent_Unit_Cancel = function(...)
-    return hjapi.exec("DzEvent_Unit_Cancel", ...)
-end
-
-hjapi.DzEvent_Unit_ChangeOwner = function(...)
-    return hjapi.exec("DzEvent_Unit_ChangeOwner", ...)
-end
-
-hjapi.DzEvent_Unit_Dead = function(...)
-    return hjapi.exec("DzEvent_Unit_Dead", ...)
-end
-
-hjapi.DzEvent_Unit_Finish = function(...)
-    return hjapi.exec("DzEvent_Unit_Finish", ...)
-end
-
-hjapi.DzEvent_Unit_Hired = function(...)
-    return hjapi.exec("DzEvent_Unit_Hired", ...)
-end
-
-hjapi.DzEvent_Unit_Start = function(...)
-    return hjapi.exec("DzEvent_Unit_Start", ...)
 end
 
 --- 异步执行函数
 ---@param funcName string
-hjapi.DzExecuteFunc = function(funcName)
+function hjapi.DzExecuteFunc(funcName)
     return hjapi.exec("DzExecuteFunc", funcName)
 end
 
 --- 限制鼠标移动，在frame内
 ---@param frame number integer
 ---@param enable boolean
-hjapi.DzFrameCageMouse = function(frame, enable)
+function hjapi.DzFrameCageMouse(frame, enable)
     return hjapi.exec("DzFrameCageMouse", frame, enable)
 end
 
 --- 清空frame所有锚点
 ---@param frame number integer
-hjapi.DzFrameClearAllPoints = function(frame)
+function hjapi.DzFrameClearAllPoints(frame)
     return hjapi.exec("DzFrameClearAllPoints", frame)
 end
 
 --- 修改游戏渲染黑边: 上方高度:upperHeight,下方高度:bottomHeight
 ---@param upperHeight number floor(3)
 ---@param bottomHeight number floor(3)
-hjapi.DzFrameEditBlackBorders = function(upperHeight, bottomHeight)
+function hjapi.DzFrameEditBlackBorders(upperHeight, bottomHeight)
     return hjapi.exec("DzFrameEditBlackBorders", upperHeight, bottomHeight)
 end
 
@@ -905,20 +453,20 @@ end
 ---@param name string
 ---@param id number integer
 ---@return number integer
-hjapi.DzFrameFindByName = function(name, id)
+function hjapi.DzFrameFindByName(name, id)
     return hjapi.exec("DzFrameFindByName", name, id)
 end
 
 --- 获取Frame的透明度(0-255)
 ---@param frame number integer
 ---@return number integer
-hjapi.DzFrameGetAlpha = function(frame)
+function hjapi.DzFrameGetAlpha(frame)
     return hjapi.exec("DzFrameGetAlpha", frame)
 end
 
 --- 原生 - 玩家聊天信息框
 ---@return number integer
-hjapi.DzFrameGetChatMessage = function()
+function hjapi.DzFrameGetChatMessage()
     return hjapi.exec("DzFrameGetChatMessage", nil)
 end
 
@@ -929,21 +477,21 @@ end
 ---@param row number integer
 ---@param column number integer
 ---@return number integer
-hjapi.DzFrameGetCommandBarButton = function(row, column)
+function hjapi.DzFrameGetCommandBarButton(row, column)
     return hjapi.exec("DzFrameGetCommandBarButton", row, column)
 end
 
 --- frame控件是否启用
 ---@param frame number integer
 ---@return boolean
-hjapi.DzFrameGetEnable = function(frame)
+function hjapi.DzFrameGetEnable(frame)
     return hjapi.exec("DzFrameGetEnable", frame)
 end
 
 --- 获取Frame的高度
 ---@param frame number integer
 ---@return number floor
-hjapi.DzFrameGetHeight = function(frame)
+function hjapi.DzFrameGetHeight(frame)
     return hjapi.exec("DzFrameGetHeight", frame)
 end
 
@@ -951,7 +499,7 @@ end
 --- 左侧的英雄头像，参数表示第N+1个英雄，索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetHeroBarButton = function(buttonId)
+function hjapi.DzFrameGetHeroBarButton(buttonId)
     return hjapi.exec("DzFrameGetHeroBarButton", buttonId)
 end
 
@@ -959,7 +507,7 @@ end
 --- 左侧的英雄头像下的血条，参数表示第N+1个英雄，索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetHeroHPBar = function(buttonId)
+function hjapi.DzFrameGetHeroHPBar(buttonId)
     return hjapi.exec("DzFrameGetHeroHPBar", buttonId)
 end
 
@@ -967,7 +515,7 @@ end
 --- 左侧的英雄头像下的蓝条，参数表示第N+1个英雄，索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetHeroManaBar = function(buttonId)
+function hjapi.DzFrameGetHeroManaBar(buttonId)
     return hjapi.exec("DzFrameGetHeroManaBar", buttonId)
 end
 
@@ -975,13 +523,13 @@ end
 --- 索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetItemBarButton = function(buttonId)
+function hjapi.DzFrameGetItemBarButton(buttonId)
     return hjapi.exec("DzFrameGetItemBarButton", buttonId)
 end
 
 --- 原生 - 小地图
 ---@return number integer
-hjapi.DzFrameGetMinimap = function()
+function hjapi.DzFrameGetMinimap()
     return hjapi.exec("DzFrameGetMinimap", nil)
 end
 
@@ -989,28 +537,28 @@ end
 --- 小地图右侧竖排按钮，索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetMinimapButton = function(buttonId)
+function hjapi.DzFrameGetMinimapButton(buttonId)
     return hjapi.exec("DzFrameGetMinimapButton", buttonId)
 end
 
 --- 获取 Frame 的名称
 ---@param frame number integer
 ---@return string
-hjapi.DzFrameGetName = function(frame)
+function hjapi.DzFrameGetName(frame)
     return hjapi.exec("DzFrameGetName", frame)
 end
 
 --- 获取 Frame 的 Parent
 ---@param frame number integer
 ---@return number integer
-hjapi.DzFrameGetParent = function(frame)
+function hjapi.DzFrameGetParent(frame)
     return hjapi.exec("DzFrameGetParent", frame)
 end
 
 --- 原生 - 单位大头像
 --- 小地图右侧的大头像
 ---@return number integer
-hjapi.DzFrameGetPortrait = function()
+function hjapi.DzFrameGetPortrait()
     return hjapi.exec("DzFrameGetPortrait", nil)
 end
 
@@ -1018,7 +566,7 @@ end
 --- 支持EditBox, TextFrame, TextArea, SimpleFontString
 ---@param frame number integer
 ---@return string
-hjapi.DzFrameGetText = function(frame)
+function hjapi.DzFrameGetText(frame)
     return hjapi.exec("DzFrameGetText", frame)
 end
 
@@ -1026,28 +574,28 @@ end
 --- 支持EditBox
 ---@param frame number integer
 ---@return number integer
-hjapi.DzFrameGetTextSizeLimit = function(frame)
+function hjapi.DzFrameGetTextSizeLimit(frame)
     return hjapi.exec("DzFrameGetTextSizeLimit", frame)
 end
 
 --- 原生 - 鼠标提示
 --- 鼠标移动到物品或技能按钮上显示的提示窗，初始位于技能栏上方
 ---@return number integer
-hjapi.DzFrameGetTooltip = function()
+function hjapi.DzFrameGetTooltip()
     return hjapi.exec("DzFrameGetTooltip", nil)
 end
 
 --- 原生 - 上方消息框
 --- 高维修费用 等消息
 ---@return number integer
-hjapi.DzFrameGetTopMessage = function()
+function hjapi.DzFrameGetTopMessage()
     return hjapi.exec("DzFrameGetTopMessage", nil)
 end
 
 --- 原生 - 系统消息框
 --- 包含显示消息给玩家 及 显示Debug消息等
 ---@return number integer
-hjapi.DzFrameGetUnitMessage = function()
+function hjapi.DzFrameGetUnitMessage()
     return hjapi.exec("DzFrameGetUnitMessage", nil)
 end
 
@@ -1055,7 +603,7 @@ end
 --- 左上的菜单等按钮，索引从0开始
 ---@param buttonId number integer
 ---@return number integer
-hjapi.DzFrameGetUpperButtonBarButton = function(buttonId)
+function hjapi.DzFrameGetUpperButtonBarButton(buttonId)
     return hjapi.exec("DzFrameGetUpperButtonBarButton", buttonId)
 end
 
@@ -1063,13 +611,13 @@ end
 --- 支持Slider、SimpleStatusBar、StatusBar
 ---@param frame number integer
 ---@return number floor
-hjapi.DzFrameGetValue = function(frame)
+function hjapi.DzFrameGetValue(frame)
     return hjapi.exec("DzFrameGetValue", frame)
 end
 
 --- 原生 - 隐藏界面元素
 --- 不再在地图初始化时调用则会残留小地图和时钟模型
-hjapi.DzFrameHideInterface = function()
+function hjapi.DzFrameHideInterface()
     return hjapi.exec("DzFrameHideInterface", nil)
 end
 
@@ -1079,7 +627,7 @@ end
 ---@param point number integer
 ---@param x number floor(3)
 ---@param y number floor(3)
-hjapi.DzFrameSetAbsolutePoint = function(frame, point, x, y)
+function hjapi.DzFrameSetAbsolutePoint(frame, point, x, y)
     return hjapi.exec("DzFrameSetAbsolutePoint", frame, point, x, y)
 end
 
@@ -1088,14 +636,14 @@ end
 ---@param frame number integer
 ---@param relativeFrame number integer
 ---@return boolean
-hjapi.DzFrameSetAllPoints = function(frame, relativeFrame)
+function hjapi.DzFrameSetAllPoints(frame, relativeFrame)
     return hjapi.exec("DzFrameSetAllPoints", frame, relativeFrame)
 end
 
 --- 设置frame的透明度(0-255)
 ---@param frame number integer
 ---@param alpha number integer
-hjapi.DzFrameSetAlpha = function(frame, alpha)
+function hjapi.DzFrameSetAlpha(frame, alpha)
     return hjapi.exec("DzFrameSetAlpha", frame, alpha)
 end
 
@@ -1103,7 +651,7 @@ end
 ---@param frame number integer
 ---@param animId number integer 播放序号的动画
 ---@param autoCast boolean 自动播放
-hjapi.DzFrameSetAnimate = function(frame, animId, autoCast)
+function hjapi.DzFrameSetAnimate(frame, animId, autoCast)
     return hjapi.exec("DzFrameSetAnimate", frame, animId, autoCast)
 end
 
@@ -1111,14 +659,14 @@ end
 --- 自动播放为false时可用
 ---@param frame number integer
 ---@param offset number float(5) 进度
-hjapi.DzFrameSetAnimateOffset = function(frame, offset)
+function hjapi.DzFrameSetAnimateOffset(frame, offset)
     return hjapi.exec("DzFrameSetAnimateOffset", frame, offset)
 end
 
 --- 启用/禁用 frame
 ---@param frame number integer
 ---@param enable boolean
-hjapi.DzFrameSetEnable = function(frame, enable)
+function hjapi.DzFrameSetEnable(frame, enable)
     return hjapi.exec("DzFrameSetEnable", frame, enable)
 end
 
@@ -1126,7 +674,7 @@ end
 ---@param frame number integer
 ---@param enable boolean
 ---@return boolean
-hjapi.DzFrameSetFocus = function(frame, enable)
+function hjapi.DzFrameSetFocus(frame, enable)
     return hjapi.exec("DzFrameSetFocus", frame, enable)
 end
 
@@ -1137,7 +685,7 @@ end
 ---@param fileName string
 ---@param height number float(5)
 ---@param flag number integer
-hjapi.DzFrameSetFont = function(frame, fileName, height, flag)
+function hjapi.DzFrameSetFont(frame, fileName, height, flag)
     return hjapi.exec("DzFrameSetFont", frame, fileName, height, flag)
 end
 
@@ -1147,7 +695,7 @@ end
 ---@param frame number integer
 ---@param minValue number float(5)
 ---@param maxValue number float(5)
-hjapi.DzFrameSetMinMaxValue = function(frame, minValue, maxValue)
+function hjapi.DzFrameSetMinMaxValue(frame, minValue, maxValue)
     return hjapi.exec("DzFrameSetMinMaxValue", frame, minValue, maxValue)
 end
 
@@ -1157,7 +705,7 @@ end
 ---@param modelFile string
 ---@param modelType number integer
 ---@param flag number integer
-hjapi.DzFrameSetModel = function(frame, modelFile, modelType, flag)
+function hjapi.DzFrameSetModel(frame, modelFile, modelType, flag)
     return hjapi.exec("DzFrameSetModel", frame, modelFile, modelType, flag)
 end
 
@@ -1165,7 +713,7 @@ end
 --- 设置 frame 的父窗口为 parent
 ---@param frame number integer
 ---@param parent number integer
-hjapi.DzFrameSetParent = function(frame, parent)
+function hjapi.DzFrameSetParent(frame, parent)
     return hjapi.exec("DzFrameSetParent", frame, parent)
 end
 
@@ -1177,7 +725,7 @@ end
 ---@param relativePoint number integer
 ---@param x number float(5)
 ---@param y number float(5)
-hjapi.DzFrameSetPoint = function(frame, point, relativeFrame, relativePoint, x, y)
+function hjapi.DzFrameSetPoint(frame, point, relativeFrame, relativePoint, x, y)
     return hjapi.exec("DzFrameSetPoint", frame, point, relativeFrame, relativePoint, x, y)
 end
 
@@ -1188,7 +736,7 @@ end
 ---@param relativePoint number 以 align-> alignParent 对齐
 ---@param x number 锚点X
 ---@param y number 锚点Y
-hjapi.FrameRelation = function(frame, point, relativeFrame, relativePoint, x, y)
+function hjapi.FrameRelation(frame, point, relativeFrame, relativePoint, x, y)
     point = point or FRAME_ALIGN_CENTER
     relativeFrame = relativeFrame or hjapi.DzGetGameUI()
     relativePoint = relativePoint or FRAME_ALIGN_CENTER
@@ -1202,7 +750,7 @@ end
 --- 设置 frame 优先级:int
 ---@param frame number integer
 ---@param priority number integer
-hjapi.DzFrameSetPriority = function(frame, priority)
+function hjapi.DzFrameSetPriority(frame, priority)
     return hjapi.exec("DzFrameSetPriority", frame, priority)
 end
 
@@ -1210,7 +758,7 @@ end
 --- 设置 frame 的缩放 scale
 ---@param frame number integer
 ---@param scale number float(5)
-hjapi.DzFrameSetScale = function(frame, scale)
+function hjapi.DzFrameSetScale(frame, scale)
     return hjapi.exec("DzFrameSetScale", frame, scale)
 end
 
@@ -1220,7 +768,7 @@ end
 ---@param eventId number integer
 ---@param funcName string
 ---@param sync boolean
-hjapi.DzFrameSetScript = function(frame, eventId, funcName, sync)
+function hjapi.DzFrameSetScript(frame, eventId, funcName, sync)
     return hjapi.exec("DzFrameSetScript", frame, eventId, funcName, sync)
 end
 
@@ -1231,7 +779,7 @@ end
 ---@param eventId number integer
 ---@param funcHandle function
 ---@param sync boolean
-hjapi.DzFrameSetScriptByCode = function(frame, eventId, funcHandle, sync)
+function hjapi.DzFrameSetScriptByCode(frame, eventId, funcHandle, sync)
     return hjapi.exec("DzFrameSetScriptByCode", frame, eventId, funcHandle, sync)
 end
 
@@ -1239,7 +787,7 @@ end
 ---@param frame number integer
 ---@param w number float(5) 宽
 ---@param h number float(5) 高
-hjapi.DzFrameSetSize = function(frame, w, h)
+function hjapi.DzFrameSetSize(frame, w, h)
     return hjapi.exec("DzFrameSetSize", frame, w, h)
 end
 
@@ -1247,7 +795,7 @@ end
 --- 支持Slider
 ---@param frame number integer
 ---@param step number float(3) 步进
-hjapi.DzFrameSetStepValue = function(frame, step)
+function hjapi.DzFrameSetStepValue(frame, step)
     return hjapi.exec("DzFrameSetStepValue", frame, step)
 end
 
@@ -1255,7 +803,7 @@ end
 --- 支持EditBox, TextFrame, TextArea, SimpleFontString、GlueEditBoxWar3、SlashChatBox、TimerTextFrame、TextButtonFrame、GlueTextButton
 ---@param frame number integer
 ---@param text string
-hjapi.DzFrameSetText = function(frame, text)
+function hjapi.DzFrameSetText(frame, text)
     return hjapi.exec("DzFrameSetText", frame, text)
 end
 
@@ -1263,20 +811,20 @@ end
 --- 支持TextFrame、SimpleFontString、SimpleMessageFrame
 ---@param frame number integer
 ---@param align number integer ，参考blizzard:^FRAME_ALIGN
-hjapi.DzFrameSetTextAlignment = function(frame, align)
+function hjapi.DzFrameSetTextAlignment(frame, align)
     return hjapi.exec("DzFrameSetTextAlignment", frame, align)
 end
 
 ---@param frame number integer
 ---@param color number integer
-hjapi.DzFrameSetTextColor = function(frame, color)
+function hjapi.DzFrameSetTextColor(frame, color)
     return hjapi.exec("DzFrameSetTextColor", frame, color)
 end
 
 --- 设置frame字数限制
 ---@param frame number integer
 ---@param limit number integer
-hjapi.DzFrameSetTextSizeLimit = function(frame, limit)
+function hjapi.DzFrameSetTextSizeLimit(frame, limit)
     return hjapi.exec("DzFrameSetTextSizeLimit", frame, limit)
 end
 
@@ -1285,7 +833,7 @@ end
 ---@param frame number integer
 ---@param texture string 贴图路径
 ---@param flag number integer 是否平铺
-hjapi.DzFrameSetTexture = function(frame, texture, flag)
+function hjapi.DzFrameSetTexture(frame, texture, flag)
     return hjapi.exec("DzFrameSetTexture", frame, texture, flag)
 end
 
@@ -1294,17 +842,17 @@ end
 --- 设置tooltip
 ---@param frame number integer
 ---@param tooltip number integer
-hjapi.DzFrameSetTooltip = function(frame, tooltip)
+function hjapi.DzFrameSetTooltip(frame, tooltip)
     return hjapi.exec("DzFrameSetTooltip", frame, tooltip)
 end
 
 ---@param funcName string
-hjapi.DzFrameSetUpdateCallback = function(funcName)
+function hjapi.DzFrameSetUpdateCallback(funcName)
     return hjapi.exec("DzFrameSetUpdateCallback", funcName)
 end
 
 ---@param funcHandle function
-hjapi.DzFrameSetUpdateCallbackByCode = function(funcHandle)
+function hjapi.DzFrameSetUpdateCallbackByCode(funcHandle)
     return hjapi.exec("DzFrameSetUpdateCallbackByCode", funcHandle)
 end
 
@@ -1312,29 +860,29 @@ end
 --- 支持Slider、SimpleStatusBar、StatusBar
 ---@param frame number integer
 ---@param value number float(5)
-hjapi.DzFrameSetValue = function(frame, value)
+function hjapi.DzFrameSetValue(frame, value)
     return hjapi.exec("DzFrameSetValue", frame, value)
 end
 
 --- 设置frame颜色
 ---@param frame number integer
 ---@param vertexColor number integer
-hjapi.DzFrameSetVertexColor = function(frame, vertexColor)
+function hjapi.DzFrameSetVertexColor(frame, vertexColor)
     return hjapi.exec("DzFrameSetVertexColor", frame, vertexColor)
 end
 
 --- 设置frame显示与否
 ---@param frame number integer
 ---@param enable boolean
-hjapi.DzFrameShow = function(frame, enable)
+function hjapi.DzFrameShow(frame, enable)
     return hjapi.exec("DzFrameShow", frame, enable)
 end
 
-hjapi.DzGetClientHeight = function(...)
+function hjapi.DzGetClientHeight(...)
     return hjapi.exec("DzGetClientHeight", ...)
 end
 
-hjapi.DzGetClientWidth = function(...)
+function hjapi.DzGetClientWidth(...)
     return hjapi.exec("DzGetClientWidth", ...)
 end
 
@@ -1345,134 +893,134 @@ end
 ---@param b number integer
 ---@param a number integer
 ---@return number integer
-hjapi.DzGetColor = function(r, g, b, a)
+function hjapi.DzGetColor(r, g, b, a)
     return hjapi.exec("DzGetColor", r, g, b, a)
 end
 
-hjapi.DzGetConvertWorldPositionX = function(...)
+function hjapi.DzGetConvertWorldPositionX(...)
     return hjapi.exec("DzGetConvertWorldPositionX", ...)
 end
 
-hjapi.DzGetConvertWorldPositionY = function(...)
+function hjapi.DzGetConvertWorldPositionY(...)
     return hjapi.exec("DzGetConvertWorldPositionY", ...)
 end
 
-hjapi.DzGetGameMode = function(...)
+function hjapi.DzGetGameMode(...)
     return hjapi.exec("DzGetGameMode", ...)
 end
 
 --- 原生 - 游戏UI
 --- 一般用作创建自定义UI的父节点
 ---@return number integer
-hjapi.DzGetGameUI = function()
+function hjapi.DzGetGameUI()
     return hjapi.exec("DzGetGameUI", nil)
 end
 
 --- 获取客户端语言
 --- 对不同语言客户端返回不同
 ---@return string
-hjapi.DzGetLocale = function()
+function hjapi.DzGetLocale()
     return hjapi.exec("DzGetLocale", nil)
 end
 
 --- 鼠标所在的Frame控件指针
 --- 不是所有类型的Frame都能响应鼠标，能响应的有BUTTON，TEXT等
 ---@return number integer
-hjapi.DzGetMouseFocus = function()
+function hjapi.DzGetMouseFocus()
     return hjapi.exec("DzGetMouseFocus", nil)
 end
 
 --- 获取鼠标在游戏内的坐标X
 ---@return number
-hjapi.DzGetMouseTerrainX = function()
+function hjapi.DzGetMouseTerrainX()
     return hjapi.exec("DzGetMouseTerrainX", nil)
 end
 
 --- 获取鼠标在游戏内的坐标Y
 ---@return number
-hjapi.DzGetMouseTerrainY = function()
+function hjapi.DzGetMouseTerrainY()
     return hjapi.exec("DzGetMouseTerrainY", nil)
 end
 
 --- 获取鼠标在游戏内的坐标Z
 ---@return number
-hjapi.DzGetMouseTerrainZ = function()
+function hjapi.DzGetMouseTerrainZ()
     return hjapi.exec("DzGetMouseTerrainZ", nil)
 end
 
 --- 获取鼠标在屏幕的坐标X
 ---@return number
-hjapi.DzGetMouseX = function()
+function hjapi.DzGetMouseX()
     return hjapi.exec("DzGetMouseX", nil)
 end
 
 --- 获取鼠标游戏窗口坐标X
 ---@return number integer
-hjapi.DzGetMouseXRelative = function()
+function hjapi.DzGetMouseXRelative()
     return hjapi.exec("DzGetMouseXRelative", nil)
 end
 
 --- 获取鼠标在屏幕的坐标Y
 ---@return number
-hjapi.DzGetMouseY = function()
+function hjapi.DzGetMouseY()
     return hjapi.exec("DzGetMouseY", nil)
 end
 
 --- 获取鼠标游戏窗口坐标Y
 ---@return number integer
-hjapi.DzGetMouseYRelative = function()
+function hjapi.DzGetMouseYRelative()
     return hjapi.exec("DzGetMouseYRelative", nil)
 end
 
-hjapi.DzGetPlayerInitGold = function(...)
+function hjapi.DzGetPlayerInitGold(...)
     return hjapi.exec("DzGetPlayerInitGold", ...)
 end
 
-hjapi.DzGetPlayerName = function(...)
+function hjapi.DzGetPlayerName(...)
     return hjapi.exec("DzGetPlayerName", ...)
 end
 
-hjapi.DzGetPlayerSelectedHero = function(...)
+function hjapi.DzGetPlayerSelectedHero(...)
     return hjapi.exec("DzGetPlayerSelectedHero", ...)
 end
 
 --- 事件响应 - 获取触发的按键
 --- 响应 [硬件] - 按键事件
 ---@return number integer
-hjapi.DzGetTriggerKey = function()
+function hjapi.DzGetTriggerKey()
     return hjapi.exec("DzGetTriggerKey", nil)
 end
 
 --- 事件响应 - 获取触发硬件事件的玩家
 --- 响应 [硬件] - 按键事件 滚轮事件 窗口大小变化事件
 ---@return userdata player
-hjapi.DzGetTriggerKeyPlayer = function()
+function hjapi.DzGetTriggerKeyPlayer()
     return hjapi.exec("DzGetTriggerKeyPlayer", nil)
 end
 
 --- 事件响应 - 获取同步的数据
 --- 响应 [同步] - 同步消息事件
 ---@return string
-hjapi.DzGetTriggerSyncData = function()
+function hjapi.DzGetTriggerSyncData()
     return hjapi.exec("DzGetTriggerSyncData", nil)
 end
 
 --- 事件响应 - 获取同步数据的玩家
 --- 响应 [同步] - 同步消息事件
 ---@return userdata player
-hjapi.DzGetTriggerSyncPlayer = function()
+function hjapi.DzGetTriggerSyncPlayer()
     return hjapi.exec("DzGetTriggerSyncPlayer", nil)
 end
 
 --- 事件响应 - 触发的Frame
 ---@return number integer
-hjapi.DzGetTriggerUIEventFrame = function()
+function hjapi.DzGetTriggerUIEventFrame()
     return hjapi.exec("DzGetTriggerUIEventFrame", nil)
 end
 
 --- 事件响应 - 获取触发ui的玩家
 ---@return userdata player
-hjapi.DzGetTriggerUIEventPlayer = function()
+function hjapi.DzGetTriggerUIEventPlayer()
     return hjapi.exec("DzGetTriggerUIEventPlayer", nil)
 end
 
@@ -1481,63 +1029,63 @@ end
 ---@param whichUnit userdata
 ---@param level number integer
 ---@return number integer
-hjapi.DzGetUnitNeededXP = function(whichUnit, level)
+function hjapi.DzGetUnitNeededXP(whichUnit, level)
     return hjapi.exec("DzGetUnitNeededXP", whichUnit, level)
 end
 
 --- 获取鼠标指向的单位
 ---@return userdata unit
-hjapi.DzGetUnitUnderMouse = function()
+function hjapi.DzGetUnitUnderMouse()
     return hjapi.exec("DzGetUnitUnderMouse", nil)
 end
 
 --- 事件响应 - 获取滚轮变化值
 --- 响应 [硬件] - 鼠标滚轮事件，正负区分上下
 ---@return number integer
-hjapi.DzGetWheelDelta = function()
+function hjapi.DzGetWheelDelta()
     return hjapi.exec("DzGetWheelDelta", nil)
 end
 
 --- 获取魔兽窗口高度
 ---@return number integer
-hjapi.DzGetWindowHeight = function()
+function hjapi.DzGetWindowHeight()
     return hjapi.exec("DzGetWindowHeight", nil)
 end
 
 --- 获取魔兽窗口宽度
 ---@return number integer
-hjapi.DzGetWindowWidth = function()
+function hjapi.DzGetWindowWidth()
     return hjapi.exec("DzGetWindowWidth", {})
 end
 
 --- 获取魔兽窗口X坐标
 ---@return number integer
-hjapi.DzGetWindowX = function()
+function hjapi.DzGetWindowX()
     return hjapi.exec("DzGetWindowX", nil)
 end
 
 --- 获取魔兽窗口Y坐标
 ---@return number integer
-hjapi.DzGetWindowY = function()
+function hjapi.DzGetWindowY()
     return hjapi.exec("DzGetWindowY", nil)
 end
 
 --- 判断按键是否按下
 ---@param iKey number integer 参考blizzard:^GAME_KEY
 ---@return boolean
-hjapi.DzIsKeyDown = function(iKey)
+function hjapi.DzIsKeyDown(iKey)
     return hjapi.exec("DzIsKeyDown", iKey)
 end
 
 --- 鼠标是否在游戏内
 ---@return boolean
-hjapi.DzIsMouseOverUI = function()
+function hjapi.DzIsMouseOverUI()
     return hjapi.exec("DzIsMouseOverUI", nil)
 end
 
 --- 判断游戏窗口是否处于活动状态
 ---@return boolean
-hjapi.DzIsWindowActive = function()
+function hjapi.DzIsWindowActive()
     return hjapi.exec("DzIsWindowActive", nil)
 end
 
@@ -1545,7 +1093,7 @@ end
 --- 加载--> file.toc
 --- 载入自己的fdf列表文件
 ---@return boolean
-hjapi.DzLoadToc = function(tocFilePath)
+function hjapi.DzLoadToc(tocFilePath)
     if (hjapi._cache["DzLoadToc"][tocFilePath] == true) then
         return true
     end
@@ -1554,25 +1102,13 @@ hjapi.DzLoadToc = function(tocFilePath)
 end
 
 ---@param enable boolean
-hjapi.DzOriginalUIAutoResetPoint = function(enable)
+function hjapi.DzOriginalUIAutoResetPoint(enable)
     return hjapi.exec("DzOriginalUIAutoResetPoint", enable)
-end
-
-hjapi.DzPlatform_GameStart = function(...)
-    return hjapi.exec("DzPlatform_GameStart", ...)
-end
-
-hjapi.DzPlatform_HasGameOver = function(...)
-    return hjapi.exec("DzPlatform_HasGameOver", ...)
-end
-
-hjapi.DzPlatform_HasGameOver_Player = function(...)
-    return hjapi.exec("DzPlatform_HasGameOver_Player", ...)
 end
 
 --- 原生 - 修改屏幕比例(FOV)
 ---@param value number float(5)
-hjapi.DzSetCustomFovFix = function(value)
+function hjapi.DzSetCustomFovFix(value)
     return hjapi.exec("DzSetCustomFovFix", value)
 end
 
@@ -1580,19 +1116,15 @@ end
 --- 设置内存数据 address=value
 ---@param address number integer
 ---@param value number float(5)
-hjapi.DzSetMemory = function(address, value)
+function hjapi.DzSetMemory(address, value)
     return hjapi.exec("DzSetMemory", address, value)
 end
 
 --- 设置鼠标的坐标
 ---@param x number integer
 ---@param y number integer
-hjapi.DzSetMousePos = function(x, y)
+function hjapi.DzSetMousePos(x, y)
     return hjapi.exec("DzSetMousePos", x, y)
-end
-
-hjapi.DzSetParams = function(...)
-    return hjapi.exec("DzSetParams", ...)
 end
 
 --- 替换单位类型
@@ -1600,7 +1132,7 @@ end
 --- 不会替换大头像中的模型
 ---@param whichUnit userdata
 ---@param id number|string
-hjapi.DzSetUnitID = function(whichUnit, id)
+function hjapi.DzSetUnitID(whichUnit, id)
     return hjapi.exec("DzSetUnitID", whichUnit, id)
 end
 
@@ -1609,7 +1141,7 @@ end
 --- 不会替换大头像中的模型
 ---@param whichUnit userdata
 ---@param model string
-hjapi.DzSetUnitModel = function(whichUnit, model)
+function hjapi.DzSetUnitModel(whichUnit, model)
     return hjapi.exec("DzSetUnitModel", whichUnit, model)
 end
 
@@ -1617,7 +1149,7 @@ end
 ---@param whichUnit userdata
 ---@param x number float(2)
 ---@param y number float(2)
-hjapi.DzSetUnitPosition = function(whichUnit, x, y)
+function hjapi.DzSetUnitPosition(whichUnit, x, y)
     return hjapi.exec("DzSetUnitPosition", whichUnit, x, y)
 end
 
@@ -1626,13 +1158,13 @@ end
 ---@param whichUnit userdata
 ---@param path string
 ---@param texId number integer
-hjapi.DzSetUnitTexture = function(whichUnit, path, texId)
+function hjapi.DzSetUnitTexture(whichUnit, path, texId)
     return hjapi.exec("DzSetUnitTexture", whichUnit, path, texId)
 end
 
 --- 原生 - 设置小地图背景贴图
 ---@param blp string
-hjapi.DzSetWar3MapMap = function(blp)
+function hjapi.DzSetWar3MapMap(blp)
     return hjapi.exec("DzSetWar3MapMap", blp)
 end
 
@@ -1640,7 +1172,7 @@ end
 --- ID默认填0，同名时优先获取最后被创建的。SimpleFontString为fdf中的Frame类型
 ---@param name string
 ---@param id number integer
-hjapi.DzSimpleFontStringFindByName = function(name, id)
+function hjapi.DzSimpleFontStringFindByName(name, id)
     return hjapi.exec("DzSimpleFontStringFindByName", name, id)
 end
 
@@ -1648,7 +1180,7 @@ end
 --- ID默认填0，同名时优先获取最后被创建的。SimpleFrame为fdf中的Frame类型
 ---@param name string
 ---@param id number integer
-hjapi.DzSimpleFrameFindByName = function(name, id)
+function hjapi.DzSimpleFrameFindByName(name, id)
     return hjapi.exec("DzSimpleFrameFindByName", name, id)
 end
 
@@ -1656,11 +1188,11 @@ end
 --- ID默认填0，同名时优先获取最后被创建的。SimpleTexture为fdf中的Frame类型
 ---@param name string
 ---@param id number integer
-hjapi.DzSimpleTextureFindByName = function(name, id)
+function hjapi.DzSimpleTextureFindByName(name, id)
     return hjapi.exec("DzSimpleTextureFindByName", name, id)
 end
 
-hjapi.DzSyncBuffer = function(...)
+function hjapi.DzSyncBuffer(...)
     return hjapi.exec("DzSyncBuffer", ...)
 end
 
@@ -1668,8 +1200,16 @@ end
 --- 同步 标签：prefix  发送数据：data
 ---@param prefix string
 ---@param data string
-hjapi.DzSyncData = function(prefix, data)
+function hjapi.DzSyncData(prefix, data)
     return hjapi.exec("DzSyncData", prefix, data)
+end
+
+--- 同步游戏数据（立刻）
+--- 同步 标签：prefix  发送数据：data
+---@param prefix string
+---@param data string
+function hjapi.DzSyncDataImmediately(prefix, data)
+    return hjapi.exec("DzSyncDataImmediately", prefix, data)
 end
 
 ---@param trig userdata
@@ -1677,7 +1217,7 @@ end
 ---@param status number integer
 ---@param sync boolean
 ---@param funcName string
-hjapi.DzTriggerRegisterKeyEvent = function(trig, key, status, sync, funcName)
+function hjapi.DzTriggerRegisterKeyEvent(trig, key, status, sync, funcName)
     return hjapi.exec("DzTriggerRegisterKeyEvent", trig, key, status, sync, funcName)
 end
 
@@ -1686,7 +1226,7 @@ end
 ---@param status number integer
 ---@param sync boolean
 ---@param funcHandle function
-hjapi.DzTriggerRegisterKeyEventByCode = function(trig, key, status, sync, funcHandle)
+function hjapi.DzTriggerRegisterKeyEventByCode(trig, key, status, sync, funcHandle)
     return hjapi.exec("DzTriggerRegisterKeyEventByCode", trig, key, status, sync, funcHandle)
 end
 
@@ -1695,7 +1235,7 @@ end
 ---@param status number integer
 ---@param sync boolean
 ---@param funcName string
-hjapi.DzTriggerRegisterMouseEvent = function(trig, btn, status, sync, funcName)
+function hjapi.DzTriggerRegisterMouseEvent(trig, btn, status, sync, funcName)
     return hjapi.exec("DzTriggerRegisterMouseEvent", trig, btn, status, sync, funcName)
 end
 
@@ -1704,35 +1244,35 @@ end
 ---@param status number integer
 ---@param sync boolean
 ---@param funcHandle function
-hjapi.DzTriggerRegisterMouseEventByCode = function(trig, btn, status, sync, funcHandle)
+function hjapi.DzTriggerRegisterMouseEventByCode(trig, btn, status, sync, funcHandle)
     return hjapi.exec("DzTriggerRegisterMouseEventByCode", trig, btn, status, sync, funcHandle)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcName string
-hjapi.DzTriggerRegisterMouseMoveEvent = function(trig, sync, funcName)
+function hjapi.DzTriggerRegisterMouseMoveEvent(trig, sync, funcName)
     return hjapi.exec("DzTriggerRegisterMouseMoveEvent", trig, sync, funcName)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcHandle function
-hjapi.DzTriggerRegisterMouseMoveEventByCode = function(trig, sync, funcHandle)
+function hjapi.DzTriggerRegisterMouseMoveEventByCode(trig, sync, funcHandle)
     return hjapi.exec("DzTriggerRegisterMouseMoveEventByCode", trig, sync, funcHandle)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcName string
-hjapi.DzTriggerRegisterMouseWheelEvent = function(trig, sync, funcName)
+function hjapi.DzTriggerRegisterMouseWheelEvent(trig, sync, funcName)
     return hjapi.exec("DzTriggerRegisterMouseWheelEvent", trig, sync, funcName)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcHandle function
-hjapi.DzTriggerRegisterMouseWheelEventByCode = function(trig, sync, funcHandle)
+function hjapi.DzTriggerRegisterMouseWheelEventByCode(trig, sync, funcHandle)
     return hjapi.exec("DzTriggerRegisterMouseWheelEventByCode", trig, sync, funcHandle)
 end
 
@@ -1742,49 +1282,49 @@ end
 ---@param trig userdata
 ---@param prefix string
 ---@param server boolean
-hjapi.DzTriggerRegisterSyncData = function(trig, prefix, server)
+function hjapi.DzTriggerRegisterSyncData(trig, prefix, server)
     return hjapi.exec("DzTriggerRegisterSyncData", trig, prefix, server)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcName string
-hjapi.DzTriggerRegisterWindowResizeEvent = function(trig, sync, funcName)
+function hjapi.DzTriggerRegisterWindowResizeEvent(trig, sync, funcName)
     return hjapi.exec("DzTriggerRegisterWindowResizeEvent", trig, sync, funcName)
 end
 
 ---@param trig userdata
 ---@param sync boolean
 ---@param funcHandle function
-hjapi.DzTriggerRegisterWindowResizeEventByCode = function(trig, sync, funcHandle)
+function hjapi.DzTriggerRegisterWindowResizeEventByCode(trig, sync, funcHandle)
     return hjapi.exec("DzTriggerRegisterWindowResizeEventByCode", trig, sync, funcHandle)
 end
 
-hjapi.DzUnitDisableAttack = function(...)
+function hjapi.DzUnitDisableAttack(...)
     return hjapi.exec("DzUnitDisableAttack", ...)
 end
 
-hjapi.DzUnitDisableInventory = function(...)
+function hjapi.DzUnitDisableInventory(...)
     return hjapi.exec("DzUnitDisableInventory", ...)
 end
 
-hjapi.DzUnitLearningSkill = function(...)
+function hjapi.DzUnitLearningSkill(...)
     return hjapi.exec("DzUnitLearningSkill", ...)
 end
 
-hjapi.DzUnitSilence = function(...)
+function hjapi.DzUnitSilence(...)
     return hjapi.exec("DzUnitSilence", ...)
 end
 
-hjapi.EXBlendButtonIcon = function(...)
+function hjapi.EXBlendButtonIcon(...)
     return hjapi.exec("EXBlendButtonIcon", ...)
 end
 
-hjapi.EXDclareButtonIcon = function(...)
+function hjapi.EXDclareButtonIcon(...)
     return hjapi.exec("EXDclareButtonIcon", ...)
 end
 
-hjapi.EXDisplayChat = function(...)
+function hjapi.EXDisplayChat(...)
     return hjapi.exec("EXDisplayChat", ...)
 end
 
@@ -1792,7 +1332,7 @@ end
 --- 重置 effect
 --- 清空所有的旋转和缩放，重置为初始状态
 ---@param effect userdata
-hjapi.EXEffectMatReset = function(effect)
+function hjapi.EXEffectMatReset(effect)
     return hjapi.exec("EXEffectMatReset", effect)
 end
 
@@ -1801,7 +1341,7 @@ end
 --- 多次调用，效果会叠加，不想叠加需要先重置为初始状态
 ---@param effect userdata
 ---@param angle number float(5)
-hjapi.EXEffectMatRotateX = function(effect, angle)
+function hjapi.EXEffectMatRotateX(effect, angle)
     return hjapi.exec("EXEffectMatRotateX", effect, angle)
 end
 
@@ -1810,7 +1350,7 @@ end
 --- 多次调用，效果会叠加，不想叠加需要先重置为初始状态
 ---@param effect userdata
 ---@param angle number float(5)
-hjapi.EXEffectMatRotateY = function(effect, angle)
+function hjapi.EXEffectMatRotateY(effect, angle)
     return hjapi.exec("EXEffectMatRotateY", effect, angle)
 end
 
@@ -1819,7 +1359,7 @@ end
 --- 多次调用，效果会叠加，不想叠加需要先重置为初始状态
 ---@param effect userdata
 ---@param angle number float(5)
-hjapi.EXEffectMatRotateZ = function(effect, angle)
+function hjapi.EXEffectMatRotateZ(effect, angle)
     return hjapi.exec("EXEffectMatRotateZ", effect, angle)
 end
 
@@ -1830,12 +1370,12 @@ end
 ---@param x number float(5)
 ---@param y number float(5)
 ---@param z number float(5)
-hjapi.EXEffectMatScale = function(effect, x, y, z)
+function hjapi.EXEffectMatScale(effect, x, y, z)
     return hjapi.exec("EXEffectMatScale", effect, x, y, z)
 end
 
 ---@param script string
-hjapi.EXExecuteScript = function(script)
+function hjapi.EXExecuteScript(script)
     return hjapi.exec("EXExecuteScript", script)
 end
 
@@ -1843,7 +1383,7 @@ end
 ---@param level number integer
 ---@param dataType number integer
 ---@return number integer
-hjapi.EXGetAbilityDataInteger = function(abil, level, dataType)
+function hjapi.EXGetAbilityDataInteger(abil, level, dataType)
     return hjapi.exec("EXGetAbilityDataInteger", abil, level, dataType)
 end
 
@@ -1851,7 +1391,7 @@ end
 ---@param level number integer
 ---@param dataType number integer
 ---@return number float
-hjapi.EXGetAbilityDataReal = function(abil, level, dataType)
+function hjapi.EXGetAbilityDataReal(abil, level, dataType)
     return hjapi.exec("EXGetAbilityDataReal", abil, level, dataType)
 end
 
@@ -1859,86 +1399,86 @@ end
 ---@param level number integer
 ---@param dataType number integer
 ---@return string
-hjapi.EXGetAbilityDataString = function(abil, level, dataType)
+function hjapi.EXGetAbilityDataString(abil, level, dataType)
     return hjapi.exec("EXGetAbilityDataString", abil, level, dataType)
 end
 
 ---@param abil userdata ability
 ---@return number integer
-hjapi.EXGetAbilityId = function(abil)
+function hjapi.EXGetAbilityId(abil)
     return hjapi.exec("EXGetAbilityId", abil)
 end
 
 ---@param abil userdata ability
 ---@param stateType number integer
 ---@return number float
-hjapi.EXGetAbilityState = function(abil, stateType)
+function hjapi.EXGetAbilityState(abil, stateType)
     return hjapi.exec("EXGetAbilityState", abil, stateType)
 end
 
-hjapi.EXGetAbilityString = function(...)
+function hjapi.EXGetAbilityString(...)
     return hjapi.exec("EXGetAbilityString", ...)
 end
 
 ---@param buffCode number integer
 ---@param dataType number integer
 ---@return string
-hjapi.EXGetBuffDataString = function(buffCode, dataType)
+function hjapi.EXGetBuffDataString(buffCode, dataType)
     return hjapi.exec("EXGetBuffDataString", buffCode, dataType)
 end
 
 --- 获取特效大小
 ---@param effect userdata
 ---@return number float
-hjapi.EXGetEffectSize = function(effect)
+function hjapi.EXGetEffectSize(effect)
     return hjapi.exec("EXGetEffectSize", effect)
 end
 
 --- 获取特效X轴坐标
 ---@param effect userdata
 ---@return number float
-hjapi.EXGetEffectX = function(effect)
+function hjapi.EXGetEffectX(effect)
     return hjapi.exec("EXGetEffectX", effect)
 end
 
 --- 获取特效Y轴坐标
 ---@param effect userdata
 ---@return number float
-hjapi.EXGetEffectY = function(effect)
+function hjapi.EXGetEffectY(effect)
     return hjapi.exec("EXGetEffectY", effect)
 end
 
 --- 获取特效Z轴坐标
 ---@param effect userdata
 ---@return number float
-hjapi.EXGetEffectZ = function(effect)
+function hjapi.EXGetEffectZ(effect)
     return hjapi.exec("EXGetEffectZ", effect)
 end
 
 ---@param eddType number integer
 ---@return number integer
-hjapi.EXGetEventDamageData = function(eddType)
+function hjapi.EXGetEventDamageData(eddType)
     return hjapi.exec("EXGetEventDamageData", eddType)
 end
 
 --- 是物理伤害
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@return boolean
-hjapi.isEventPhysicalDamage = function()
+function hjapi.isEventPhysicalDamage()
     return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_PHYSICAL)
 end
 
 --- 是攻击伤害
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@return boolean
-hjapi.isEventAttackDamage = function()
+function hjapi.isEventAttackDamage()
     return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_ATTACK)
 end
 
 --- 是远程伤害
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@return boolean
-hjapi.isEventRangedDamage = function()
+function hjapi.isEventRangedDamage()
     return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_RANGED)
 end
 
@@ -1946,7 +1486,7 @@ end
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@param damageType userdata 参考 blizzard:^DAMAGE_TYPE
 ---@return boolean
-hjapi.isEventDamageType = function(damageType)
+function hjapi.isEventDamageType(damageType)
     return damageType == cj.ConvertDamageType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_DAMAGE_TYPE))
 end
 
@@ -1954,7 +1494,7 @@ end
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@param weaponType userdata 参考 blizzard:^WEAPON_TYPE
 ---@return boolean
-hjapi.isEventWeaponType = function(weaponType)
+function hjapi.isEventWeaponType(weaponType)
     return weaponType == cj.ConvertWeaponType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_WEAPON_TYPE))
 end
 
@@ -1962,20 +1502,20 @@ end
 --- 响应'受到伤害'单位事件,不能用在等待之后
 ---@param attackType userdata 参考 blizzard:^ATTACK_TYPE
 ---@return boolean
-hjapi.isEventAttackType = function(attackType)
+function hjapi.isEventAttackType(attackType)
     return attackType == cj.ConvertAttackType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_ATTACK_TYPE))
 end
 
 ---@param itemCode number integer
 ---@param dataType number integer
 ---@return string
-hjapi.EXGetItemDataString = function(itemCode, dataType)
+function hjapi.EXGetItemDataString(itemCode, dataType)
     return hjapi.exec("EXGetItemDataString", itemCode, dataType)
 end
 
 ---@param whichUnit userdata
 ---@param abilityID number string|integer
-hjapi.EXGetUnitAbility = function(whichUnit, abilityID)
+function hjapi.EXGetUnitAbility(whichUnit, abilityID)
     if (type(abilityID) == "string") then
         abilityID = c2i(abilityID)
     end
@@ -1984,90 +1524,90 @@ end
 
 ---@param whichUnit userdata
 ---@param index number integer
-hjapi.EXGetUnitAbilityByIndex = function(whichUnit, index)
+function hjapi.EXGetUnitAbilityByIndex(whichUnit, index)
     return hjapi.exec("EXGetUnitAbilityByIndex", whichUnit, index)
 end
 
-hjapi.EXGetUnitArrayString = function(...)
+function hjapi.EXGetUnitArrayString(...)
     return hjapi.exec("EXGetUnitArrayString", ...)
 end
 
-hjapi.EXGetUnitInteger = function(...)
+function hjapi.EXGetUnitInteger(...)
     return hjapi.exec("EXGetUnitInteger", ...)
 end
 
-hjapi.EXGetUnitReal = function(...)
+function hjapi.EXGetUnitReal(...)
     return hjapi.exec("EXGetUnitReal", ...)
 end
 
-hjapi.EXGetUnitString = function(...)
+function hjapi.EXGetUnitString(...)
     return hjapi.exec("EXGetUnitString", ...)
 end
 
 ---@param whichUnit userdata
 ---@param enable boolean
-hjapi.EXPauseUnit = function(whichUnit, enable)
+function hjapi.EXPauseUnit(whichUnit, enable)
     return hjapi.exec("EXPauseUnit", whichUnit, enable)
 end
 
 --- 单位添加晕眩
 ---@param whichUnit userdata
-hjapi.UnitAddSwim = function(whichUnit)
+function hjapi.UnitAddSwim(whichUnit)
     return hjapi.EXPauseUnit(whichUnit, true)
 end
 
 --- 单位移除晕眩
 --- 别用来移风暴之锤之类的晕眩。因为它只会移除晕眩并不会移除晕眩的buff
 ---@param whichUnit userdata
-hjapi.UnitRemoveSwim = function(whichUnit)
+function hjapi.UnitRemoveSwim(whichUnit)
     return hjapi.EXPauseUnit(whichUnit, false)
 end
 
-hjapi.EXSetAbilityAEmeDataA = function(...)
+function hjapi.EXSetAbilityAEmeDataA(...)
     return hjapi.exec("EXSetAbilityAEmeDataA", ...)
 end
 
-hjapi.EXSetAbilityDataInteger = function(...)
+function hjapi.EXSetAbilityDataInteger(...)
     return hjapi.exec("EXSetAbilityDataInteger", ...)
 end
 
-hjapi.EXSetAbilityDataReal = function(...)
+function hjapi.EXSetAbilityDataReal(...)
     return hjapi.exec("EXSetAbilityDataReal", ...)
 end
 
-hjapi.EXSetAbilityDataString = function(...)
+function hjapi.EXSetAbilityDataString(...)
     return hjapi.exec("EXSetAbilityDataString", ...)
 end
 
 ---@param ability userdata
 ---@param stateType number integer
 ---@param value number floor(3)
-hjapi.EXSetAbilityState = function(ability, stateType, value)
+function hjapi.EXSetAbilityState(ability, stateType, value)
     return hjapi.exec("EXSetAbilityState", ability, stateType, value)
 end
 
-hjapi.EXSetAbilityString = function(...)
+function hjapi.EXSetAbilityString(...)
     return hjapi.exec("EXSetAbilityString", ...)
 end
 
 ---@param buffCode number integer
 ---@param dataType number integer
 ---@param value string
-hjapi.EXSetBuffDataString = function(buffCode, dataType, value)
+function hjapi.EXSetBuffDataString(buffCode, dataType, value)
     return hjapi.exec("EXSetBuffDataString", buffCode, dataType, value)
 end
 
 --- 设置特效大小
 ---@param e userdata
 ---@param size number float(3)
-hjapi.EXSetEffectSize = function(e, size)
+function hjapi.EXSetEffectSize(e, size)
     return hjapi.exec("EXSetEffectSize", e, size)
 end
 
 --- 设置特效动画速度
 ---@param e userdata
 ---@param speed number float(3)
-hjapi.EXSetEffectSpeed = function(e, speed)
+function hjapi.EXSetEffectSpeed(e, speed)
     return hjapi.exec("EXSetEffectSpeed", e, speed)
 end
 
@@ -2075,20 +1615,20 @@ end
 ---@param e userdata
 ---@param x number float(3)
 ---@param y number float(3)
-hjapi.EXSetEffectXY = function(e, x, y)
+function hjapi.EXSetEffectXY(e, x, y)
     return hjapi.exec("EXSetEffectXY", e, x, y)
 end
 
 ---设置特效高度
 ---@param e userdata
 ---@param z number float(3)
-hjapi.EXSetEffectZ = function(e, z)
+function hjapi.EXSetEffectZ(e, z)
     return hjapi.exec("EXSetEffectZ", e, z)
 end
 
 ---@param amount number float(3)
 ---@return boolean
-hjapi.EXSetEventDamage = function(amount)
+function hjapi.EXSetEventDamage(amount)
     return hjapi.exec("EXSetEventDamage", amount)
 end
 
@@ -2096,11 +1636,11 @@ end
 ---@param dataType number integer
 ---@param value string
 ---@return boolean
-hjapi.EXSetItemDataString = function(itemCode, dataType, value)
+function hjapi.EXSetItemDataString(itemCode, dataType, value)
     return hjapi.exec("EXSetItemDataString", itemCode, dataType, value)
 end
 
-hjapi.EXSetUnitArrayString = function(...)
+function hjapi.EXSetUnitArrayString(...)
     return hjapi.exec("EXSetUnitArrayString", ...)
 end
 
@@ -2109,7 +1649,7 @@ end
 ---@param enable boolean
 ---@param u userdata
 ---@param t number integer 碰撞类型，参考blizzard:^COLLISION_TYPE
-hjapi.EXSetUnitCollisionType = function(enable, u, t)
+function hjapi.EXSetUnitCollisionType(enable, u, t)
     return hjapi.exec("EXSetUnitCollisionType", enable, u, t)
 end
 
@@ -2117,39 +1657,39 @@ end
 --- 立即转身
 ---@param u userdata
 ---@param angle number float(2)
-hjapi.EXSetUnitFacing = function(u, angle)
+function hjapi.EXSetUnitFacing(u, angle)
     return hjapi.exec("EXSetUnitFacing", u, angle)
 end
 
-hjapi.EXSetUnitInteger = function(...)
+function hjapi.EXSetUnitInteger(...)
     return hjapi.exec("EXSetUnitInteger", ...)
 end
 
 --- 设置单位的移动类型
 ---@param u userdata
 ---@param t number integer 移动类型，参考blizzard:^MOVE_TYPE
-hjapi.EXSetUnitMoveType = function(u, t)
+function hjapi.EXSetUnitMoveType(u, t)
     return hjapi.exec("EXSetUnitMoveType", u, t)
 end
 
-hjapi.EXSetUnitReal = function(...)
+function hjapi.EXSetUnitReal(...)
     return hjapi.exec("EXSetUnitReal", ...)
 end
 
-hjapi.EXSetUnitString = function(...)
+function hjapi.EXSetUnitString(...)
     return hjapi.exec("EXSetUnitString", ...)
 end
 
 --- 伤害值
 ---@return number
-hjapi.GetEventDamage = function()
+function hjapi.GetEventDamage()
     return hjapi.exec("GetEventDamage", nil)
 end
 
 ---@param whichUnit userdata
 ---@param state userdata unitstate
 ---@return number
-hjapi.GetUnitState = function(whichUnit, state)
+function hjapi.GetUnitState(whichUnit, state)
     return hjapi.exec("GetUnitState", whichUnit, state)
 end
 
@@ -2162,7 +1702,7 @@ end
 ---@param param5 number integer
 ---@param param6 number integer
 ---@return boolean
-hjapi.RequestExtraBooleanData = function(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
+function hjapi.RequestExtraBooleanData(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
     return hjapi.exec("RequestExtraBooleanData", dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
 end
 
@@ -2175,7 +1715,7 @@ end
 ---@param param5 number integer
 ---@param param6 number integer
 ---@return number integer
-hjapi.RequestExtraIntegerData = function(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
+function hjapi.RequestExtraIntegerData(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
     return hjapi.exec("RequestExtraIntegerData", dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
 end
 
@@ -2188,7 +1728,7 @@ end
 ---@param param5 number integer
 ---@param param6 number integer
 ---@return number
-hjapi.RequestExtraRealData = function(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
+function hjapi.RequestExtraRealData(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
     return hjapi.exec("RequestExtraRealData", dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
 end
 
@@ -2201,7 +1741,7 @@ end
 ---@param param5 number integer
 ---@param param6 number integer
 ---@return string
-hjapi.RequestExtraStringData = function(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
+function hjapi.RequestExtraStringData(dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
     return hjapi.exec("RequestExtraStringData", dataType, whichPlayer, param1, param2, param3, param4, param5, param6)
 end
 
@@ -2209,7 +1749,7 @@ end
 ---@param whichUnit userdata
 ---@param state userdata unitstate
 ---@param value number
-hjapi.SetUnitState = function(whichUnit, state, value)
+function hjapi.SetUnitState(whichUnit, state, value)
     hjapi.exec("SetUnitState", whichUnit, state, value)
     if (whichUnit ~= nil and state == UNIT_STATE_ATTACK_WHITE or state == UNIT_STATE_DEFEND_WHITE) then
         cj.UnitAddAbility(whichUnit, HL_ID.japi_delay)
@@ -2219,73 +1759,73 @@ end
 
 --- 获取某个坐标的Z轴高度
 ---@type fun(x:number,y:number):number
-hjapi.GetZ = function(x, y)
+function hjapi.Z(x, y)
     if (type(x) == "number" and type(y) == "number") then
         x = math.floor(x)
         y = math.floor(y)
         local k = x .. '_' .. y
-        if (hjapi._cache["GetZ"][k] == nil) then
+        if (hjapi._cache["Z"][k] == nil) then
             local loc = cj.Location(x, y)
             local z = cj.GetLocationZ(loc)
             cj.RemoveLocation(loc)
-            hjapi._cache["GetZ"][k] = z
+            hjapi._cache["Z"][k] = z
         end
-        return hjapi._cache["GetZ"][k]
+        return hjapi._cache["Z"][k]
     end
     return 0
 end
 
 --- X比例 转 像素
 ---@type fun(x:number):number
-hjapi.PX = function(x)
+function hjapi.PX(x)
     return hjapi.DzGetClientWidth() * x / 0.8
 end
 --- Y比例 转 像素
 ---@type fun(y:number):number
-hjapi.PY = function(y)
+function hjapi.PY(y)
     return hjapi.DzGetClientHeight() * y / 0.6
 end
 
 --- X像素 转 比例
 ---@type fun(x:number):number
-hjapi.RX = function(x)
+function hjapi.RX(x)
     return x / hjapi.DzGetClientWidth() * 0.8
 end
 --- Y像素 转 比例
 ---@type fun(y:number):number
-hjapi.RY = function(y)
+function hjapi.RY(y)
     return y / hjapi.DzGetClientHeight() * 0.6
 end
 
 --- 鼠标客户端内X像素
 ---@type fun():number
-hjapi.MousePX = function()
+function hjapi.MousePX()
     return hjapi.DzGetMouseXRelative()
 end
 --- 鼠标客户端内Y像素
 ---@type fun():number
-hjapi.MousePY = function()
+function hjapi.MousePY()
     return hjapi.DzGetClientHeight() - hjapi.DzGetMouseYRelative()
 end
 
 --- 鼠标X像素 转 比例
 ---@type fun():number
-hjapi.MouseRX = function()
+function hjapi.MouseRX()
     return hjapi.RX(hjapi.MousePX())
 end
 --- 鼠标Y像素 转 比例
 ---@type fun():number
-hjapi.MouseRY = function()
+function hjapi.MouseRY()
     return hjapi.RY(hjapi.MousePY())
 end
 
 --- 判断XY是否在客户端内
 ---@type fun(rx:number,ry:number):boolean
-hjapi.InWindow = function(rx, ry)
+function hjapi.InWindow(rx, ry)
     return rx > 0 and rx < 0.8 and ry > 0 and ry < 0.6
 end
 --- 判断鼠标是否在客户端内
 ---@type fun():boolean
-hjapi.InWindowMouse = function()
+function hjapi.InWindowMouse()
     return hjapi.InWindow(hjapi.MouseRX(), hjapi.MouseRY())
 end

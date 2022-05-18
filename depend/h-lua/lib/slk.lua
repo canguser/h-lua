@@ -6,7 +6,7 @@ hslk = {}
 --- 根据名称如对应多个ID，返回table
 ---@param name string
 ---@return string|string[]|nil
-hslk.n2i = function(name)
+function hslk.n2i(name)
     if (type(name) ~= "string") then
         return
     end
@@ -24,7 +24,7 @@ end
 ---@param id string|number
 ---@vararg string 可选，直接获取级层key的值，如 hslk.i2v("H001","slk","Primary") == "STR"
 ---@return table|any
-hslk.i2v = function(id, ...)
+function hslk.i2v(id, ...)
     if (id == nil) then
         return
     end
@@ -59,7 +59,7 @@ end
 ---@param name string
 ---@vararg string 可选，直接获取级层key的值，如 hslk.n2v("天选勇者","slk","Primary") == "STR"
 ---@return table|table[]|any
-hslk.n2v = function(name, ...)
+function hslk.n2v(name, ...)
     local id = hslk.n2i(name)
     if (type(id) == "string") then
         return hslk.i2v(id, ...)
@@ -75,7 +75,7 @@ end
 --- 根据 hslk._class 获取ID集
 ---@param class table | {'unit','item'} 输入多个类型自动合并ID
 ---@return table
-hslk.classIds = function(class)
+function hslk.classIds(class)
     if (type(class) == "string") then
         class = { class }
     end
@@ -96,7 +96,7 @@ end
 --- 根据 hslk._type 获取ID集
 ---@param t table | {'hero'} 输入多个类型自动合并ID
 ---@return table
-hslk.typeIds = function(t)
+function hslk.typeIds(t)
     if (type(t) == "string") then
         t = { t }
     end
@@ -119,7 +119,7 @@ end
 ---@param id string|number
 ---@vararg string 可选，直接获取级层key的值，如 hslk.misc("Misc","FadeBuffMinDuration") == "10"
 ---@return table|nil
-hslk.misc = function(...)
+function hslk.misc(...)
     local n = select("#", ...)
     if (n > 0) then
         local val = HSLK_MISC

@@ -6,7 +6,7 @@ hrect = {
 }
 
 ---@private
-hrect.alloc = function(r, name)
+function hrect.alloc(r, name)
     if (hcache.exist(r) == false) then
         hcache.alloc(r)
         hcache.set(r, CONST_CACHE.RECT_NAME, name)
@@ -23,7 +23,7 @@ end
 
 --- 获取地图世界区域
 ---@return userdata
-hrect.world = function()
+function hrect.world()
     if (hrect._world == nil) then
         hrect._world = cj.GetWorldBounds()
         hrect.alloc(hrect._world)
@@ -33,7 +33,7 @@ end
 
 --- 获取地图镜头区域
 ---@return userdata
-hrect.camera = function()
+function hrect.camera()
     if (hrect._camera == nil) then
         hrect._camera = cj.Rect(cj.GetCameraBoundMinX(), cj.GetCameraBoundMinY(), cj.GetCameraBoundMaxX(), cj.GetCameraBoundMaxY())
         hrect.alloc(hrect._camera)
@@ -43,7 +43,7 @@ end
 
 --- 获取地图可玩区域
 ---@return userdata
-hrect.playable = function()
+function hrect.playable()
     if (hrect._playable == nil) then
         hrect._playable = cj.Rect(
             cj.GetCameraBoundMinX() - cj.GetCameraMargin(CAMERA_MARGIN_LEFT),
@@ -63,7 +63,7 @@ end
 ---@param h number
 ---@param name string
 ---@return userdata
-hrect.create = function(x, y, w, h, name)
+function hrect.create(x, y, w, h, name)
     local minX = x - (w * 0.5)
     local minY = y - (h * 0.5)
     local maxX = x + (w * 0.5)
@@ -76,7 +76,7 @@ end
 --- 获取区域名称
 ---@param whichRect userdata
 ---@return string
-hrect.getName = function(whichRect)
+function hrect.getName(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_NAME, '')
 end
@@ -84,7 +84,7 @@ end
 --- 获取区域中心坐标x
 ---@param whichRect userdata
 ---@return number
-hrect.getX = function(whichRect)
+function hrect.getX(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_X, 0)
 end
@@ -92,7 +92,7 @@ end
 --- 获取区域中心坐标y
 ---@param whichRect userdata
 ---@return number
-hrect.getY = function(whichRect)
+function hrect.getY(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_Y, 0)
 end
@@ -100,7 +100,7 @@ end
 --- 获取区域的长
 ---@param whichRect userdata
 ---@return number
-hrect.getWidth = function(whichRect)
+function hrect.getWidth(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_WIDTH, 0)
 end
@@ -108,7 +108,7 @@ end
 --- 获取区域的宽
 ---@param whichRect userdata
 ---@return number
-hrect.getHeight = function(whichRect)
+function hrect.getHeight(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_HEIGHT, 0)
 end
@@ -116,7 +116,7 @@ end
 --- 获取区域的起点坐标x(左下角)
 ---@param whichRect userdata
 ---@return number
-hrect.getMinX = function(whichRect)
+function hrect.getMinX(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_X_MIN, 0)
 end
@@ -124,7 +124,7 @@ end
 --- 获取区域的起点坐标y(左下角)
 ---@param whichRect userdata
 ---@return number
-hrect.getMinY = function(whichRect)
+function hrect.getMinY(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_Y_MIN, 0)
 end
@@ -132,7 +132,7 @@ end
 --- 获取区域的结束坐标x(右上角)
 ---@param whichRect userdata
 ---@return number
-hrect.getMaxX = function(whichRect)
+function hrect.getMaxX(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_X_MAX, 0)
 end
@@ -140,7 +140,7 @@ end
 --- 获取区域的结束坐标y(右上角)
 ---@param whichRect userdata
 ---@return number
-hrect.getMaxY = function(whichRect)
+function hrect.getMaxY(whichRect)
     hrect.alloc(whichRect)
     return hcache.get(whichRect, CONST_CACHE.RECT_Y_MAX, 0)
 end
@@ -148,7 +148,7 @@ end
 --- 删除区域
 ---@param whichRect userdata
 ---@param delay number|nil 延时
-hrect.del = function(whichRect, delay)
+function hrect.destroy(whichRect, delay)
     delay = delay or 0
     if (delay == nil or delay <= 0) then
         hevent.free(whichRect)
@@ -178,7 +178,7 @@ end
     }
 ]]
 ---@param options pilotRectLock
-hrect.lock = function(options)
+function hrect.lock(options)
     options.during = options.during or 0
     if (options.during <= 0 or (options.lockRect == nil and (options.width <= 0 or options.height <= 0))) then
         return
@@ -198,7 +198,7 @@ hrect.lock = function(options)
         inc = inc + 1
         if (inc > (options.during / 0.10)) then
             t.destroy()
-            hgroup.clear(lockGroup, true, false)
+            hgroup.clear(lockGroup, false)
             return
         end
         local x = options.lockX
@@ -244,12 +244,12 @@ hrect.lock = function(options)
             local yy = hunit.y(u)
             if (options.type == "square") then
                 if (his.borderRect(lockRect, xx, yy) == true) then
-                    deg = math.getDegBetweenXY(x, y, xx, yy)
+                    deg = math.angle(x, y, xx, yy)
                     distance = math.getMaxDistanceInRect(w, h, deg)
                 end
             elseif (options.type == "circle") then
-                if (math.getDistanceBetweenXY(x, y, xx, yy) > math.min(w / 2, h / 2)) then
-                    deg = math.getDegBetweenXY(x, y, xx, yy)
+                if (math.distance(x, y, xx, yy) > math.min(w / 2, h / 2)) then
+                    deg = math.angle(x, y, xx, yy)
                     distance = math.min(w / 2, h / 2)
                 end
             end
@@ -260,7 +260,7 @@ hrect.lock = function(options)
             end
         end)
         if (lockRect ~= nil) then
-            hrect.del(lockRect)
+            hrect.destroy(lockRect)
         end
     end)
 end
