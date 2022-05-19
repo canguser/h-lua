@@ -291,7 +291,7 @@ function hskill.damage(options)
             heffect.xyz(options.effect, hunit.x(options.targetUnit), hunit.y(options.targetUnit), hunit.z(options.targetUnit), 0)
         end
         -- @触发伤害事件
-        if (sourceUnit ~= nil) then
+        if (options.sourceUnit ~= nil) then
             hevent.trigger(options.sourceUnit, CONST_EVENT.damage, {
                 triggerUnit = options.sourceUnit,
                 targetUnit = options.targetUnit,

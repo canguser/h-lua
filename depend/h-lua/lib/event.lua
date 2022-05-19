@@ -264,7 +264,6 @@ function hevent.trigger(handle, key, triggerData)
         end)
     end
     -- 判断事件注册执行与否
-    -- 判断事件注册执行与否
     local reg = hevent.data(handle, key)
     if (reg ~= nil) then
         if (reg.count() > 0) then

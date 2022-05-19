@@ -337,6 +337,7 @@ function hattributeSetter.init(whichUnit)
         defend_white = hjapi.GetUnitState(whichUnit, UNIT_STATE_DEFEND_WHITE),
         attack_range = 100,
         attack_range_acquire = 100,
+        attack_sides = hunit.getAttackSides1(whichUnit),
     }
     if (uSlk.dmgplus1) then
         attribute.attack_white = math.floor(uSlk.dmgplus1)
@@ -352,6 +353,9 @@ function hattributeSetter.init(whichUnit)
     elseif ((uSlk.weapsOn == "2") and uSlk.cool2) then
         attribute.attack_space_origin = math.round(uSlk.cool2)
     end
+    attribute.attack = attribute.attack_white
+    attribute.defend = attribute.defend_white
+    attribute.attack_space = attribute.attack_space_origin
     for _, v in ipairs(CONST_ATTR_CONF) do
         if (attribute[v[1]] == nil) then
             if (type(v[3]) == "table") then
@@ -479,12 +483,15 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
             elseif (attr == "attack_space_origin") then
                 -- 攻击间隔[JAPI*]
                 hattributeSetter.setUnitAttackSpace(whichUnit, futureVal)
+                params.attack_space = math.round(math.max(0, params.attack_space_origin) / (1 + math.min(math.max(params.attack_speed, -80), 400) * 0.01))
             elseif (attr == "attack_white") then
                 -- 白字攻击[JAPI+]
                 hattributeSetter.setUnitAttackWhite(whichUnit, futureVal, diff)
+                params.attack = (params.attack_white or 0) + (params.attack_green or 0)
             elseif (attr == "attack_green") then
                 -- 绿字攻击
                 hattributeSetter.setUnitAttackGreen(whichUnit, futureVal)
+                params.attack = (params.attack_white or 0) + (params.attack_green or 0)
             elseif (attr == "attack_range") then
                 -- 攻击范围[JAPI]
                 if (true == hattributeSetter.setUnitAttackRange(whichUnit, futureVal)) then
@@ -500,15 +507,20 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
             elseif (attr == "attack_speed") then
                 -- 攻击速度[JAPI+]
                 hattributeSetter.setUnitAttackSpeed(whichUnit, futureVal)
+                params.attack_space = math.round(math.max(0, params.attack_space_origin) / (1 + math.min(math.max(params.attack_speed, -80), 400) * 0.01))
             elseif (attr == "defend_white") then
                 -- 白字护甲[JAPI*]
                 hattributeSetter.setUnitDefendWhite(whichUnit, futureVal)
+                params.defend = math.floor((params.defend_white or 0) + (params.defend_green or 0))
             elseif (attr == "defend_green") then
                 -- 绿字护甲
                 hattributeSetter.setUnitDefendGreen(whichUnit, futureVal)
+                params.defend = math.floor((params.defend_white or 0) + (params.defend_green or 0))
             elseif (his.hero(whichUnit) and table.includes({ "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green" }, attr)) then
                 -- 白/绿字力敏智
                 hattributeSetter.setUnitThree(whichUnit, futureVal, attr)
+                local t = string.sub(attr, 1, 3)
+                params[t] = (params[t .. "_white"] or 0) + (params[t .. "_green"] or 0)
             elseif (attr == "life_back" or attr == "mana_back") then
                 -- 生命,魔法恢复
                 if (math.abs(futureVal) > hattribute.CURE_FLOOR) then

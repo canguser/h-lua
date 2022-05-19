@@ -23,13 +23,13 @@ function hunit.getNSight(uOrId)
 end
 
 --- 获取单位的攻击1浮动
---- 这是根据slk计算的浮动攻击，rand每次获取到的值可能不一样
+--- 这是根据slk计算的浮动攻击上下限
 ---@param uOrId userdata|string|number
 ---@return number[2]
 function hunit.getAttackSides1(uOrId)
     local s = hslk.i2v(hunit.getId(uOrId), "slk")
     if (s == nil) then
-        return 0
+        return { 0, 0 }
     end
     local sides1 = s.sides1 or 1
     local dice1 = s.dice1 or 0
@@ -38,11 +38,7 @@ function hunit.getAttackSides1(uOrId)
     if (sides1 < 1) then
         sides1 = 1
     end
-    return {
-        min = dice1 * 1,
-        max = dice1 * sides1,
-        rand = dice1 * math.random(1, sides1),
-    }
+    return { dice1 * 1, dice1 * sides1 }
 end
 
 --- 获取单位的最大生命值
@@ -448,6 +444,9 @@ function hunit.embed(u, options)
             str_white = "=" .. cj.GetHeroStr(u, false),
             agi_white = "=" .. cj.GetHeroAgi(u, false),
             int_white = "=" .. cj.GetHeroInt(u, false),
+            str = "=" .. cj.GetHeroStr(u, false),
+            agi = "=" .. cj.GetHeroAgi(u, false),
+            int = "=" .. cj.GetHeroInt(u, false),
         })
     end
     -- 属性 attr
