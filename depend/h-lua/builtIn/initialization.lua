@@ -44,9 +44,6 @@ for i = 1, bj_MAX_PLAYER_SLOTS, 1 do
         and (cj.GetPlayerSlotState(hplayer.players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
         --
         hplayer.qty_current = hplayer.qty_current + 1
-
-        -- 默认开启自动换木
-        hplayer.setIsAutoConvert(hplayer.players[i], true)
         hcache.set(hplayer.players[i], CONST_CACHE.PLAYER_STATUS, hplayer.player_status.gaming)
     else
         hcache.set(hplayer.players[i], CONST_CACHE.PLAYER_STATUS, hplayer.player_status.none)
@@ -130,6 +127,17 @@ for i = 1, bj_MAX_PLAYER_SLOTS, 1 do
         end)
         hevent.pool(hevent_binder.player.chat, function(tgr)
             cj.TriggerRegisterPlayerChatEvent(tgr, hplayer.players[i], "", false)
+            hevent_chat_pattern[i] = Array()
+            hevent.register(hplayer.players[i], CONST_EVENT.chat, function(evtData)
+                ---@type Array
+                hevent_chat_pattern[hplayer.index(evtData.triggerPlayer)].forEach(function(p, c)
+                    local m = string.match(evtData.chatString, p)
+                    if (m ~= nil) then
+                        evtData.matchedString = m
+                        c(evtData)
+                    end
+                end)
+            end)
         end)
         hevent.pool(hevent_binder.player.selection, function(tgr)
             cj.TriggerRegisterPlayerUnitEvent(tgr, hplayer.players[i], EVENT_PLAYER_UNIT_SELECTED, nil)

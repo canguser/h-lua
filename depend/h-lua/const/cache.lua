@@ -28,7 +28,6 @@ CONST_CACHE = {
     PLAYER_DAMAGE = "c-p-damage",
     PLAYER_BE_DAMAGE = "c-p-be-damage",
     PLAYER_KILL = "c-p-kill",
-    PLAYER_IS_AUTO_CONVERT = "c-p-is-auto-convert",
     PLAYER_IS_SHOCKING = "c-p-is-shocking",
     PLAYER_BGM_CURRENT = "c-p-bgm-current",
     PLAYER_BGM_DELAY_TIMER = "c-p-bgm-delay-t",

@@ -267,19 +267,6 @@ function hplayer.victory(whichPlayer, tips)
     end
 end
 
---- 玩家设置是否自动将{hAwardConvertRatio}黄金换1木头
----@param whichPlayer userdata
----@param b boolean
-function hplayer.setIsAutoConvert(whichPlayer, b)
-    hcache.set(whichPlayer, CONST_CACHE.PLAYER_IS_AUTO_CONVERT, b)
-end
---- 获取玩家是否自动将{hAwardConvertRatio}黄金换1木头
----@param whichPlayer userdata
----@return boolean
-function hplayer.getIsAutoConvert(whichPlayer)
-    return hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_AUTO_CONVERT, false)
-end
-
 --- 设置玩家镜头是否在震动
 ---@private
 ---@param whichPlayer userdata
@@ -287,6 +274,7 @@ end
 function hplayer.setIsShocking(whichPlayer, b)
     hcache.set(whichPlayer, CONST_CACHE.PLAYER_IS_SHOCKING, b)
 end
+
 --- 获取玩家镜头是否在震动
 ---@param whichPlayer userdata
 ---@return boolean
@@ -575,6 +563,7 @@ end
 function hplayer.getGold(whichPlayer)
     return cj.GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD)
 end
+
 --- 设置玩家实时金钱
 ---@param whichPlayer userdata
 ---@param gold number
@@ -590,26 +579,9 @@ function hplayer.setGold(whichPlayer, gold, u)
         type = "gold",
         value = gold - hplayer.getGold(whichPlayer),
     })
-    -- 满 100W 调用自动换算（至于换不换算，看玩家有没有开转换）
     local max = 1000000
     if (gold > max) then
-        local curLumber = hplayer.getLumber(whichPlayer)
-        if (hplayer.getIsAutoConvert(whichPlayer) and curLumber < max) then
-            local playerConvertRatio = hplayer.getConvertRatio()
-            local goldRemain = math.fmod(gold, playerConvertRatio)
-            local exceedLumber = math.floor((gold - goldRemain) / playerConvertRatio)
-            if (exceedLumber > 0) then
-                if (exceedLumber + curLumber > max) then
-                    goldRemain = goldRemain + playerConvertRatio * (exceedLumber + curLumber - max)
-                    exceedLumber = max - curLumber
-                end
-                hplayer.adjustPlayerState(exceedLumber, whichPlayer, PLAYER_STATE_RESOURCE_LUMBER)
-                hplayer.adjustLumber(whichPlayer)
-                gold = goldRemain
-            else
-                gold = max
-            end
-        end
+        gold = max
     end
     hplayer.setPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD, gold)
     hplayer.adjustGold(whichPlayer)
@@ -626,6 +598,7 @@ function hplayer.addGold(whichPlayer, gold, u)
     gold = math.ceil(gold * hplayer.getGoldRatio(whichPlayer) / 100)
     hplayer.setGold(whichPlayer, hplayer.getGold(whichPlayer) + gold, u)
 end
+
 --- 减少玩家金钱
 ---@param whichPlayer userdata
 ---@param gold number

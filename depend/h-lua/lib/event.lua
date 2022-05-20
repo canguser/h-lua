@@ -1,3 +1,4 @@
+---@class hevent
 hevent = {}
 
 --- 动态事件池
@@ -5,6 +6,9 @@ hevent_pool = {}
 
 hevent_pool_dyn_max = 1000
 hevent_pool_dyn = {}
+
+---@type Array[]
+hevent_chat_pattern = {}
 
 --- 事件反应
 ---@protected
@@ -666,13 +670,14 @@ end
 ---@param callFunc onChat | "function(evtData) end"
 ---@return void
 function hevent.onChat(whichPlayer, pattern, callFunc)
-    hevent.register(whichPlayer, CONST_EVENT.chat, function(evtData)
-        local m = string.match(evtData.chatString, pattern)
-        if (m ~= nil) then
-            evtData.matchedString = m
-            callFunc(evtData)
+    local i = hplayer.index(whichPlayer)
+    if (hevent_chat_pattern[i] ~= nil) then
+        if (type(callFunc) == "function") then
+            hevent_chat_pattern[i].set(pattern, callFunc)
+        else
+            hevent_chat_pattern[i].splice(pattern)
         end
-    end)
+    end
 end
 
 --- 按ESC
