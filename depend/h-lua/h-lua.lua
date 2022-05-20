@@ -4,7 +4,6 @@ require "builtIn.echo"
 require "builtIn.id"
 
 require "lib.slk"
-require "lib.cache"
 require "lib.cmd"
 require "lib.japi"
 require "lib.sync"
