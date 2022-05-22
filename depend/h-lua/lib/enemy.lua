@@ -117,7 +117,8 @@ end
         attr = nil, --自定义属性，可选
     }
 ]]
----@param options pilotEnemyCreate
+---@alias noteEnemyCreate {teamNo,register,registerOrderEvent,id,x,y,height,timeScale,modelScale,red,green,blue,opacity,qty,period,during,facing,facingX,facingY,facingUnit,attackX,attackY,attackUnit,isOpenSlot,isShadow,isUnSelectable,isPause,isInvulnerable,isShareSight,attr}
+---@param options noteEnemyCreate
 ---@return userdata|userdata[] 最后创建单位|单位组
 function henemy.create(options)
     if (#henemy.conf <= 0) then

@@ -270,7 +270,8 @@ end
         during = -1, --持续时间（可选，小于0无限制，如果有whichUnit，此项无效）
     }
 ]]
----@param options pilotItemCreate
+---@alias noteItemCreate {id,charges,whichUnit,x,y,during}
+---@param options noteItemCreate
 ---@return userdata|nil
 function hitem.create(options)
     if (options.id == nil) then

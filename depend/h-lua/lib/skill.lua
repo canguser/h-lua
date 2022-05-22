@@ -184,7 +184,8 @@ end
         effect = string, --特效路径
     }
 ]]
----@param options pilotDamage
+---@alias noteSkillDamage {sourceUnit:userdata,targetUnit:userdata,damage:number,effect:string,damageSrc:string}
+---@param options noteSkillDamage
 function hskill.damage(options)
     options.damage = options.damage or 0
     if (options.damage < 0.125) then

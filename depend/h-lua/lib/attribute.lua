@@ -34,9 +34,10 @@ function hattribute.setRelation(relation)
 end
 
 --- 设置单位属性
+---@alias noteAttr {life,mana,move,defend,defend_white,defend_green,attack_speed,attack_space,attack_space_origin,attack,attack_white,attack_green,attack_range,attack_range_acquire,str,agi,int,str_green,agi_green,int_green,str_white,agi_white,int_white,life_back,mana_back,reborn,swim_oppose,broken_oppose,silent_oppose,unarm_oppose,lightning_chain_oppose,crack_fly_oppose,gold_ratio,lumber_ratio,exp_ratio,sell_ratio}
 ---@param whichUnit userdata
 ---@param during number 0表示无限
----@param data pilotAttr
+---@param data noteAttr
 ---@return nil|table buffKeys，返回buff keys，如果一个buff都没有，返回nil
 function hattribute.set(whichUnit, during, data)
     if (whichUnit == nil) then

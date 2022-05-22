@@ -177,7 +177,8 @@ end
         lockY 锁定某个坐标Y时设置，可选
     }
 ]]
----@param options pilotRectLock
+---@alias noteRectLock {type,during,width,height,lockRect,lockUnit,lockX,lockY}
+---@param options noteRectLock
 function hrect.lock(options)
     options.during = options.during or 0
     if (options.during <= 0 or (options.lockRect == nil and (options.width <= 0 or options.height <= 0))) then

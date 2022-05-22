@@ -29,7 +29,7 @@ end
 ]]
 ---@alias dialogCreateAction fun(action: string):void
 ---@param whichPlayer userdata
----@param options pilotDialogCreate
+---@param options {title:string,buttons:table}
 ---@param action dialogCreateAction | "function(btnValue) end"
 ---@return void
 function hdialog.create(whichPlayer, options, action)

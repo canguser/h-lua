@@ -25,7 +25,8 @@ end
         during = nil, --持续时间，默认为nil，不计时
     }
 ]]
----@param options pilotQuestCreate
+---@alias noteQuestCreate {side:"位置",title:"标题",content:"内容",icon:"图标",during:"持续时间"}
+---@param options noteQuestCreate
 ---@return userdata
 function hquest.create(options)
     local side = options.side or "left"

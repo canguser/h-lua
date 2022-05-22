@@ -42,7 +42,8 @@ end
         during=0, --默认持续时间小于等于0:无限
     }
 ]]
----@param options pilotWeatherCreate
+---@alias noteWeatherCreate {x:number,y:number,w:number,h:number,whichRect:userdata,type:number,during:number}
+---@param options noteWeatherCreate
 ---@return userdata
 function hweather.create(options)
     if (options.whichRect == nil) then
