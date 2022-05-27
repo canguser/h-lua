@@ -46,6 +46,31 @@ function hskill.getName(abilityId)
     return cj.GetObjectName(id)
 end
 
+--- 获取技能等级
+---@param whichUnit userdata
+---@param abilityId number|string
+---@return string
+function hskill.getLevel(whichUnit, abilityId)
+    local id = abilityId
+    if (type(abilityId) == "string") then
+        id = c2i(id)
+    end
+    return cj.GetUnitAbilityLevel(whichUnit, id)
+end
+
+--- 设置技能等级
+---@param whichUnit userdata
+---@param abilityId number|string
+---@param level number
+---@return string
+function hskill.setLevel(whichUnit, abilityId, level)
+    local id = abilityId
+    if (type(abilityId) == "string") then
+        id = c2i(id)
+    end
+    return cj.SetUnitAbilityLevel(whichUnit, id, level)
+end
+
 --- 添加技能
 ---@param whichUnit userdata
 ---@param abilityId string|number

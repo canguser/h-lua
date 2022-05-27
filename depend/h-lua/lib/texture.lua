@@ -43,13 +43,13 @@ function htexture.cinematicFilterGeneric(duration, bmode, tex, red0, green0, blu
 end
 
 --- 创建一个遮罩
----@public
 ---@param path string 贴图路径 512x256 png->blp
 ---@param during number 持续时间,默认3秒
 ---@param whichPlayer userdata|nil 玩家
 ---@param red number 0-255
 ---@param green number 0-255
 ---@param blue number 0-255
+---@return void
 function htexture.mark(path, during, whichPlayer, red, green, blue)
     if (path == nil) then
         return

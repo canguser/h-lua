@@ -530,36 +530,6 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
                 end
             end
         end
-    elseif (valType == "table") then
-        -- table类型只有+-没有别的
-        if (opr == "+") then
-            local _k = string.attrBuffKey(val)
-            if (during > 0) then
-                table.insert(params[attr], { _k = _k, _t = val })
-                htime.setTimeout(during, function()
-                    hattributeSetter.setHandle(whichUnit, attr, "-", val, 0)
-                end)
-            else
-                table.insert(params[attr], { _k = _k, _t = val })
-            end
-        elseif (opr == "-") then
-            local _k = string.attrBuffKey(val)
-            local hasKey = false
-            for k, v in ipairs(params[attr]) do
-                if (v._k == _k) then
-                    table.remove(params[attr], k)
-                    hasKey = true
-                    break
-                end
-            end
-            if (hasKey == true) then
-                if (during > 0) then
-                    htime.setTimeout(during, function()
-                        hattributeSetter.setHandle(whichUnit, attr, "+", val, 0)
-                    end)
-                end
-            end
-        end
     elseif (valType == "string") then
         -- string类型只有+-=
         if (opr == "+") then

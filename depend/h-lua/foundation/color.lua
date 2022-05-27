@@ -1,9 +1,8 @@
 ---@class hcolor
 hcolor = {}
 
----@private
 ---@param str string
----@param color string hex
+---@param color string hex 6位代码
 ---@return string
 function hcolor.hex(str, color)
     if (str == nil or str == '' or color == nil) then
@@ -12,7 +11,6 @@ function hcolor.hex(str, color)
     return "|cff" .. color .. str .. "|r"
 end
 
----@private
 ---@param str string
 ---@param color string|function
 ---@return string
@@ -29,7 +27,6 @@ function hcolor.mixed(str, color)
 end
 
 --- 耀金
----@public
 ---@param str string
 ---@return string
 function hcolor.gold(str)
@@ -37,7 +34,6 @@ function hcolor.gold(str)
 end
 
 --- 纯白
----@public
 ---@param str string
 ---@return string
 function hcolor.white(str)
@@ -45,7 +41,6 @@ function hcolor.white(str)
 end
 
 --- 纯黑
----@public
 ---@param str string
 ---@return string
 function hcolor.black(str)
@@ -53,7 +48,6 @@ function hcolor.black(str)
 end
 
 --- 浅灰
----@public
 ---@param str string
 ---@return string
 function hcolor.grey(str)
@@ -61,7 +55,6 @@ function hcolor.grey(str)
 end
 
 --- 深灰
----@public
 ---@param str string
 ---@return string
 function hcolor.greyDeep(str)
@@ -69,7 +62,6 @@ function hcolor.greyDeep(str)
 end
 
 --- 亮红
----@public
 ---@param str string
 ---@return string
 function hcolor.redLight(str)
@@ -77,7 +69,6 @@ function hcolor.redLight(str)
 end
 
 --- 大红
----@public
 ---@param str string
 ---@return string
 function hcolor.red(str)
@@ -85,7 +76,6 @@ function hcolor.red(str)
 end
 
 --- 浅绿
----@public
 ---@param str string
 ---@return string
 function hcolor.greenLight(str)
@@ -93,7 +83,6 @@ function hcolor.greenLight(str)
 end
 
 --- 深绿
----@public
 ---@param str string
 ---@return string
 function hcolor.green(str)
@@ -101,7 +90,6 @@ function hcolor.green(str)
 end
 
 --- 浅黄
----@public
 ---@param str string
 ---@return string
 function hcolor.yellowLight(str)
@@ -109,7 +97,6 @@ function hcolor.yellowLight(str)
 end
 
 --- 亮黄
----@public
 ---@param str string
 ---@return string
 function hcolor.yellow(str)
@@ -117,7 +104,6 @@ function hcolor.yellow(str)
 end
 
 --- 浅橙
----@public
 ---@param str string
 ---@return string
 function hcolor.orangeLight(str)
@@ -125,7 +111,6 @@ function hcolor.orangeLight(str)
 end
 
 --- 橙色
----@public
 ---@param str string
 ---@return string
 function hcolor.orange(str)
@@ -133,7 +118,6 @@ function hcolor.orange(str)
 end
 
 --- 天空蓝
----@public
 ---@param str string
 ---@return string
 function hcolor.skyLight(str)
@@ -141,7 +125,6 @@ function hcolor.skyLight(str)
 end
 
 --- 青空蓝
----@public
 ---@param str string
 ---@return string
 function hcolor.sky(str)
@@ -149,7 +132,6 @@ function hcolor.sky(str)
 end
 
 --- 浅海蓝
----@public
 ---@param str string
 ---@return string
 function hcolor.seaLight(str)
@@ -157,7 +139,6 @@ function hcolor.seaLight(str)
 end
 
 --- 深海蓝
----@public
 ---@param str string
 ---@return string
 function hcolor.sea(str)
@@ -165,7 +146,6 @@ function hcolor.sea(str)
 end
 
 --- 浅紫
----@public
 ---@param str string
 ---@return string
 function hcolor.purpleLight(str)
@@ -173,7 +153,6 @@ function hcolor.purpleLight(str)
 end
 
 --- 亮紫
----@public
 ---@param str string
 ---@return string
 function hcolor.purple(str)
@@ -191,7 +170,10 @@ end
         {hcolor.purple, "300"}, -- 可使用函数进行颜色设定，自定义函数也可以只要返回string类型即可
     }
 ]]
----@type fun(str:string,containColor:nil|string|function,options:table):string
+---@param str string
+---@param containColor nil|string|function
+---@param options table
+---@return string
 function hcolor.format(str, containColor, options)
     local poses = string.findAllPos(str, '%%s')
     local builder = {}

@@ -116,7 +116,6 @@ end
 
 --- 根据ID获取misc数据（slk-misc.md）
 --- misc一般指平衡常数，可查阅docs/md或编辑器内描述
----@param id string|number
 ---@vararg string 可选，直接获取级层key的值，如 hslk.misc("Misc","FadeBuffMinDuration") == "10"
 ---@return table|nil
 function hslk.misc(...)

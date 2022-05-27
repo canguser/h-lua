@@ -208,17 +208,6 @@ function string.findCount(str, pattern)
     return qty
 end
 
---- 获取属性table生成key
----@private
----@param val table
----@return string
-function string.attrBuffKey(val)
-    local ks = {}
-    local key = string.vkey(ks)
-    ks = nil
-    return key
-end
-
 local randChars = {
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",

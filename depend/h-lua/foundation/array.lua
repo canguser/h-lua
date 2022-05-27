@@ -28,12 +28,13 @@ function Array(params)
     end
 
     --- 返回数组中元素的数目
-    ---@return number integer
+    ---@type fun():number integer
     this.count = function()
         return #this.__PROPERTIES__.keys
     end
 
     --- 返回数组中key索引的顺序；没有该key则返回-1
+    ---@type fun(key:string):number
     this.index = function(key)
         local idx = -1
         for ki, k in ipairs(this.__PROPERTIES__.keys) do
@@ -46,6 +47,7 @@ function Array(params)
     end
 
     --- 强行设置数组元素
+    ---@type fun(key:string, value:any):void
     this.set = function(key, value)
         if (this.__PROPERTIES__.values[key] == nil) then
             table.insert(this.__PROPERTIES__.keys, key)
@@ -54,16 +56,19 @@ function Array(params)
     end
 
     --- 根据key获取数组value
+    ---@type fun(key:string):any
     this.get = function(key)
         return this.__PROPERTIES__.values[key]
     end
 
     --- 返回数组中所有的键名
+    ---@type fun():string[]
     this.keys = function()
         return this.__PROPERTIES__.keys
     end
 
     --- 返回数组中所有的值
+    ---@type fun():any[]
     this.values = function()
         local values = {}
         for _, key in ipairs(this.__PROPERTIES__.keys) do
@@ -73,19 +78,21 @@ function Array(params)
     end
 
     --- 检查指定的键名是否存在于数组中
+    ---@type fun(key:string):boolean
     this.keyExists = function(key)
         return key ~= nil and table.includes(this.keys(), key)
     end
 
     --- 检查指定的值是否存在于数组中
+    ---@type fun(value:any):boolean
     this.valueExists = function(value)
         return value ~= nil and table.includes(this.values(), value)
     end
 
-    --- 遍历
-    --- 遍历过程中返回 false 则中断
+    --- 正向遍历
+    --- 过程中返回 false 则中断
     ---@alias noteArrayEach fun(key: "key", value: "value"):void
-    ---@param action noteArrayEach | "function(key,value) end"
+    ---@type fun(action:noteArrayEach | "function(key,value) end"):void
     this.forEach = function(action)
         if (type(action) == "function") then
             local keys = table.clone(this.__PROPERTIES__.keys)
@@ -101,7 +108,8 @@ function Array(params)
     end
 
     --- 反向遍历
-    ---@param action noteArrayEach | "function(key,value) end"
+    --- 过程中返回 false 则中断
+    ---@type fun(action:noteArrayEach | "function(key,value) end"):void
     this.backEach = function(action)
         if (type(action) == "function") then
             local keys = {}
@@ -120,6 +128,7 @@ function Array(params)
     end
 
     --- 将一个元素插入数组的末尾（入栈）
+    --@type fun(action:noteArrayEach | "function(key,value) end"):void
     this.push = function(value, key)
         key = key or ("Ar:" .. (htime.inc or 0) .. string.random(5))
         if (this.__PROPERTIES__.values[key] == nil) then
@@ -129,6 +138,7 @@ function Array(params)
     end
 
     --- 删除数组的最后一个元素（出栈）
+    ---@type fun():void
     this.pop = function()
         local value
         local last = this.count()
@@ -142,6 +152,7 @@ function Array(params)
     end
 
     --- 删除数组中首个元素，并返回被删除元素的值
+    ---@type fun():any
     this.shift = function()
         local value
         if (this.__PROPERTIES__.keys[1]) then
@@ -154,6 +165,7 @@ function Array(params)
     end
 
     --- 在数组开头插入一个元素
+    ---@type fun(value:any,key:string|nil)
     this.unshift = function(value, key)
         local count = this.count()
         if (count <= 0) then
@@ -169,6 +181,7 @@ function Array(params)
     end
 
     --- 从数组中移除key索引的元素，并用新元素value取代它；没有value可替换则为删除
+    ---@type fun(value:any,key:string|nil):any
     this.splice = function(key, value)
         if (key == nil or not this.keyExists(key)) then
             return
@@ -183,7 +196,7 @@ function Array(params)
     end
 
     --- 克隆一个副本
-    ---@return Array
+    ---@type fun():Array
     this.clone = function()
         local copy = Array()
         this.forEach(function(key, value)
@@ -197,7 +210,7 @@ function Array(params)
     end
 
     --- 合并另一个array
-    ---@param arr Array
+    ---@type fun(arr:Array):Array
     this.merge = function(arr)
         if (instanceof(arr, "Array")) then
             arr.forEach(function(key, value)
@@ -224,8 +237,7 @@ function Array(params)
     end
 
     --- 键排序
-    ---@param
-    ---@return Array
+    ---@type fun():Array
     this.sort = function()
         local ks = table.clone(this.__PROPERTIES__.keys)
         table.sort(ks)

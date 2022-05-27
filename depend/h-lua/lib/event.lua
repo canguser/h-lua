@@ -283,7 +283,7 @@ end
 
 
 --- 准备被攻击
---- * 使用默认key default，如有需要请自行直接使用register方法注册
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onBeAttackReadyData {triggerUnit:"被攻击单位",attackUnit:"攻击单位"}
 ---@alias onBeAttackReady fun(evtData: onBeAttackReadyData):void
 ---@param whichUnit userdata
@@ -294,8 +294,9 @@ function hevent.onBeAttackReady(whichUnit, callFunc)
 end
 
 --- 造成攻击
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onAttack fun(evtData: {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onAttackData {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害"}
+---@alias onAttack fun(evtData: onAttackData):void
 ---@param whichUnit userdata
 ---@param callFunc onAttack | "function(evtData) end"
 ---@return void
@@ -304,8 +305,9 @@ function hevent.onAttack(whichUnit, callFunc)
 end
 
 --- 承受攻击
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onBeAttack fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onBeAttackData {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害"}
+---@alias onBeAttack fun(evtData: onBeAttackData):void
 ---@param whichUnit userdata
 ---@param callFunc onBeAttack | "function(evtData) end"
 ---@return void
@@ -314,8 +316,9 @@ function hevent.onBeAttack(whichUnit, callFunc)
 end
 
 --- 学习技能
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSkillStudy fun(evtData: {triggerUnit:"学习单位",learnedSkill:"学习技能ID字符串"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSkillStudyData {triggerUnit:"学习单位",learnedSkill:"学习技能ID字符串"}
+---@alias onSkillStudy fun(evtData: onSkillStudyData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillStudy | "function(evtData) end"
 ---@return void
@@ -324,8 +327,9 @@ function hevent.onSkillStudy(whichUnit, callFunc)
 end
 
 --- 准备施放技能
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSkillReady fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSkillReadyData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
+---@alias onSkillReady fun(evtData: onSkillReadyData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillReady | "function(evtData) end"
 ---@return void
@@ -334,8 +338,9 @@ function hevent.onSkillReady(whichUnit, callFunc)
 end
 
 --- 开始施放技能
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSkillCast fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSkillCastData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
+---@alias onSkillCast fun(evtData: onSkillCastData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillCast | "function(evtData) end"
 ---@return void
@@ -344,8 +349,9 @@ function hevent.onSkillCast(whichUnit, callFunc)
 end
 
 --- 停止施放技能
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSkillStop fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSkillStopData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}
+---@alias onSkillStop fun(evtData: onSkillStopData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillStop | "function(evtData) end"
 ---@return void
@@ -354,7 +360,7 @@ function hevent.onSkillStop(whichUnit, callFunc)
 end
 
 --- 发动技能效果
---- * 使用默认key default，如有需要请自行直接使用register方法注册
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillEffectData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetItem:"获取目标物品",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@alias onSkillEffect fun(evtData: onSkillEffectData):void
 ---@param whichUnit userdata
@@ -365,8 +371,9 @@ function hevent.onSkillEffect(whichUnit, callFunc)
 end
 
 --- 施放技能结束
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSkillFinish fun(evtData: {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSkillFinishData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}
+---@alias onSkillFinish fun(evtData: onSkillFinishData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillFinish | "function(evtData) end"
 ---@return void
@@ -375,8 +382,9 @@ function hevent.onSkillFinish(whichUnit, callFunc)
 end
 
 --- 单位使用物品
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemUsed fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemUsedData {triggerUnit:"触发单位",triggerItem:"触发物品",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
+---@alias onItemUsed fun(evtData: onItemUsedData):void
 ---@param whichUnit userdata
 ---@param callFunc onItemUsed | "function(evtData) end"
 ---@return void
@@ -385,8 +393,9 @@ function hevent.onItemUsed(whichUnit, callFunc)
 end
 
 --- 丢弃(传递)物品
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemDrop fun(evtData: {triggerUnit:"丢弃单位",targetUnit:"获得单位（如果有）",triggerItem:"触发物品"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemDropData {triggerUnit:"丢弃单位",targetUnit:"获得单位（如果有）",triggerItem:"触发物品"}
+---@alias onItemDrop fun(evtData: onItemDropData):void
 ---@param whichUnit userdata
 ---@param callFunc onItemDrop | "function(evtData) end"
 ---@return void
@@ -395,8 +404,9 @@ function hevent.onItemDrop(whichUnit, callFunc)
 end
 
 --- 获得物品
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemGet fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemGetData {triggerUnit:"触发单位",triggerItem:"触发物品"}
+---@alias onItemGet fun(evtData: onItemGetData):void
 ---@param whichUnit userdata
 ---@param callFunc onItemGet | "function(evtData) end"
 ---@return void
@@ -405,8 +415,9 @@ function hevent.onItemGet(whichUnit, callFunc)
 end
 
 --- 抵押物品（玩家把物品扔给商店）
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemPawn fun(evtData: {triggerUnit:"触发单位",soldItem:"抵押物品",buyingUnit:"抵押商店",soldGold:"抵押获得黄金",soldLumber:"抵押获得木头"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemPawnData {triggerUnit:"触发单位",soldItem:"抵押物品",buyingUnit:"抵押商店",soldGold:"抵押获得黄金",soldLumber:"抵押获得木头"}
+---@alias onItemPawn fun(evtData: onItemPawnData):void
 ---@param whichUnit userdata
 ---@param callFunc onItemPawn | "function(evtData) end"
 ---@return void
@@ -415,8 +426,9 @@ function hevent.onItemPawn(whichUnit, callFunc)
 end
 
 --- 出售物品(商店卖给玩家)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemSell fun(evtData: {triggerUnit:"售卖单位",soldItem:"售卖物品",buyingUnit:"购买单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemSellData {triggerUnit:"售卖单位",soldItem:"售卖物品",buyingUnit:"购买单位"}
+---@alias onItemSell fun(evtData: onItemSellData):void
 ---@param whichUnit userdata
 ---@param callFunc onItemSell | "function(evtData) end"
 ---@return void
@@ -425,8 +437,9 @@ function hevent.onItemSell(whichUnit, callFunc)
 end
 
 --- 出售单位(商店卖给玩家)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onUnitSell fun(evtData: {triggerUnit:"商店单位",soldUnit:"被售卖单位",buyingUnit:"购买单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onUnitSellData {triggerUnit:"商店单位",soldUnit:"被售卖单位",buyingUnit:"购买单位"}
+---@alias onUnitSell fun(evtData: onUnitSellData):void
 ---@param whichUnit userdata
 ---@param callFunc onUnitSell | "function(evtData) end"
 ---@return void
@@ -435,8 +448,9 @@ function hevent.onUnitSell(whichUnit, callFunc)
 end
 
 --- 物品被破坏
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onItemDestroy fun(evtData: {triggerUnit:"触发单位",triggerItem:"触发物品"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onItemDestroyData {triggerUnit:"触发单位",triggerItem:"触发物品"}
+---@alias onItemDestroy fun(evtData: onItemDestroyData):void
 ---@param whichItem userdata
 ---@param callFunc onItemDestroy | "function(evtData) end"
 ---@return void
@@ -448,8 +462,9 @@ function hevent.onItemDestroy(whichItem, callFunc)
 end
 
 --- 造成伤害
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onDamage fun(evtData: {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onDamageData {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源"}
+---@alias onDamage fun(evtData: onDamageData):void
 ---@param whichUnit userdata
 ---@param callFunc onDamage | "function(evtData) end"
 ---@return void
@@ -458,7 +473,7 @@ function hevent.onDamage(whichUnit, callFunc)
 end
 
 --- 承受伤害
---- * 使用默认key default，如有需要请自行直接使用register方法注册
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onBeDamageData {triggerUnit:"被伤害单位",sourceUnit:"伤害来自单位",damage:"伤害",damageSrc:"伤害来源"}
 ---@alias onBeDamage fun(evtData: onBeDamageData):void
 ---@param whichUnit userdata
@@ -469,8 +484,9 @@ function hevent.onBeDamage(whichUnit, callFunc)
 end
 
 --- 死亡时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onDead fun(evtData: {triggerUnit:"死亡单位",killUnit:"凶手单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onDeadData {triggerUnit:"死亡单位",killUnit:"凶手单位"}
+---@alias onDead fun(evtData: onDeadData):void
 ---@param whichUnit userdata
 ---@param callFunc onDead | "function(evtData) end"
 ---@return void
@@ -479,8 +495,9 @@ function hevent.onDead(whichUnit, callFunc)
 end
 
 --- 杀敌时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onKill fun(evtData: {triggerUnit:"凶手单位",targetUnit:"死亡单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onKillData {triggerUnit:"凶手单位",targetUnit:"死亡单位"}
+---@alias onKill fun(evtData: onKillData):void
 ---@param whichUnit userdata
 ---@param callFunc onKill | "function(evtData) end"
 ---@return void
@@ -489,8 +506,9 @@ function hevent.onKill(whichUnit, callFunc)
 end
 
 --- 复活时(必须使用 hunit.reborn 方法才能嵌入到事件系统)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onReborn fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onRebornData {triggerUnit:"触发单位"}
+---@alias onReborn fun(evtData: onRebornData):void
 ---@param whichUnit userdata
 ---@param callFunc onReborn | "function(evtData) end"
 ---@return void
@@ -499,7 +517,7 @@ function hevent.onReborn(whichUnit, callFunc)
 end
 
 --- 获得经验时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onExpData {triggerUnit:"触发单位",value:"获取了多少经验值"}
 ---@alias onExp fun(evtData: onExpData):void
 ---@param whichUnit userdata
@@ -510,8 +528,9 @@ function hevent.onExp(whichUnit, callFunc)
 end
 
 --- 提升等级时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onLevelUp fun(evtData: {triggerUnit:"触发单位",value:"获取提升了多少级"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onLevelUpData {triggerUnit:"触发单位",value:"获取提升了多少级"}
+---@alias onLevelUp fun(evtData: onLevelUpData):void
 ---@param whichUnit userdata
 ---@param callFunc onLevelUp | "function(evtData) end"
 ---@return void
@@ -520,8 +539,9 @@ function hevent.onLevelUp(whichUnit, callFunc)
 end
 
 --- 建筑升级开始时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onUpgradeStart fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onUpgradeStartData {triggerUnit:"触发单位"}
+---@alias onUpgradeStart fun(evtData: onUpgradeStartData):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeStart | "function(evtData) end"
 ---@return void
@@ -530,8 +550,9 @@ function hevent.onUpgradeStart(whichUnit, callFunc)
 end
 
 --- 建筑升级取消时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onUpgradeCancel fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onUpgradeCancelData {triggerUnit:"触发单位"}
+---@alias onUpgradeCancel fun(evtData: onUpgradeCancelData):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeCancel | "function(evtData) end"
 ---@return void
@@ -540,8 +561,9 @@ function hevent.onUpgradeCancel(whichUnit, callFunc)
 end
 
 --- 建筑升级完成时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onUpgradeFinish fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onUpgradeFinishData {triggerUnit:"触发单位"}
+---@alias onUpgradeFinish fun(evtData: onUpgradeFinishData):void
 ---@param whichUnit userdata
 ---@param callFunc onUpgradeFinish | "function(evtData) end"
 ---@return void
@@ -550,8 +572,9 @@ function hevent.onUpgradeFinish(whichUnit, callFunc)
 end
 
 --- 进入某单位（whichUnit）半径范围内
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onEnterUnitRange fun(evtData: {centerUnit:"被进入范围的中心单位",triggerUnit:"进入范围的单位",radius:"设定的半径范围"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onEnterUnitRangeData {centerUnit:"被进入范围的中心单位",triggerUnit:"进入范围的单位",radius:"设定的半径范围"}
+---@alias onEnterUnitRange fun(evtData: onEnterUnitRangeData):void
 ---@param whichUnit userdata
 ---@param radius number
 ---@param callFunc onEnterUnitRange | "function(evtData) end"
@@ -576,8 +599,9 @@ function hevent.onEnterUnitRange(whichUnit, radius, callFunc)
 end
 
 --- 进入某区域
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onEnterRect fun(evtData: {triggerRect:"被进入的矩形区域",triggerUnit:"进入矩形区域的单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onEnterRectData {triggerRect:"被进入的矩形区域",triggerUnit:"进入矩形区域的单位"}
+---@alias onEnterRect fun(evtData: onEnterRectData):void
 ---@param whichRect userdata
 ---@param callFunc onEnterRect | "function(evtData) end"
 ---@return void
@@ -605,8 +629,9 @@ function hevent.onEnterRect(whichRect, callFunc)
 end
 
 --- 离开某区域
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onLeaveRect fun(evtData: {triggerRect:"被离开的矩形区域",triggerUnit:"离开矩形区域的单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onLeaveRectData {triggerRect:"被离开的矩形区域",triggerUnit:"离开矩形区域的单位"}
+---@alias onLeaveRect fun(evtData: onLeaveRectData):void
 ---@param whichRect userdata
 ---@param callFunc onLeaveRect | "function(evtData) end"
 ---@return void
@@ -634,8 +659,9 @@ function hevent.onLeaveRect(whichRect, callFunc)
 end
 
 --- 任意建筑建造开始时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onConstructStart fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onConstructStartData {triggerUnit:"触发单位"}
+---@alias onConstructStart fun(evtData: onConstructStartData):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructStart | "function(evtData) end"
 ---@return void
@@ -644,8 +670,9 @@ function hevent.onConstructStart(whichPlayer, callFunc)
 end
 
 --- 任意建筑建造取消时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onConstructCancel fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onConstructCancelData {triggerUnit:"触发单位"}
+---@alias onConstructCancel fun(evtData: onConstructCancelData):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructCancel | "function(evtData) end"
 ---@return void
@@ -654,8 +681,9 @@ function hevent.onConstructCancel(whichPlayer, callFunc)
 end
 
 --- 任意建筑建造完成时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onConstructFinish fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onConstructFinishData {triggerUnit:"触发单位"}
+---@alias onConstructFinish fun(evtData: onConstructFinishData):void
 ---@param whichPlayer userdata
 ---@param callFunc onConstructFinish | "function(evtData) end"
 ---@return void
@@ -664,8 +692,9 @@ function hevent.onConstructFinish(whichPlayer, callFunc)
 end
 
 --- 当聊天时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onChat fun(evtData: {triggerPlayer:"聊天的玩家",chatString:"聊天的内容",matchedString:"匹配命中的内容"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onChatData {triggerPlayer:"聊天的玩家",chatString:"聊天的内容",matchedString:"匹配命中的内容"}
+---@alias onChat fun(evtData: onChatData):void
 ---@param whichPlayer userdata
 ---@param pattern string 支持正则
 ---@param callFunc onChat | "function(evtData) end"
@@ -682,8 +711,9 @@ function hevent.onChat(whichPlayer, pattern, callFunc)
 end
 
 --- 按ESC
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onEsc fun(evtData: {triggerPlayer:"触发玩家"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onEscData {triggerPlayer:"触发玩家"}
+---@alias onEsc fun(evtData: onEscData):void
 ---@param whichPlayer userdata
 ---@param callFunc onEsc | "function(evtData) end"
 ---@return void
@@ -692,8 +722,9 @@ function hevent.onEsc(whichPlayer, callFunc)
 end
 
 --- 玩家选择单位(点击了qty次)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onSelection fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onSelectionData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
+---@alias onSelection fun(evtData: onSelectionData):void
 ---@param whichPlayer userdata
 ---@param qty number
 ---@param callFunc onSelection | "function(evtData) end"
@@ -703,8 +734,9 @@ function hevent.onSelection(whichPlayer, qty, callFunc)
 end
 
 --- 玩家取消选择单位
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onDeSelection fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onDeSelectionData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
+---@alias onDeSelection fun(evtData: onDeSelectionData):void
 ---@param whichPlayer userdata
 ---@param callFunc onDeSelection | "function(evtData) end"
 ---@return void
@@ -713,8 +745,9 @@ function hevent.onDeSelection(whichPlayer, callFunc)
 end
 
 --- 玩家离开游戏事件(注意这是全局事件)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onPlayerLeave fun(evtData: {triggerPlayer:"触发玩家"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onPlayerLeaveData {triggerPlayer:"触发玩家"}
+---@alias onPlayerLeave fun(evtData: onPlayerLeaveData):void
 ---@param callFunc onPlayerLeave | "function(evtData) end"
 ---@return void
 function hevent.onPlayerLeave(callFunc)
@@ -722,7 +755,7 @@ function hevent.onPlayerLeave(callFunc)
 end
 
 --- 玩家资源变动
---- * 使用默认key default，如有需要请自行直接使用register方法注册
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onPlayerResourceChangeData {triggerPlayer:"触发玩家",triggerUnit:"触发单位",type:"资源类型",value:"变化值"}
 ---@alias onPlayerResourceChange fun(evtData: onPlayerResourceChangeData):void
 ---@param callFunc onPlayerResourceChange | "function(evtData) end"
@@ -732,8 +765,9 @@ function hevent.onPlayerResourceChange(callFunc)
 end
 
 --- 任意单位经过hero方法被玩家所挑选为英雄时(注意这是全局事件)
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onPickHero fun(evtData: {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onPickHeroData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
+---@alias onPickHero fun(evtData: onPickHeroData):void
 ---@param callFunc onPickHero | "function(evtData) end"
 ---@return void
 function hevent.onPickHero(callFunc)
@@ -741,8 +775,9 @@ function hevent.onPickHero(callFunc)
 end
 
 --- 可破坏物死亡
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onDestructableDestroy fun(evtData: {triggerDestructable:"被破坏的可破坏物"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onDestructableDestroyData {triggerDestructable:"被破坏的可破坏物"}
+---@alias onDestructableDestroy fun(evtData: onDestructableDestroyData):void
 ---@param whichDestructable userdata
 ---@param callFunc onDestructableDestroy | "function(evtData) end"
 ---@return void
@@ -754,8 +789,9 @@ function hevent.onDestructableDestroy(whichDestructable, callFunc)
 end
 
 --- 全图当前可破坏物死亡
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onMapDestructableDestroy fun(evtData: {triggerDestructable:"被破坏的可破坏物"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onMapDestructableDestroyData {triggerDestructable:"被破坏的可破坏物"}
+---@alias onMapDestructableDestroy fun(evtData: onMapDestructableDestroyData):void
 ---@param callFunc onMapDestructableDestroy | "function(evtData) end"
 ---@return void
 function hevent.onMapDestructableDestroy(callFunc)
@@ -770,8 +806,9 @@ end
 
 --- 当单位发布驻扎(H)命令
 --- 只有真人玩家的单位有此事件
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onHoldOn fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onHoldOnData {triggerUnit:"触发单位"}
+---@alias onHoldOn fun(evtData: onHoldOnData):void
 ---@param whichUnit userdata
 ---@param callFunc onHoldOn | "function(evtData) end"
 ---@return void
@@ -781,8 +818,9 @@ end
 
 --- 当单位发布停止(S)命令
 --- 只有真人玩家的单位有此事件
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onStop fun(evtData: {triggerUnit:"触发单位"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onStopData {triggerUnit:"触发单位"}
+---@alias onStop fun(evtData: onStopData):void
 ---@param whichUnit userdata
 ---@param callFunc onStop | "function(evtData) end"
 ---@return void
@@ -791,8 +829,9 @@ function hevent.onStop(whichUnit, callFunc)
 end
 
 --- 任意单位改变所有者时
---- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onUnitChangeOwner fun(evtData: {triggerUnit:"被改变所有者的单位",prevOwner:"原所有者"}):void
+--- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
+---@alias onUnitChangeOwnerData {triggerUnit:"被改变所有者的单位",prevOwner:"原所有者"}
+---@alias onUnitChangeOwner fun(evtData: onUnitChangeOwnerData):void
 ---@param whichPlayer userdata
 ---@param callFunc onUnitChangeOwner | "function(evtData) end"
 ---@return void
