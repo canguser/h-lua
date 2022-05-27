@@ -8,3 +8,4 @@ projects/*
 sdk.conf
 sdk/sdk.exe
 API.md
+depend/sdk/hlua.conf

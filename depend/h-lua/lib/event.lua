@@ -284,7 +284,8 @@ end
 
 --- 准备被攻击
 --- * 使用默认key default，如有需要请自行直接使用register方法注册
----@alias onBeAttackReady fun(evtData: {triggerUnit:"被攻击单位",attackUnit:"攻击单位"}):void
+---@alias onBeAttackReadyData {triggerUnit:"被攻击单位",attackUnit:"攻击单位"}
+---@alias onBeAttackReady fun(evtData: onBeAttackReadyData):void
 ---@param whichUnit userdata
 ---@param callFunc onBeAttackReady | "function(evtData) end"
 ---@return void

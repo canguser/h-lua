@@ -104,34 +104,3 @@ function htexture.mark(path, during, whichPlayer, red, green, blue)
         end
     end
 end
-
---- 创建一个警示圈
----@param diameter number 直径范围(px)
----@param x number 坐标X
----@param y number 坐标Y
----@param during number 持续时间，警示圈不允许永久存在，during默认为3秒
----@param token number 马甲单位ID,默认叹号！马甲单位原始直径应为128px（刚好一小格）
----@param color  userdata 警示圈马甲单位的颜色,仅支持玩家队伍色，参考 blizzard:^PLAYER_COLOR_?
-function htexture.alertCircle(diameter, x, y, during, token, color)
-    if (diameter == nil or diameter < 64) then
-        return
-    end
-    during = during or 3
-    if (during <= 0) then
-        during = 3
-    end
-    token = token or HL_ID.texture_alert_circle_exclamation
-    local modelScale = hslk.i2v(token, "slk", "modelScale")
-    if (modelScale == nil) then
-        return
-    end
-    if (type(token) == "string") then
-        token = c2i(token)
-    end
-    color = color or PLAYER_COLOR_RED
-    modelScale = math.round(math.round(modelScale, 3) * (diameter / 128), 2)
-    local u = cj.CreateUnit(hplayer.player_passive, token, x, y, 270)
-    cj.SetUnitColor(u, color)
-    cj.SetUnitScale(u, modelScale, modelScale, modelScale)
-    hunit.destroy(u, during)
-end

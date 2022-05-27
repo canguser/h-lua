@@ -22,18 +22,6 @@ H_LUA_ABILITY_SELECT_HERO = hslk_ability({
     _type = "system",
 })._id
 
---- #叹号警示圈 直径128px
-hslk_unit({
-    _parent = "ogru",
-    _type = "system",
-})
-
---- #叉号警示圈 直径128px
-hslk_unit({
-    _parent = "ogru",
-    _type = "system",
-})
-
 --- #英雄视野 view
 hslk_unit({
     _parent = "ogru",
