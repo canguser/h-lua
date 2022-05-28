@@ -62,6 +62,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	require(L, sdkData.HLua+"/foundation/string.lua")
 	require(L, sdkData.HLua+"/foundation/mbstring.lua")
 	require(L, sdkData.HLua+"/foundation/table.lua")
+	require(L, sdkData.HLua+"/foundation/ubertip.lua")
 	require(L, sdkData.HLua+"/slk/pilot.lua")
 	// embeds
 	requireEmbed(L, sdkData.Embeds, "embeds/slk/json.lua")
