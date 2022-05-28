@@ -264,6 +264,7 @@ hevent_binder = {
                 targetUnit = cj.GetSpellTargetUnit(),
                 targetItem = cj.GetSpellTargetItem(),
                 targetLoc = cj.GetSpellTargetLoc(),
+                targetDestructable = cj.GetSpellTargetDestructable(),
             }
             hevent.trigger(evtData.triggerUnit, CONST_EVENT.skillEffect, evtData)
         end),

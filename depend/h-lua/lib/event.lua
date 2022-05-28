@@ -361,7 +361,7 @@ end
 
 --- 发动技能效果
 --- * 使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
----@alias onSkillEffectData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetItem:"获取目标物品",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
+---@alias onSkillEffectData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetItem:"获取目标物品",targetDestructable:"获取目标可破坏物",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@alias onSkillEffect fun(evtData: onSkillEffectData):void
 ---@param whichUnit userdata
 ---@param callFunc onSkillEffect | "function(evtData) end"
