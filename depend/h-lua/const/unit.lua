@@ -29,6 +29,7 @@ CONST_WEAPON_SOUND = {
 
 -- 移动类型
 CONST_MOVE_TYPE = {
+    [""] = { value = "", label = "没有" },
     foot = { value = "foot", label = "步行" },
     horse = { value = "horse", label = "坐骑" },
     fly = { value = "fly", label = "飞行" },
