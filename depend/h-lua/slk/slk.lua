@@ -21,6 +21,7 @@ function hslk_init()
     -- 载入平衡常数数据
     HSLK_MISC = JassSlk.misc
     -- 处理物编数据
+    hslk_cli_ids = table.merge(hslk_cli_ids, HSLK_CLI_H_IDS)
     if (#hslk_cli_ids > 0) then
         for _, id in ipairs(hslk_cli_ids) do
             HSLK_I2V[id] = HSLK_CLI_DATA[id] or {}
@@ -65,7 +66,12 @@ function hslk_init()
             end
             -- 处理N2V
             if (HSLK_I2V[id].slk) then
-                local n = HSLK_I2V[id].slk.Name
+                local n
+                if (HSLK_I2V[id]._class == "buff") then
+                    n = HSLK_I2V[id].slk.EditorName
+                else
+                    n = HSLK_I2V[id].slk.Name
+                end
                 if (n ~= nil) then
                     if (HSLK_N2V[n] == nil) then
                         HSLK_N2I[n] = {}
@@ -86,11 +92,6 @@ local function hslk_cli_set(_v)
     HSLK_CLI_DATA[_v._id] = _v
     HSLK_CLI_H_IDI = HSLK_CLI_H_IDI + 1
     return _v
-end
-
---- 设定配置
----@param conf table 参考 F6_CONF
-function hslk_conf(conf)
 end
 
 ---@param _v note_Ability

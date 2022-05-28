@@ -45,7 +45,6 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	require(L, sdkData.HLua+"/builtIn/console/go.lua")
 	require(L, sdkData.HLua+"/const/abilityTarget.lua")
 	require(L, sdkData.HLua+"/const/attribute.lua")
-	require(L, sdkData.HLua+"/const/ubertip.lua")
 	require(L, sdkData.HLua+"/const/cache.lua")
 	require(L, sdkData.HLua+"/const/damageSource.lua")
 	require(L, sdkData.HLua+"/const/event.lua")
@@ -144,7 +143,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 		}
 	}
 	fn = L.GetGlobal("SLK_GO_JSON")
-	if err := L.CallByParam(lua.P{
+	if err = L.CallByParam(lua.P{
 		Fn:      fn,
 		NRet:    1,
 		Protect: true,
@@ -153,20 +152,28 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	}
 	// get lua function results
 	slkData := L.ToString(-1)
-	var sData []map[string]interface{}
-	err = json.Unmarshal([]byte(slkData), &sData)
+	var slData []map[string]interface{}
+	err = json.Unmarshal([]byte(slkData), &slData)
 	if err != nil {
-		fmt.Println(slkData)
 		lib.Panic(err)
 	}
-	// 拼接魔码
-	var _slkIniBuilderItem strings.Builder
-	var _slkIniBuilderAbility strings.Builder
-	var _slkIniBuilderUnit strings.Builder
-	var _slkIniBuilderBuff strings.Builder
-	var _slkIniBuilderUpgrade strings.Builder
+	// lni codes
+	var _sbrAbility strings.Builder
+	var _sbrDestructable strings.Builder
+	var _sbrUnit strings.Builder
+	var _sbrItem strings.Builder
+	var _sbrBuff strings.Builder
+	var _sbrUpgrade strings.Builder
+	_slkIniBuilder := map[string]*strings.Builder{
+		"ability":      &_sbrAbility,
+		"destructable": &_sbrDestructable,
+		"unit":         &_sbrUnit,
+		"item":         &_sbrItem,
+		"buff":         &_sbrBuff,
+		"upgrade":      &_sbrUpgrade,
+	}
 	var idCli []string
-	for _, sda := range sData {
+	for _, sda := range slData {
 		_slk := make(map[string]string)
 		_hash := make(map[string]interface{})
 		_id := ""
@@ -231,93 +238,24 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 			}
 		}
 		if _id != "" && _parent != "" && len(_slk) > 0 {
-			idIni = append(idIni, _id)
 			idCli = append(idCli, _id)
-			_class := _hash["_class"]
-			if _class == "item" {
-				_slkIniBuilderItem.WriteString("[" + _id + "]")
-				_slkIniBuilderItem.WriteString("\n_parent=" + _parent)
-				for k, v := range _slk {
-					_slkIniBuilderItem.WriteString("\n" + k + "=" + v)
-				}
-				_slkIniBuilderItem.WriteString("\n\n")
-			} else if _class == "ability" {
-				_slkIniBuilderAbility.WriteString("[" + _id + "]")
-				_slkIniBuilderAbility.WriteString("\n_parent=" + _parent)
-				for k, v := range _slk {
-					_slkIniBuilderAbility.WriteString("\n" + k + "=" + v)
-				}
-				_slkIniBuilderAbility.WriteString("\n\n")
-			} else if _class == "unit" {
-				_slkIniBuilderUnit.WriteString("[" + _id + "]")
-				_slkIniBuilderUnit.WriteString("\n_parent=" + _parent)
-				for k, v := range _slk {
-					_slkIniBuilderUnit.WriteString("\n" + k + "=" + v)
-				}
-				_slkIniBuilderUnit.WriteString("\n\n")
-			} else if _class == "buff" {
-				_slkIniBuilderBuff.WriteString("[" + _id + "]")
-				_slkIniBuilderBuff.WriteString("\n_parent=" + _parent)
-				for k, v := range _slk {
-					_slkIniBuilderBuff.WriteString("\n" + k + "=" + v)
-				}
-				_slkIniBuilderBuff.WriteString("\n\n")
-			} else if _class == "upgrade" {
-				_slkIniBuilderUpgrade.WriteString("[" + _id + "]")
-				_slkIniBuilderUpgrade.WriteString("\n_parent=" + _parent)
-				for k, v := range _slk {
-					_slkIniBuilderUpgrade.WriteString("\n" + k + "=" + v)
-				}
-				_slkIniBuilderUpgrade.WriteString("\n\n")
+			_class := _hash["_class"].(string)
+			sbr := _slkIniBuilder[_class]
+			sbr.WriteString("[" + _id + "]")
+			sbr.WriteString("\n_parent=" + _parent)
+			for k, v := range _slk {
+				sbr.WriteString("\n" + k + "=" + v)
 			}
+			sbr.WriteString("\n\n")
 		}
 	}
-	// 合并ini
-	if itemIni == "" {
-		itemIni += _slkIniBuilderItem.String()
-	} else {
-		itemIni += "\n\n" + _slkIniBuilderItem.String()
-	}
-	createSrcTableDir := sdkData.Temp + "/" + createSrc + "/table"
-	err = lib.FilePutContents(createSrcTableDir+"/item.ini", itemIni, fs.ModePerm)
-	if err != nil {
-		lib.Panic(err)
-	}
-	if unitIni == "" {
-		unitIni += _slkIniBuilderUnit.String()
-	} else {
-		unitIni += "\n\n" + _slkIniBuilderUnit.String()
-	}
-	err = lib.FilePutContents(createSrcTableDir+"/unit.ini", unitIni, fs.ModePerm)
-	if err != nil {
-		lib.Panic(err)
-	}
-	if abilityIni == "" {
-		abilityIni += _slkIniBuilderAbility.String()
-	} else {
-		abilityIni += "\n\n" + _slkIniBuilderAbility.String()
-	}
-	err = lib.FilePutContents(createSrcTableDir+"/ability.ini", abilityIni, fs.ModePerm)
-	if err != nil {
-		lib.Panic(err)
-	}
-	if buffIni == "" {
-		buffIni += _slkIniBuilderBuff.String()
-	} else {
-		buffIni += "\n\n" + _slkIniBuilderBuff.String()
-	}
-	err = lib.FilePutContents(createSrcTableDir+"/buff.ini", buffIni, fs.ModePerm)
-	if err != nil {
-		lib.Panic(err)
-	}
-	if upgradeIni == "" {
-		upgradeIni += _slkIniBuilderUpgrade.String()
-	} else {
-		upgradeIni += "\n\n" + _slkIniBuilderUpgrade.String()
-	}
-	err = lib.FilePutContents(createSrcTableDir+"/upgrade.ini", upgradeIni, fs.ModePerm)
-	if err != nil {
-		lib.Panic(err)
+	// merge ini
+	csTableDir := sdkData.Temp + "/" + createSrc + "/table"
+	for k, v := range _slkIniBuilder {
+		err = lib.FilePutContents(csTableDir+"/"+k+".ini", v.String(), fs.ModePerm)
+		if err != nil {
+			lib.Panic(err)
+		}
 	}
 	// 为 cliSlk 补充物编ID
 	cliSlkFile := sdkData.Temp + "/" + createSrc + "/map/h-lua-slk/slk.lua"

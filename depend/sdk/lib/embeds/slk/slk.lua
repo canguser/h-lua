@@ -1,7 +1,3 @@
-function hslk_conf(conf)
-    F6_CONF_SET(conf)
-end
-
 function hslk_ability(_v)
     _v = F6V_A(_v)
     _v._id = SLK_ID(_v)
