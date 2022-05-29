@@ -14,7 +14,7 @@ function hgroup.forEach(whichGroup, action)
     if (#whichGroup > 0) then
         if (type(action) == "function") then
             for idx, eu in ipairs(whichGroup) do
-                if (his.unitDestroyed(eu) == false) then
+                if (hunit.isDestroyed(eu) == false) then
                     local res = action(eu, idx)
                     if (type(res) == "boolean" and res == false) then
                         break
@@ -91,7 +91,7 @@ function hgroup.createByXY(x, y, radius, filterFunc)
     end
     local g = {}
     for idx, filterUnit in ipairs(hgroup.GLOBAL) do
-        if (his.unitDestroyed(filterUnit)) then
+        if (hunit.isDestroyed(filterUnit)) then
             table.remove(hgroup.GLOBAL, idx)
             idx = idx - 1
         end
@@ -128,12 +128,12 @@ function hgroup.createByRect(r, filterFunc)
     end
     local g = {}
     for idx, filterUnit in ipairs(hgroup.GLOBAL) do
-        if (his.unitDestroyed(filterUnit)) then
+        if (hunit.isDestroyed(filterUnit)) then
             table.remove(hgroup.GLOBAL, idx)
             idx = idx - 1
         end
         -- 排除区域外
-        if (his.inRect(r, hunit.x(filterUnit), hunit.y(filterUnit))) then
+        if (hrect.isInner(r, hunit.x(filterUnit), hunit.y(filterUnit))) then
             if (filterFunc ~= nil) then
                 if (filterFunc(filterUnit) == true) then
                     table.insert(g, filterUnit)
@@ -201,7 +201,7 @@ function hgroup.animate(whichGroup, animate)
         return
     end
     hgroup.forEach(whichGroup, function(eu)
-        if (his.dead(eu) == false) then
+        if (hunit.isDead(eu) == false) then
             hunit.animate(eu, animate)
         end
     end)

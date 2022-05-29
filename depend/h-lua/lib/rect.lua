@@ -21,6 +21,43 @@ function hrect.alloc(r, name)
     end
 end
 
+--- 是否在区域内
+function hrect.isInner(whichRect, x, y)
+    return (x < hrect.getMaxX(whichRect) and x > hrect.getMinX(whichRect) and y < hrect.getMaxY(whichRect) and y > hrect.getMinY(whichRect))
+end
+
+--- 是否超出区域边界
+---@param whichRect userdata
+---@param x number
+---@param y number
+---@return boolean
+function hrect.isBorder(whichRect, x, y)
+    local flag = false
+    if (x >= hrect.getMaxX(whichRect) or x <= hrect.getMinX(whichRect)) then
+        flag = true
+    end
+    if (y >= hrect.getMaxY(whichRect) or y <= hrect.getMinY(whichRect)) then
+        return true
+    end
+    return flag
+end
+
+--- 是否超出可玩区域
+---@param x number
+---@param y number
+---@return boolean
+function hrect.isBorderPlayable(x, y)
+    return hrect.isBorder(hrect.playable(), x, y)
+end
+
+--- 是否超出镜头区域
+---@param x number
+---@param y number
+---@return boolean
+function hrect.isBorderCamera(x, y)
+    return hrect.isBorder(hrect.camera(), x, y)
+end
+
 --- 获取地图世界区域
 ---@return userdata
 function hrect.world()
@@ -208,7 +245,7 @@ function hrect.lock(options)
         local h = options.height
         --单位优先
         if (options.lockUnit) then
-            if (his.dead(options.lockUnit)) then
+            if (hunit.isDead(options.lockUnit)) then
                 t.destroy()
                 return
             end
@@ -244,7 +281,7 @@ function hrect.lock(options)
             local xx = hunit.x(u)
             local yy = hunit.y(u)
             if (options.type == "square") then
-                if (his.borderRect(lockRect, xx, yy) == true) then
+                if (hrect.isBorder(lockRect, xx, yy) == true) then
                     deg = math.angle(x, y, xx, yy)
                     distance = math.getMaxDistanceInRect(w, h, deg)
                 end

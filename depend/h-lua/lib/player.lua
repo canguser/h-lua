@@ -25,6 +25,57 @@ hplayer = {
     convert_ratio = 1000000
 }
 
+--- 是否电脑(如果位置为电脑玩家或无玩家，则为true)
+--- 常用来判断电脑AI是否开启
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isComputer(whichPlayer)
+    return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_COMPUTER or cj.GetPlayerSlotState(whichPlayer) ~= PLAYER_SLOT_STATE_PLAYING
+end
+
+--- 是否玩家位置(如果位置为真实玩家或为空，则为true；而如果选择了电脑玩家补充，则为false)
+--- 常用来判断该是否玩家可填补位置
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isUser(whichPlayer)
+    return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_USER
+end
+
+--- 是否正在游戏
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isPlaying(whichPlayer)
+    return cj.GetPlayerSlotState(whichPlayer) == PLAYER_SLOT_STATE_PLAYING
+end
+
+--- 是否中立玩家（包括中立敌对 中立被动 中立受害 中立特殊）
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isNeutral(whichPlayer)
+    return cj.GetPlayerId(whichPlayer) >= 12
+end
+
+--- 玩家是否正在受伤
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isBeDamaging(whichPlayer)
+    return hcache.get(whichPlayer, CONST_CACHE.ATTR_BE_DAMAGING, false)
+end
+
+--- 玩家是否正在造成伤害
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isDamaging(whichPlayer)
+    return hcache.get(whichPlayer, CONST_CACHE.ATTR_DAMAGING, false)
+end
+
+--- 玩家是否有贴图在展示
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isMarking(whichPlayer)
+    return hcache.get(whichPlayer, CONST_CACHE.PLAYER_MARKING) == true
+end
+
 ---@private
 function hplayer.adjustPlayerState(delta, whichPlayer, whichPlayerState)
     if delta > 0 then

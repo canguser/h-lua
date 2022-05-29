@@ -50,11 +50,11 @@ hevent_binder = {
         end),
         apm = cj.Condition(function()
             local u = cj.GetTriggerUnit()
-            if (his.locust(u)) then
+            if (hunit.isLocust(u)) then
                 return
             end
             local p = hunit.getOwner(u)
-            if (his.playing(p) == true and his.playerSite(p) == true and his.computer(p) == false) then
+            if (hplayer.isPlaying(p) == true and hplayer.isUser(p) == true and hplayer.isComputer(p) == false) then
                 hcache.set(p, CONST_CACHE.PLAYER_APM, hcache.get(p, CONST_CACHE.PLAYER_APM, 0) + 1)
             end
         end),
@@ -138,10 +138,10 @@ hevent_binder = {
             -- 如果不是英雄，自动清理，在3秒后尝试删除单位
             -- 如果其他单位需要不备清理，可死亡后立即设置缓存 hcache.set(u,CONST_CACHE.UNIT_NOT_DEL,true)
             -- * 只有框架内运行单位有效
-            if (his.hero(u) == false) then
+            if (hunit.isHero(u) == false) then
                 htime.setTimeout(3, function(curTimer)
                     curTimer.destroy()
-                    if (his.dead(u) and true ~= hcache.get(u, CONST_CACHE.UNIT_NOT_DEL)) then
+                    if (hunit.isDead(u) and true ~= hcache.get(u, CONST_CACHE.UNIT_NOT_DEL)) then
                         hunit.destroy(u, 0)
                     end
                 end)
@@ -347,7 +347,7 @@ hevent_binder = {
             -- 触发获得物品
             local evtData = { triggerUnit = u, triggerItem = it }
             hevent.trigger(u, CONST_EVENT.itemGet, evtData)
-            if (false == his.itemDestroyed(it)) then
+            if (false == hitem.isDestroyed(it)) then
                 -- 如果是自动使用的，用一波
                 if (hitem.getIsPowerUp(itId)) then
                     hitem.used(u, it)
@@ -381,7 +381,7 @@ hevent_binder = {
                 local xyk1 = math.round(cj.GetItemX(it)) .. "|" .. math.round(cj.GetItemY(it))
                 htime.setTimeout(0.05, function(t)
                     t.destroy()
-                    if (false == his.itemDestroyed(it)) then
+                    if (false == hitem.isDestroyed(it)) then
                         local x = cj.GetItemX(it)
                         local y = cj.GetItemY(it)
                         local xyk2 = math.round(x) .. "|" .. math.round(y)

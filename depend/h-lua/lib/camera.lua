@@ -53,7 +53,7 @@ end
 ---@return void
 function hcamera.lock(whichPlayer, whichUnit)
     if (whichPlayer ~= nil or hplayer.loc() == whichPlayer) then
-        if (his.alive(whichUnit) == true) then
+        if (hunit.isAlive(whichUnit) == true) then
             cj.SetCameraTargetController(whichUnit, 0, 0, false)
         else
             hcamera.reset(whichPlayer, 0)

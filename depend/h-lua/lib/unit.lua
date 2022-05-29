@@ -1,6 +1,294 @@
 ---@class hunit 单位
 hunit = {}
 
+--- 单位是否在某玩家真实视野内
+---@param whichUnit userdata
+---@return boolean
+function hunit.isDetected(whichUnit, whichPlayer)
+    if (whichUnit == nil or whichPlayer == nil) then
+        return false
+    end
+    return cj.IsUnitDetected(whichUnit, whichPlayer) == true
+end
+
+--- 单位是否对某玩家不可见
+---@param whichUnit userdata
+---@return boolean
+function hunit.isInvisible(whichUnit, whichPlayer)
+    if (whichUnit == nil or whichPlayer == nil) then
+        return false
+    end
+    return cj.IsUnitInvisible(whichUnit, whichPlayer) == true
+end
+
+--- 单位是否可攻击
+---@param whichUnit userdata
+---@return boolean
+function hunit.isAttackAble(whichUnit)
+    return "0" ~= (hslk.i2v(hunit.getId(whichUnit), "slk", "weapsOn") or "0")
+end
+
+--- 是否死亡
+---@param whichUnit userdata
+---@return boolean
+function hunit.isDead(whichUnit)
+    return (true == hcache.get(whichUnit, CONST_CACHE.UNIT_DEAD)) or cj.IsUnitType(whichUnit, UNIT_TYPE_DEAD) or (cj.GetUnitState(whichUnit, UNIT_STATE_LIFE) <= 0)
+end
+
+--- 是否生存
+---@param whichUnit userdata
+---@return boolean
+function hunit.isAlive(whichUnit)
+    return false == hunit.isDead(whichUnit)
+end
+
+--- 是否暂停
+---@param whichUnit userdata
+---@return boolean
+function hunit.isPaused(whichUnit)
+    return cj.IsUnitPaused(whichUnit)
+end
+
+--- 是否隐藏
+---@param whichUnit userdata
+---@return boolean
+function hunit.isHidden(whichUnit)
+    return cj.IsUnitHidden(whichUnit)
+end
+
+--- 是否正在睡眠
+---@param whichUnit userdata
+---@return boolean
+function hunit.isSleeping(whichUnit)
+    return cj.UnitIsSleeping(whichUnit)
+end
+
+--- 单位是否已被删除
+---@param whichUnit userdata
+---@return boolean
+function hunit.isDestroyed(whichUnit)
+    return cj.GetUnitTypeId(whichUnit) == 0 or (hunit.isDead(whichUnit) and false == hcache.exist(whichUnit))
+end
+
+--- 是否无敌
+---@param whichUnit userdata
+---@return boolean
+function hunit.isInvincible(whichUnit)
+    return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_invulnerable) > 0
+end
+
+--- 是否英雄
+--- UNIT_TYPE_HERO是对应平衡常数的英雄列表
+--- hero对应hslk._type，是本框架固有用法
+---@param whichUnit userdata
+---@return boolean
+function hunit.isHero(whichUnit)
+    local uid = hunit.getId(whichUnit)
+    if (uid == nil) then
+        return false
+    end
+    return "hero" == (hslk.i2v(uid, "_type") or "common") or cj.IsUnitType(whichUnit, UNIT_TYPE_HERO)
+end
+
+--- 是否建筑
+---@param whichUnit userdata
+---@return boolean
+function hunit.isStructure(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_STRUCTURE)
+end
+
+--- 是否镜像
+---@param whichUnit userdata
+---@return boolean
+function hunit.isIllusion(whichUnit)
+    return cj.IsUnitIllusion(whichUnit)
+end
+
+--- 是否地面单位
+---@param whichUnit userdata
+---@return boolean
+function hunit.isGround(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_GROUND)
+end
+
+--- 是否空中单位
+---@param whichUnit userdata
+---@return boolean
+function hunit.isAir(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_FLYING)
+end
+
+--- 是否近战
+---@param whichUnit userdata
+---@return boolean
+function hunit.isMelee(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
+end
+
+--- 是否远程
+---@param whichUnit userdata
+---@return boolean
+function hunit.isRanged(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
+end
+
+--- 是否召唤
+---@param whichUnit userdata
+---@return boolean
+function hunit.isSummoned(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_SUMMONED)
+end
+
+--- 是否机械
+---@param whichUnit userdata
+---@return boolean
+function hunit.isMechanical(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_MECHANICAL)
+end
+
+--- 是否古树
+---@param whichUnit userdata
+---@return boolean
+function hunit.isAncient(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_ANCIENT)
+end
+
+--- 是否自爆工兵
+---@param whichUnit userdata
+---@return boolean
+function hunit.isSapper(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_SAPPER)
+end
+
+--- 是否虚无状态
+---@param whichUnit userdata
+---@return boolean
+function hunit.isEthereal(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_ETHEREAL)
+end
+
+--- 是否魔法免疫
+---@param whichUnit userdata
+---@return boolean
+function hunit.isImmune(whichUnit)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_MAGIC_IMMUNE)
+end
+
+--- 是否某个种族
+---@param whichUnit userdata
+---@param whichRace userdata 参考 blizzard:^RACE
+---@return boolean
+function hunit.isRace(whichUnit, whichRace)
+    return cj.IsUnitRace(whichUnit, whichRace)
+end
+
+--- 是否蝗虫
+---@param whichUnit userdata
+---@return boolean
+function hunit.isLocust(whichUnit)
+    return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_locust) > 0
+end
+
+--- 是否正在受伤
+---@param whichUnit userdata
+---@return boolean
+function hunit.isBeDamaging(whichUnit)
+    return hcache.get(whichUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
+end
+
+--- 是否正在造成伤害
+---@param whichUnit userdata
+---@return boolean
+function hunit.isDamaging(whichUnit)
+    return hcache.get(whichUnit, CONST_CACHE.ATTR_DAMAGING, false)
+end
+
+--- 是否处在水面
+---@param whichUnit userdata
+---@return boolean
+function hunit.isWater(whichUnit)
+    return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == false
+end
+
+--- 是否处于地面
+---@param whichUnit userdata
+---@return boolean
+function hunit.isFloor(whichUnit)
+    return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == true
+end
+
+--- 是否某个特定单位
+---@param whichUnit userdata
+---@param otherUnit userdata
+---@return boolean
+function hunit.isUnit(whichUnit, otherUnit)
+    return cj.IsUnit(whichUnit, otherUnit)
+end
+
+--- 是否敌人单位
+---@param whichUnit userdata
+---@param otherUnit userdata
+---@return boolean
+function hunit.isEnemy(whichUnit, otherUnit)
+    return cj.IsUnitEnemy(whichUnit, hunit.getOwner(otherUnit))
+end
+
+--- 是否友军单位
+---@param whichUnit userdata
+---@param otherUnit userdata
+---@return boolean
+function hunit.isAlly(whichUnit, otherUnit)
+    return cj.IsUnitAlly(whichUnit, hunit.getOwner(otherUnit))
+end
+
+--- 是否敌人玩家
+---@param whichUnit userdata
+---@param whichPlayer userdata
+---@return boolean
+function hunit.isEnemyPlayer(whichUnit, whichPlayer)
+    return cj.IsUnitEnemy(whichUnit, whichPlayer)
+end
+
+--- 是否友军玩家
+---@param whichUnit userdata
+---@param whichPlayer userdata
+---@return boolean
+function hunit.isAllyPlayer(whichUnit, whichPlayer)
+    return cj.IsUnitAlly(whichUnit, whichPlayer)
+end
+
+--- 单位是否拥有物品栏
+--- 经测试(1.27a)单位物品栏（各族）等价物英雄物品栏，等级为1，即使没有科技
+--- RPG应去除多余的物品栏，确保判定的准确性
+---@param whichUnit userdata
+---@param slotId number
+---@return boolean
+function hunit.hasSlot(whichUnit, slotId)
+    if (slotId == nil) then
+        slotId = HL_ID.ability_item_slot
+    end
+    return cj.GetUnitAbilityLevel(whichUnit, slotId) >= 1
+end
+
+--- 单位身上是否有某种物品
+---@param whichUnit userdata
+---@param whichItemId number|string
+---@return boolean
+function hunit.hasItem(whichUnit, whichItemId)
+    local f = false
+    if (type(whichItemId) == "string") then
+        whichItemId = c2i(whichItemId)
+    end
+    for i = 0, 5, 1 do
+        local it = cj.UnitItemInSlot(whichUnit, i)
+        if (it ~= nil and cj.GetItemTypeId(it) == whichItemId) then
+            f = true
+            break
+        end
+    end
+    return f
+end
+
 --- 获取单位的头像
 ---@param uOrId userdata|string|number
 ---@return string
@@ -317,7 +605,7 @@ end
 ---@param speed number 0.00-1.00
 ---@param during number
 function hunit.setAnimateSpeed(whichUnit, speed, during)
-    if (whichUnit == nil or his.unitDestroyed(whichUnit)) then
+    if (whichUnit == nil or hunit.isDestroyed(whichUnit)) then
         return
     end
     during = during or 0
@@ -340,7 +628,7 @@ end
 ---@param blue number 0-255
 ---@param opacity number 不透明度 0.0-1.0
 function hunit.setRGBA(whichUnit, red, green, blue, opacity)
-    if (whichUnit == nil or his.unitDestroyed(whichUnit)) then
+    if (whichUnit == nil or hunit.isDestroyed(whichUnit)) then
         return
     end
     local uid = hunit.getId(whichUnit)
@@ -438,7 +726,7 @@ function hunit.embed(u, options)
         hskill.add(u, HL_ID.ability_item_slot, 1)
     end
     -- 如果是英雄，注册事件和计算初次属性
-    if (his.hero(u) == true) then
+    if (hunit.isHero(u) == true) then
         hhero.setPrevLevel(u, 1)
         hattribute.set(u, 0, {
             str_white = "=" .. cj.GetHeroStr(u, false),
@@ -700,7 +988,7 @@ end
 ---@param targetUnit userdata
 ---@param delay number
 function hunit.destroy(targetUnit, delay)
-    if (his.unitDestroyed(targetUnit)) then
+    if (hunit.isDestroyed(targetUnit)) then
         return
     end
     if (delay == nil or delay <= 0) then
@@ -712,7 +1000,7 @@ function hunit.destroy(targetUnit, delay)
     else
         htime.setTimeout(delay, function(t)
             t.destroy()
-            if (his.unitDestroyed(targetUnit)) then
+            if (hunit.isDestroyed(targetUnit)) then
                 return
             end
             hgroup.removeUnit(hgroup.GLOBAL, targetUnit)

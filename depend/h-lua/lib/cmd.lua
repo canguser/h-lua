@@ -8,7 +8,7 @@ function hcmd(pattern, callFunc)
     end
     for i = 1, bj_MAX_PLAYERS, 1 do
         local p = hplayer.players[i]
-        if (p ~= nil and his.computer(p) == false) then
+        if (p ~= nil and hplayer.isComputer(p) == false) then
             hevent.onChat(p, pattern, callFunc)
         end
     end

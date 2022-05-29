@@ -24,7 +24,7 @@ function haward.forUnit(whichUnit, exp, gold, lumber)
     local realGold = math.ceil(gold)
     local realLumber = math.ceil(lumber)
     local realExp = math.ceil(exp)
-    if (realExp >= 1 and his.hero(whichUnit)) then
+    if (realExp >= 1 and hunit.isHero(whichUnit)) then
         hunit.addExp(whichUnit, realExp, true)
     end
     if (realGold >= 1) then
@@ -71,16 +71,16 @@ function haward.forGroup(whichUnit, exp, gold, lumber)
         haward.shareRange,
         function(filterUnit)
             local flag = true
-            if (his.hero(filterUnit) == false) then
+            if (hunit.isHero(filterUnit) == false) then
                 flag = false
             end
-            if (his.ally(whichUnit, filterUnit) == false) then
+            if (hunit.isAlly(whichUnit, filterUnit) == false) then
                 flag = false
             end
-            if (his.alive(filterUnit) == false) then
+            if (hunit.isAlive(filterUnit) == false) then
                 flag = false
             end
-            if (his.structure(filterUnit) == true) then
+            if (hunit.isStructure(filterUnit) == true) then
                 flag = false
             end
             return flag

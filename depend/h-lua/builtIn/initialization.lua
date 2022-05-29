@@ -121,7 +121,7 @@ for i = 1, bj_MAX_PLAYER_SLOTS, 1 do
     hevent.pool(hevent_binder.player.useItemX, function(tgr)
         cj.TriggerRegisterPlayerUnitEvent(tgr, hplayer.players[i], EVENT_PLAYER_UNIT_SPELL_EFFECT, nil)
     end)
-    if (his.computer(hplayer.players[i]) == false) then
+    if (hplayer.isComputer(hplayer.players[i]) == false) then
         hevent.pool(hevent_binder.player.esc, function(tgr)
             cj.TriggerRegisterPlayerEvent(tgr, hplayer.players[i], EVENT_PLAYER_END_CINEMATIC)
         end)
@@ -248,7 +248,7 @@ hmonitor.create(CONST_MONITOR.LIFE_BACK, 0.5,
         hunit.addCurLife(object, val * 0.5)
     end,
     function(object)
-        if (his.unitDestroyed(object) or his.dead(object)) then
+        if (hunit.isDestroyed(object) or hunit.isDead(object)) then
             return true
         end
         local val = hattribute.get(object, "life_back")
@@ -266,7 +266,7 @@ hmonitor.create(CONST_MONITOR.MANA_BACK, 0.7,
         hunit.addCurMana(object, val * 0.7)
     end,
     function(object)
-        if (his.unitDestroyed(object) or his.dead(object)) then
+        if (hunit.isDestroyed(object) or hunit.isDead(object)) then
             return true
         end
         local val = hattribute.get(object, "mana_back")

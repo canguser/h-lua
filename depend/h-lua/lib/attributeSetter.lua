@@ -234,7 +234,7 @@ end
 --- hSlk形式的设置白绿三围属性
 ---@protected
 function hattributeSetter.setUnitThree(whichUnit, futureVal, attr)
-    if (false == his.hero(whichUnit)) then
+    if (false == hunit.isHero(whichUnit)) then
         return
     end
     if (attr == "str_white") then
@@ -288,7 +288,7 @@ function hattributeSetter.relation(whichUnit, attr, diff)
     if (table.includes({ "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green" }, attr)) then
         three = string.sub(attr, 1, 3)
     end
-    if (three ~= nil and his.hero(whichUnit)) then
+    if (three ~= nil and hunit.isHero(whichUnit)) then
         -- 主属性影响(<= 0自动忽略)
         if (hattribute.RELATION.primary > 0) then
             if (string.upper(three) == hhero.getPrimary(whichUnit)) then
@@ -324,7 +324,7 @@ end
 --- @private
 function hattributeSetter.init(whichUnit)
     local uid = hunit.getId(whichUnit)
-    if (uid == nil or his.unitDestroyed(whichUnit)) then
+    if (uid == nil or hunit.isDestroyed(whichUnit)) then
         return false
     end
     -- init
@@ -516,7 +516,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
                 -- 绿字护甲
                 hattributeSetter.setUnitDefendGreen(whichUnit, futureVal)
                 params.defend = math.floor((params.defend_white or 0) + (params.defend_green or 0))
-            elseif (his.hero(whichUnit) and table.includes({ "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green" }, attr)) then
+            elseif (hunit.isHero(whichUnit) and table.includes({ "str_white", "agi_white", "int_white", "str_green", "agi_green", "int_green" }, attr)) then
                 -- 白/绿字力敏智
                 hattributeSetter.setUnitThree(whichUnit, futureVal, attr)
                 local t = string.sub(attr, 1, 3)

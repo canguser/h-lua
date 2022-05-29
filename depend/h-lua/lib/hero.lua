@@ -179,8 +179,8 @@ end
 ---@param x number
 ---@param y number
 function hhero.reborn(whichHero, delay, invulnerable, x, y)
-    if (his.hero(whichHero)) then
-        if (delay < 0.3 and his.unitDestroyed(whichHero) == false) then
+    if (hunit.isHero(whichHero)) then
+        if (delay < 0.3 and hunit.isDestroyed(whichHero) == false) then
             cj.ReviveHero(whichHero, x, y, true)
             hcache.set(whichHero, CONST_CACHE.UNIT_DEAD, nil)
             hmonitor.listen(CONST_MONITOR.LIFE_BACK, whichHero)
@@ -195,8 +195,8 @@ function hhero.reborn(whichHero, delay, invulnerable, x, y)
         else
             htime.setTimeout(delay, function(t)
                 t.destroy()
-                if (his.unitDestroyed(whichHero) == false) then
-                    if (his.alive(whichHero)) then
+                if (hunit.isDestroyed(whichHero) == false) then
+                    if (hunit.isAlive(whichHero)) then
                         return
                     end
                     cj.ReviveHero(whichHero, x, y, true)
@@ -427,7 +427,7 @@ function hhero.buildSelector(options)
             end
             hhero.selectorClearPool = {}
             for i = 1, hplayer.qty_max, 1 do
-                if (his.playing(hplayer.players[i]) and #hhero.player_heroes[i] <= 0) then
+                if (hplayer.isPlaying(hplayer.players[i]) and #hhero.player_heroes[i] <= 0) then
                     hplayer.defeat(hplayer.players[i], "未选英雄")
                 end
             end

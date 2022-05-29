@@ -1,11 +1,17 @@
+---@deprecated
 ---@class his 判断
 his = {}
+
+local deprecated = function(new)
+    print(" * [deprecated] his." .. debug.getinfo(2).name .. " 将于后续删除，请尽快使用 " .. new .. " 代替 ")
+end
 
 --- 是否电脑(如果位置为电脑玩家或无玩家，则为true)
 --- 常用来判断电脑AI是否开启
 ---@param whichPlayer userdata
 ---@return boolean
 function his.computer(whichPlayer)
+    deprecated("hplayer.isComputer")
     return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_COMPUTER or cj.GetPlayerSlotState(whichPlayer) ~= PLAYER_SLOT_STATE_PLAYING
 end
 
@@ -14,6 +20,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.playerSite(whichPlayer)
+    deprecated("hplayer.isUser")
     return cj.GetPlayerController(whichPlayer) == MAP_CONTROL_USER
 end
 
@@ -21,6 +28,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.playing(whichPlayer)
+    deprecated("hplayer.isPlaying")
     return cj.GetPlayerSlotState(whichPlayer) == PLAYER_SLOT_STATE_PLAYING
 end
 
@@ -28,6 +36,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.neutral(whichPlayer)
+    deprecated("hplayer.isNeutral")
     local flag = false
     if (whichPlayer == nil) then
         flag = false
@@ -47,6 +56,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.detected(whichUnit, whichPlayer)
+    deprecated("hunit.isDetected")
     if (whichUnit == nil or whichPlayer == nil) then
         return false
     end
@@ -60,6 +70,7 @@ end
 ---@param slotId number
 ---@return boolean
 function his.hasSlot(whichUnit, slotId)
+    deprecated("hunit.hasSlot")
     if (slotId == nil) then
         slotId = HL_ID.ability_item_slot
     end
@@ -70,6 +81,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.canAttack(whichUnit)
+    deprecated("hunit.isAttackAble")
     return "0" ~= (hslk.i2v(hunit.getId(whichUnit), "slk", "weapsOn") or "0")
 end
 
@@ -77,6 +89,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.dead(whichUnit)
+    deprecated("hunit.isDead")
     return (true == hcache.get(whichUnit, CONST_CACHE.UNIT_DEAD)) or cj.IsUnitType(whichUnit, UNIT_TYPE_DEAD) or (cj.GetUnitState(whichUnit, UNIT_STATE_LIFE) <= 0)
 end
 
@@ -84,20 +97,23 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.alive(whichUnit)
-    return false == his.dead(whichUnit)
+    deprecated("hunit.isAlive")
+    return false == hunit.isDead(whichUnit)
 end
 
 --- 单位是否已被删除
 ---@param whichUnit userdata
 ---@return boolean
 function his.unitDestroyed(whichUnit)
-    return cj.GetUnitTypeId(whichUnit) == 0 or (his.dead(whichUnit) and false == hcache.exist(whichUnit))
+    deprecated("hunit.isDestroyed")
+    return cj.GetUnitTypeId(whichUnit) == 0 or (hunit.isDead(whichUnit) and false == hcache.exist(whichUnit))
 end
 
 --- 是否无敌
 ---@param whichUnit userdata
 ---@return boolean
 function his.invincible(whichUnit)
+    deprecated("hunit.isInvincible")
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_invulnerable) > 0
 end
 
@@ -107,6 +123,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.hero(whichUnit)
+    deprecated("hunit.isHero")
     local uid = hunit.getId(whichUnit)
     if (uid == nil) then
         return false
@@ -118,6 +135,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.structure(whichUnit)
+    deprecated("hunit.isStructure")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_STRUCTURE)
 end
 
@@ -125,6 +143,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.illusion(whichUnit)
+    deprecated("hunit.isIllusion")
     return cj.IsUnitIllusion(whichUnit)
 end
 
@@ -132,6 +151,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.ground(whichUnit)
+    deprecated("hunit.isGround")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_GROUND)
 end
 
@@ -139,6 +159,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.air(whichUnit)
+    deprecated("hunit.isAir")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_FLYING)
 end
 
@@ -146,6 +167,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.melee(whichUnit)
+    deprecated("hunit.isMelee")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
 end
 
@@ -153,6 +175,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.ranged(whichUnit)
+    deprecated("hunit.isRanged")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
 end
 
@@ -160,6 +183,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.summoned(whichUnit)
+    deprecated("hunit.isSummoned")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_SUMMONED)
 end
 
@@ -167,6 +191,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.mechanical(whichUnit)
+    deprecated("hunit.isMechanical")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MECHANICAL)
 end
 
@@ -174,6 +199,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.ancient(whichUnit)
+    deprecated("hunit.isAncient")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_ANCIENT)
 end
 
@@ -181,6 +207,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.sapper(whichUnit)
+    deprecated("hunit.isSapper")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_SAPPER)
 end
 
@@ -188,6 +215,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.ethereal(whichUnit)
+    deprecated("hunit.isEthereal")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_ETHEREAL)
 end
 
@@ -195,6 +223,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.immune(whichUnit)
+    deprecated("hunit.isImmune")
     return cj.IsUnitType(whichUnit, UNIT_TYPE_MAGIC_IMMUNE)
 end
 
@@ -203,6 +232,7 @@ end
 ---@param whichRace userdata 参考 blizzard:^RACE
 ---@return boolean
 function his.race(whichUnit, whichRace)
+    deprecated("hunit.isRace")
     return cj.IsUnitRace(whichUnit, whichRace)
 end
 
@@ -210,6 +240,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.locust(whichUnit)
+    deprecated("hunit.isLocust")
     return cj.GetUnitAbilityLevel(whichUnit, HL_ID.ability_locust) > 0
 end
 
@@ -217,6 +248,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.beDamaging(whichUnit)
+    deprecated("hunit.isBeDamaging")
     return hcache.get(whichUnit, CONST_CACHE.ATTR_BE_DAMAGING, false)
 end
 
@@ -224,6 +256,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.damaging(whichUnit)
+    deprecated("hunit.isDamaging")
     return hcache.get(whichUnit, CONST_CACHE.ATTR_DAMAGING, false)
 end
 
@@ -231,6 +264,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.playerBeDamaging(whichPlayer)
+    deprecated("hplayer.isBeDamaging")
     return hcache.get(whichPlayer, CONST_CACHE.ATTR_BE_DAMAGING, false)
 end
 
@@ -238,6 +272,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.playerDamaging(whichPlayer)
+    deprecated("hplayer.isDamaging")
     return hcache.get(whichPlayer, CONST_CACHE.ATTR_DAMAGING, false)
 end
 
@@ -245,6 +280,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.water(whichUnit)
+    deprecated("hunit.isWater")
     return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == false
 end
 
@@ -252,6 +288,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function his.floor(whichUnit)
+    deprecated("hunit.isFloor")
     return cj.IsTerrainPathable(hunit.x(whichUnit), hunit.y(whichUnit), PATHING_TYPE_FLOATABILITY) == true
 end
 
@@ -260,6 +297,7 @@ end
 ---@param otherUnit userdata
 ---@return boolean
 function his.unit(whichUnit, otherUnit)
+    deprecated("hunit.isUnit")
     return cj.IsUnit(whichUnit, otherUnit)
 end
 
@@ -268,6 +306,7 @@ end
 ---@param otherUnit userdata
 ---@return boolean
 function his.enemy(whichUnit, otherUnit)
+    deprecated("hunit.isEnemy")
     return cj.IsUnitEnemy(whichUnit, hunit.getOwner(otherUnit))
 end
 
@@ -276,6 +315,7 @@ end
 ---@param otherUnit userdata
 ---@return boolean
 function his.ally(whichUnit, otherUnit)
+    deprecated("hunit.isAlly")
     return cj.IsUnitAlly(whichUnit, hunit.getOwner(otherUnit))
 end
 
@@ -284,6 +324,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.enemyPlayer(whichUnit, whichPlayer)
+    deprecated("hunit.isEnemyPlayer")
     return cj.IsUnitEnemy(whichUnit, whichPlayer)
 end
 
@@ -292,6 +333,7 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.allyPlayer(whichUnit, whichPlayer)
+    deprecated("hunit.isAllyPlayer")
     return cj.IsUnitAlly(whichUnit, whichPlayer)
 end
 
@@ -299,11 +341,13 @@ end
 ---@param whichPlayer userdata
 ---@return boolean
 function his.marking(whichPlayer)
+    deprecated("hunit.isMarking")
     return hcache.get(whichPlayer, CONST_CACHE.PLAYER_MARKING) == true
 end
 
 --- 是否在区域内
 function his.inRect(whichRect, x, y)
+    deprecated("hrect.isInner")
     return (x < hrect.getMaxX(whichRect) and x > hrect.getMinX(whichRect) and y < hrect.getMaxY(whichRect) and y > hrect.getMinY(whichRect))
 end
 
@@ -313,6 +357,7 @@ end
 ---@param y number
 ---@return boolean
 function his.borderRect(whichRect, x, y)
+    deprecated("hrect.isBorder")
     local flag = false
     if (x >= hrect.getMaxX(whichRect) or x <= hrect.getMinX(whichRect)) then
         flag = true
@@ -328,6 +373,7 @@ end
 ---@param y number
 ---@return boolean
 function his.borderMap(x, y)
+    deprecated("hrect.isBorderPlayable")
     return his.borderRect(hrect.playable(), x, y)
 end
 
@@ -336,6 +382,7 @@ end
 ---@param y number
 ---@return boolean
 function his.borderCamera(x, y)
+    deprecated("hrect.isBorderCamera")
     return his.borderRect(hrect.camera(), x, y)
 end
 
@@ -343,6 +390,7 @@ end
 ---@param whichItem userdata
 ---@return boolean
 function his.itemDestroyed(whichItem)
+    deprecated("hitem.isDestroyed")
     return cj.GetItemTypeId(whichItem) == 0
 end
 
@@ -351,6 +399,7 @@ end
 ---@param whichItemId number|string
 ---@return boolean
 function his.hasItem(whichUnit, whichItemId)
+    deprecated("hunit.hasItem")
     local f = false
     if (type(whichItemId) == "string") then
         whichItemId = c2i(whichItemId)

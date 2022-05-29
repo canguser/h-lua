@@ -1,6 +1,13 @@
 ---@class hitem 物品
 hitem = {}
 
+--- 物品是否已被销毁
+---@param whichItem userdata
+---@return boolean
+function hitem.isDestroyed(whichItem)
+    return cj.GetItemTypeId(whichItem) == 0
+end
+
 --- 获取物品X坐标
 ---@param it userdata
 ---@return number
@@ -45,7 +52,7 @@ end
 ---@param it userdata
 ---@param delay number
 function hitem.destroy(it, delay)
-    if (his.itemDestroyed(it)) then
+    if (hitem.isDestroyed(it)) then
         return
     end
     delay = delay or 0
@@ -56,7 +63,7 @@ function hitem.destroy(it, delay)
     else
         htime.setTimeout(delay, function(t)
             t.destroy()
-            if (his.itemDestroyed(it)) then
+            if (hitem.isDestroyed(it)) then
                 return
             end
             hitem.free(it)
@@ -310,7 +317,7 @@ function hitem.create(options)
     end
     local it
     -- 如果不是创建给单位，又或者单位已经不存在了，直接返回
-    if (options.whichUnit == nil or his.unitDestroyed(options.whichUnit) or his.dead(options.whichUnit)) then
+    if (options.whichUnit == nil or hunit.isDestroyed(options.whichUnit) or hunit.isDead(options.whichUnit)) then
         -- 掉在地上
         it = cj.CreateItem(id, x, y)
         cj.SetItemCharges(it, charges)
@@ -382,7 +389,7 @@ end
 ---@param origin userdata
 ---@param slot nil|number 物品位置
 function hitem.drop(origin, slot)
-    if (origin == nil or his.unitDestroyed(origin) or his.dead(origin)) then
+    if (origin == nil or hunit.isDestroyed(origin) or hunit.isDead(origin)) then
         return
     end
     if (slot == nil) then
@@ -407,7 +414,7 @@ end
 ---@param w number
 ---@param h number
 function hitem.pickRect(u, x, y, w, h)
-    if (u == nil or his.unitDestroyed(u) or his.dead(u)) then
+    if (u == nil or hunit.isDestroyed(u) or hunit.isDead(u)) then
         return
     end
     local items = {}
@@ -429,7 +436,7 @@ end
 ---@param y number
 ---@param r number
 function hitem.pickRound(u, x, y, r)
-    if (u == nil or his.unitDestroyed(u) or his.dead(u)) then
+    if (u == nil or hunit.isDestroyed(u) or hunit.isDead(u)) then
         return
     end
     local items = {}

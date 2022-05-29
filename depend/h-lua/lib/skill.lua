@@ -219,13 +219,13 @@ function hskill.damage(options)
     if (options.targetUnit == nil) then
         return
     end
-    if (his.dead(options.targetUnit) or his.unitDestroyed(options.targetUnit)) then
+    if (hunit.isDead(options.targetUnit) or hunit.isDestroyed(options.targetUnit)) then
         return
     end
-    if (his.unitDestroyed(options.targetUnit)) then
+    if (hunit.isDestroyed(options.targetUnit)) then
         return
     end
-    if (options.sourceUnit ~= nil and his.unitDestroyed(options.sourceUnit)) then
+    if (options.sourceUnit ~= nil and hunit.isDestroyed(options.sourceUnit)) then
         return
     end
     if (options.damageSrc == nil) then
@@ -244,7 +244,7 @@ function hskill.damage(options)
         return options.damage > 0
     end)
     -- 最终伤害
-    if (options.damage > 0.125 and his.unitDestroyed(options.targetUnit) == false) then
+    if (options.damage > 0.125 and hunit.isDestroyed(options.targetUnit) == false) then
         -- 设置单位|玩家正在受伤
         local isBeDamagingTimer = hcache.get(options.targetUnit, CONST_CACHE.ATTR_BE_DAMAGING_TIMER, nil)
         if (isBeDamagingTimer ~= nil) then
@@ -277,7 +277,7 @@ function hskill.damage(options)
             end)
         )
         -- 设置单位|玩家正在造成伤害
-        if (options.sourceUnit ~= nil and his.unitDestroyed(options.sourceUnit) == false) then
+        if (options.sourceUnit ~= nil and hunit.isDestroyed(options.sourceUnit) == false) then
             local isDamagingTimer = hcache.get(options.sourceUnit, CONST_CACHE.ATTR_DAMAGING_TIMER, nil)
             if (isDamagingTimer ~= nil) then
                 isDamagingTimer.destroy()
