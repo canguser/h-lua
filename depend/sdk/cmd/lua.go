@@ -123,10 +123,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	requireEmbed(L, sdkData.Embeds, "embeds/slk/system.lua")
 	// 加载 项目 slk
 	projectSlk := sdkData.Projects + "/" + projectName + "/hslk"
-	check, err := lib.IsDir(projectSlk)
-	if err != nil {
-		lib.Panic(err)
-	}
+	check, _ := lib.IsDir(projectSlk)
 	if check == true {
 		err := filepath.Walk(projectSlk, func(path string, info fs.FileInfo, err error) error {
 			if err != nil {
@@ -143,7 +140,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 		}
 	}
 	fn = L.GetGlobal("SLK_GO_JSON")
-	if err = L.CallByParam(lua.P{
+	if err := L.CallByParam(lua.P{
 		Fn:      fn,
 		NRet:    1,
 		Protect: true,
@@ -153,7 +150,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	// get lua function results
 	slkData := L.ToString(-1)
 	var slData []map[string]interface{}
-	err = json.Unmarshal([]byte(slkData), &slData)
+	err := json.Unmarshal([]byte(slkData), &slData)
 	if err != nil {
 		lib.Panic(err)
 	}

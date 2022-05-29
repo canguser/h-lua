@@ -95,26 +95,29 @@ func war3Lua(sdkData lib.SdkData, createSrc string) {
 	}
 	// project
 	proDir := sdkData.Projects + "/" + projectName
-	projectSlkDir := tmpMapDir + "/project-slk"
-	projectSlkDir, _ = filepath.Abs(projectSlkDir)
-	lib.CopyPath(proDir+"/hslk", projectSlkDir)
-	err = filepath.Walk(projectSlkDir, func(path string, info fs.FileInfo, err error) error {
+	hasSlk, _ := lib.IsDir(proDir + "/hslk")
+	if hasSlk {
+		projectSlkDir := tmpMapDir + "/project-slk"
+		projectSlkDir, _ = filepath.Abs(projectSlkDir)
+		lib.CopyPath(proDir+"/hslk", projectSlkDir)
+		err = filepath.Walk(projectSlkDir, func(path string, info fs.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			pLen := len(path)
+			if path[pLen-4:pLen] == ".lua" {
+				requireRelation := strings.Replace(path, projectSlkDir, "", 1)
+				requireRelation = requireRelation[1:]
+				requireRelation = strings.Replace(requireRelation, ".lua", "", -1)
+				requireRelation = strings.Replace(requireRelation, "\\", ".", -1)
+				requireRelation = strings.Replace(requireRelation, "/", ".", -1)
+				requireStr = append(requireStr, "require 'project-slk."+requireRelation+"'")
+			}
+			return nil
+		})
 		if err != nil {
-			return err
+			lib.Panic(err)
 		}
-		pLen := len(path)
-		if path[pLen-4:pLen] == ".lua" {
-			requireRelation := strings.Replace(path, projectSlkDir, "", 1)
-			requireRelation = requireRelation[1:]
-			requireRelation = strings.Replace(requireRelation, ".lua", "", -1)
-			requireRelation = strings.Replace(requireRelation, "\\", ".", -1)
-			requireRelation = strings.Replace(requireRelation, "/", ".", -1)
-			requireStr = append(requireStr, "require 'project-slk."+requireRelation+"'")
-		}
-		return nil
-	})
-	if err != nil {
-		lib.Panic(err)
 	}
 	cliLuaC = strings.Replace(cliLuaC, "HLUA_CLI_REQUIRE = 20220518", strings.Join(requireStr, "\n"), 1)
 	if createSrc == "_test" {
