@@ -404,7 +404,7 @@ end
     during = 0.0 大于0生效；小于等于0时无限持续时间
 ]]
 --- @private
---- @return nil|string buffKey
+--- @return Timer|nil
 function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
     local valType = type(val)
     local params = hattribute.get(whichUnit)
@@ -418,7 +418,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
     if (hattributeSetter.smart[attr] ~= nil) then
         attr = hattributeSetter.smart[attr]
     end
-    local buffKey
+    local buffTimer
     local diff = 0
     if (valType == "number") then
         if (opr == "+") then
@@ -460,7 +460,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
                     groupKey = 'attr.' .. attr .. '-'
                 end
                 params[attr] = futureVal
-                htime.setTimeout(during, function()
+                buffTimer = htime.setTimeout(during, function()
                     hattributeSetter.setHandle(whichUnit, attr, "-", diff, 0)
                 end)
             else
@@ -536,7 +536,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
             local valArr = string.explode(",", val)
             if (during > 0) then
                 params[attr] = table.merge(params[attr], valArr)
-                htime.setTimeout(during, function()
+                buffTimer = htime.setTimeout(during, function()
                     hattributeSetter.setHandle(whichUnit, attr, "-", val, 0)
                 end)
             else
@@ -550,7 +550,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
                         table.delete(params[attr], v, 1)
                     end
                 end
-                htime.setTimeout(during, function()
+                buffTimer = htime.setTimeout(during, function()
                     hattributeSetter.setHandle(whichUnit, attr, "+", val, 0)
                 end)
             else
@@ -564,7 +564,7 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
             local old = table.clone(params[attr])
             if (during > 0) then
                 params[attr] = string.explode(",", val)
-                htime.setTimeout(during, function()
+                buffTimer = htime.setTimeout(during, function()
                     hattributeSetter.setHandle(whichUnit, attr, "=", string.implode(",", old), 0)
                 end)
             else
@@ -572,5 +572,5 @@ function hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
             end
         end
     end
-    return buffKey
+    return buffTimer
 end

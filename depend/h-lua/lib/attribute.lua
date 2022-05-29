@@ -38,7 +38,7 @@ end
 ---@param whichUnit userdata
 ---@param during number 0表示无限
 ---@param data noteAttr
----@return nil|table buffKeys，返回buff keys，如果一个buff都没有，返回nil
+---@return nil|Timer[] 当持续时间大于0时，返回buffTimer[]
 function hattribute.set(whichUnit, during, data)
     if (whichUnit == nil) then
         -- 例如有时造成伤害之前把单位删除就捕捉不到这个伤害来源了
@@ -55,57 +55,30 @@ function hattribute.set(whichUnit, during, data)
         err("data must be table")
         return
     end
-    local buffKeys = {}
+    local timers = {}
     for _, arr in ipairs(table.obj2arr(data, CONST_ATTR_KEYS)) do
         local attr = arr.key
         local v = arr.value
-        local buffKey
+        local t
         if (attribute[attr] == nil) then
             attribute[attr] = CONST_ATTR_VALUE[attr] or 0
         end
-        if (type(v) == "string") then
+        if (type(v) == "number") then
+            t = hattributeSetter.setHandle(whichUnit, attr, "=", v, during)
+        elseif (type(v) == "string") then
             local opr = string.sub(v, 1, 1)
             v = string.sub(v, 2, string.len(v))
             local val = tonumber(v)
             if (val == nil) then
                 val = v
             end
-            buffKey = hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
-        elseif (type(v) == "table") then
-            -- table型
-            if (v.add ~= nil and type(v.add) == "table") then
-                for _, set in ipairs(v.add) do
-                    if (set == nil) then
-                        err("table effect loss[set]!")
-                        break
-                    end
-                    if (type(set) ~= "table") then
-                        err("add type(set) must be a table!")
-                        break
-                    end
-                    buffKey = hattributeSetter.setHandle(whichUnit, attr, "+", set, during)
-                end
-            elseif (v.sub ~= nil and type(v.sub) == "table") then
-                for _, set in ipairs(v.sub) do
-                    if (set == nil) then
-                        err("table effect loss[set]!")
-                        break
-                    end
-                    if (type(set) ~= "table") then
-                        err("sub type(set) must be a table!")
-                        break
-                    end
-                    buffKey = hattributeSetter.setHandle(whichUnit, attr, "-", set, during)
-                end
-            end
+            t = hattributeSetter.setHandle(whichUnit, attr, opr, val, during)
         end
-        if (buffKey ~= nil) then
-            table.insert(buffKeys, buffKey)
+        if (t ~= nil) then
+            table.insert(timers, t)
         end
     end
-    if (#buffKeys > 0) then
-        return buffKeys
-    end
+    return timers
 end
 
 --- 通用get
