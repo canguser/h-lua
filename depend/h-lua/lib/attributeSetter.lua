@@ -290,7 +290,7 @@ function hattributeSetter.relation(whichUnit, attr, diff)
     end
     if (three ~= nil and hunit.isHero(whichUnit)) then
         -- 主属性影响(<= 0自动忽略)
-        if (hattribute.RELATION.primary > 0) then
+        if ((hattribute.RELATION.primary or 0) > 0) then
             if (string.upper(three) == hhero.getPrimary(whichUnit)) then
                 hattribute.set(whichUnit, 0, { attack_white = "+" .. diff * hattribute.RELATION.primary })
             end
