@@ -58,9 +58,8 @@ end
 
 --- 遍历物品池
 --- 遍历过程中返回 false 则中断
----@alias ItemPoolForEach fun(enumItem: userdata, idx: number):void
 ---@param poolName string
----@param action ItemPoolForEach | "function(enumItem, idx) end"
+---@param action fun(enumItem:userdata, idx:number)
 function hitemPool.forEach(poolName, action)
     if (poolName == nil) then
         return

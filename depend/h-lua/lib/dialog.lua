@@ -27,10 +27,9 @@ end
         }
     }
 ]]
----@alias dialogCreateAction fun(action: string):void
 ---@param whichPlayer userdata
 ---@param options {title:string,buttons:table}
----@param action dialogCreateAction | "function(btnValue) end"
+---@param action fun(btnValue:string|any)
 ---@return void
 function hdialog.create(whichPlayer, options, action)
     if (#options.buttons <= 0) then

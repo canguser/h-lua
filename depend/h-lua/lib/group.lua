@@ -3,9 +3,8 @@ hgroup = { GLOBAL = {} }
 
 --- 遍历单位组
 --- 遍历过程中返回 false 则中断
----@alias GroupForEach fun(enumUnit: userdata, idx: number):void
 ---@param whichGroup table
----@param action GroupForEach | "function(enumUnit, idx) end"
+---@param action fun(enumUnit:userdata, idx:number)
 ---@return void
 function hgroup.forEach(whichGroup, action)
     if (whichGroup == nil) then
@@ -79,11 +78,11 @@ function hgroup.removeUnit(whichGroup, whichUnit)
 end
 
 --- 创建单位组,以(x,y)点为中心radius距离
----@alias GroupFilter fun(filterUnit: userdata):void
+---@alias GroupFilter fun(filterUnit:userdata)
 ---@param x number
 ---@param y number
 ---@param radius number
----@param filterFunc GroupFilter | "function(filterUnit) end"
+---@param filterFunc GroupFilter
 ---@return userdata[]
 function hgroup.createByXY(x, y, radius, filterFunc)
     if (#hgroup.GLOBAL == 0) then
@@ -112,7 +111,7 @@ end
 --- 创建单位组,以某个单位为中心radius距离
 ---@param u userdata
 ---@param radius number
----@param filterFunc GroupFilter | "function(filterUnit) end"
+---@param filterFunc GroupFilter
 ---@return userdata[]
 function hgroup.createByUnit(u, radius, filterFunc)
     return hgroup.createByXY(hunit.x(u), hunit.y(u), radius, filterFunc)
@@ -120,7 +119,7 @@ end
 
 --- 创建单位组,以区域为范围选择
 ---@param r userdata
----@param filterFunc GroupFilter | "function(filterUnit) end"
+---@param filterFunc GroupFilter
 ---@return userdata[]
 function hgroup.createByRect(r, filterFunc)
     if (#hgroup.GLOBAL == 0) then

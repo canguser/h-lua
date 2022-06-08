@@ -6,12 +6,10 @@ hmonitor = {
 }
 
 --- 创建一个监听器
----@alias monAction fun(object: any):void
----@alias monRemoveFilter fun(object: any):boolean
 ---@param key string 唯一key
 ---@param frequency number 周期间隔，每个周期会把受监听对象回调
----@param action monAction | "function(object) end" 监听操作
----@param ignoreFilter nil|monRemoveFilter | "function(object) end" 移除监听对象的适配条件
+---@param action fun(object:any) 监听操作
+---@param ignoreFilter nil|fun(object:any) 移除监听对象的适配条件
 function hmonitor.create(key, frequency, action, ignoreFilter)
     if (type(key) ~= "string" or type(frequency) ~= "number" or type(action) ~= "function") then
         return
@@ -28,7 +26,7 @@ function hmonitor.create(key, frequency, action, ignoreFilter)
             if (ignoreFilter == nil or ignoreFilter(o) ~= true) then
                 action(o)
             else
-                arr.splice(o)
+                arr.set(o, nil)
             end
         end)
     end)
@@ -74,6 +72,6 @@ end
 function hmonitor.ignore(key, obj)
     local monitor = hmonitor._monitors[key]
     if (monitor ~= nil) then
-        monitor.arr.splice(obj)
+        monitor.arr.set(obj, nil)
     end
 end

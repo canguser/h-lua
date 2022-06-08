@@ -30,7 +30,7 @@ function Timer(isInterval, period, callFunc)
         local remain = math.max(0, (this.__PROPERTIES__.pause or (k - htime.inc)) / 100)
         if (k > 0 and type(fluctuate) == "number") then
             if (htime.kernel[k] and htime.kernel[k].keyExists(this.__ID__)) then
-                htime.kernel[k].splice(this.__ID__)
+                htime.kernel[k].set(this.__ID__, nil)
                 htime.penetrate(this, math.min(this.__PROPERTIES__.period, math.max(0, remain + fluctuate)))
             end
             return this
@@ -43,7 +43,7 @@ function Timer(isInterval, period, callFunc)
         if (k > 0 and type(fluctuate) == "number") then
             this.__PROPERTIES__.period = this.__PROPERTIES__.period + fluctuate
             if (this.remain() > this.__PROPERTIES__.period) then
-                htime.kernel[k].splice(this.__ID__)
+                htime.kernel[k].set(this.__ID__, nil)
                 htime.penetrate(this, this.__PROPERTIES__.period)
             end
             return this
@@ -56,7 +56,7 @@ function Timer(isInterval, period, callFunc)
     this.pause = function()
         local k = this.__PROPERTIES__.kernel or 0
         if (k > htime.inc) then
-            htime.kernel[k].splice(this.__ID__)
+            htime.kernel[k].set(this.__ID__, nil)
         end
         this.__PROPERTIES__.pause = k - htime.inc
         this.__PROPERTIES__.kernel = nil
@@ -72,7 +72,7 @@ function Timer(isInterval, period, callFunc)
     this.destroy = function()
         local k = this.__PROPERTIES__.kernel or 0
         if (k > htime.inc) then
-            htime.kernel[k].splice(this.__ID__)
+            htime.kernel[k].set(this.__ID__, nil)
         end
         this.__PROPERTIES__.pause = nil
         this.__PROPERTIES__.kernel = nil
@@ -101,7 +101,7 @@ function htime.penetrate(t, remain)
         htime.kernel[i] = Array()
     end
     t.__PROPERTIES__.kernel = i
-    htime.kernel[i].push(t, t.__ID__)
+    htime.kernel[i].set(t.__ID__, t)
 end
 
 --- 系统时钟

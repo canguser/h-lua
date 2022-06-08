@@ -1,6 +1,6 @@
 --- 配置这局游戏支持的框架指令
 ---@param pattern string 命令正则匹配规则
----@param callFunc onChat | "function(evtData) end"
+---@param callFunc fun(evtData:onChatData)
 ---@return void
 function hcmd(pattern, callFunc)
     if (type(pattern) ~= "string" or type(callFunc) ~= "function") then

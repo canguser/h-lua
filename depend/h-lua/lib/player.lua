@@ -104,8 +104,7 @@ end
 
 --- 遍历玩家
 --- 遍历过程中返回 false 则中断
----@alias Handler fun(enumPlayer: userdata, idx: number):void
----@param action Handler | "function(enumPlayer, idx) end"
+---@param action fun(enumPlayer:userdata, idx:number)
 function hplayer.forEach(action)
     if (action == nil) then
         return

@@ -233,9 +233,8 @@ end
 
 --- 循环获取某单位6格物品
 --- 遍历过程中返回 false 则中断
----@alias SlotForEach fun(enumItem: userdata,slotIndex: number):void
 ---@param whichUnit userdata
----@param action SlotForEach | "function(enumItem, slotIndex) end"
+---@param action fun(enumItem:userdata,slotIndex:number)
 ---@return number
 function hitem.forEach(whichUnit, action)
     local it

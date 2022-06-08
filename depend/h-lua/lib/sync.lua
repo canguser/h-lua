@@ -60,9 +60,9 @@ end
 
 --- [事件]注册一般消息同步操作
 --- 与send配套，接 hsync.send
----@alias onHSync fun(syncData: {triggerPlayer:"触发玩家",triggerKey:"触发索引",triggerData:"数组数据"}):void
+---@alias noteSyncData {triggerPlayer:"触发玩家",triggerKey:"触发索引",triggerData:"数组数据"}
 ---@param key string 自定义回调key
----@param callback onHSync | "function(syncData) end" 同步响应回调
+---@param callback fun(syncData:noteSyncData}) 同步响应回调
 function hsync.onSend(key, callback)
     key = key or hsync.key()
     hsync.call(key, callback)
