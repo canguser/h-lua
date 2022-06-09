@@ -129,7 +129,7 @@ end
 ---@param whichUnit userdata
 ---@return boolean
 function hunit.isRanged(whichUnit)
-    return cj.IsUnitType(whichUnit, UNIT_TYPE_MELEE_ATTACKER)
+    return cj.IsUnitType(whichUnit, UNIT_TYPE_RANGED_ATTACKER)
 end
 
 --- 是否召唤
