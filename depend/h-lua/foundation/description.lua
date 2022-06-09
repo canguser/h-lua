@@ -118,10 +118,18 @@ function description.unitUbertip(v)
     if (type(v.Ubertip) == "string" and v.Ubertip ~= "") then
         table.insert(desc, v.Ubertip)
     end
-    table.insert(desc, hcolor.mixed("攻击类型：" .. CONST_WEAPON_TYPE[v.weapTp1].label .. "(" .. v.cool1 .. "秒/击)", "ff3939"))
-    table.insert(desc, hcolor.mixed("基本攻击：" .. v.dmgplus1, "ff8080"))
-    table.insert(desc, hcolor.mixed("攻击范围：" .. v.rangeN1, "99ccff"))
-    table.insert(desc, hcolor.mixed("移速：" .. v.spd .. " " .. CONST_MOVE_TYPE[v.movetp].label, "ccffcc"))
+    if (v.weapTp1 and v.cool1) then
+        table.insert(desc, hcolor.mixed("攻击类型：" .. CONST_WEAPON_TYPE[v.weapTp1].label .. "(" .. v.cool1 .. "秒/击)", "ff3939"))
+    end
+    if (v.dmgplus1) then
+        table.insert(desc, hcolor.mixed("基本攻击：" .. v.dmgplus1, "ff8080"))
+    end
+    if (v.rangeN1) then
+        table.insert(desc, hcolor.mixed("攻击范围：" .. v.rangeN1, "99ccff"))
+    end
+    if (v.spd and v.movetp) then
+        table.insert(desc, hcolor.mixed("移速：" .. v.spd .. " " .. CONST_MOVE_TYPE[v.movetp].label, "ccffcc"))
+    end
     return string.implode("|n", desc)
 end
 
