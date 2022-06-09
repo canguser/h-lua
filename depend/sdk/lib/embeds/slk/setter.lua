@@ -40,12 +40,6 @@ function F6V_U(v)
     else
         v.Name = description.unitName(v)
     end
-    v.weapTp1 = v.weapTp1 or "normal"
-    v.cool1 = v.cool1 or 2
-    v.dmgplus1 = v.dmgplus1 or 10
-    v.rangeN1 = v.rangeN1 or 100
-    v.spd = v.spd or 300
-    v.movetp = v.movetp or "foot"
     if (v.Hotkey ~= nil) then
         v.Buttonpos_1 = v.Buttonpos_1 or CONST_HOTKEY_FULL_KV[v.Hotkey].Buttonpos_1 or 0
         v.Buttonpos_2 = v.Buttonpos_2 or CONST_HOTKEY_FULL_KV[v.Hotkey].Buttonpos_2 or 0
