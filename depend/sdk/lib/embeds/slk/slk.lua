@@ -59,3 +59,17 @@ function hslk_upgrade(_v)
     SLK_GO_SET(_v)
     return _v
 end
+
+function hslk_destructable(_v)
+    _v = F6V_DE(_v)
+    _v._id = SLK_ID(_v)
+    SLK_GO_SET(_v)
+    return _v
+end
+
+function hslk_doodad(_v)
+    _v = F6V_DO(_v)
+    _v._id = SLK_ID(_v)
+    SLK_GO_SET(_v)
+    return _v
+end

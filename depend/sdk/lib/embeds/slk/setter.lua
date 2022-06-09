@@ -325,3 +325,21 @@ function F6V_UP(v)
     v.Ubertip = description.upgradeUbertip(v)
     return v
 end
+
+function F6V_DE(v)
+    v._class = "destructable"
+    v._type = v._type or "common"
+    if (v._parent == nil) then
+        v._parent = "BTrs"
+    end
+    return v
+end
+
+function F6V_DO(v)
+    v._class = "doodad"
+    v._type = v._type or "common"
+    if (v._parent == nil) then
+        v._parent = "DOtp"
+    end
+    return v
+end

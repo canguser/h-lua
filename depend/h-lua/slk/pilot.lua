@@ -38,6 +38,20 @@ function _upgrade(_v)
     return _v
 end
 
+---@alias note_Destructable {EditorSuffix,HP,InBeta,MMBlue,MMGreen,MMRed,Name,armor,buildTime,canPlaceDead,canPlaceRandScale,category,cliffHeight,code,colorB,colorG,colorR,comment,deathSnd,doodClass,fatLOS,file,fixedRot,flyH,fogRadius,fogVis,goldRep,lightweight,lumberRep,maxPitch,maxRoll,maxScale,minScale,numVar,occH,onCliffs,onWater,pathTex,pathTexDeath,portraitmodel,radius,repairTime,selSize,selcircsize,selectable,shadow,showInMM,targType,texFile,texID,tilesetSpecific,tilesets,useClickHelper,useMMColor,version,walkable}
+---@param _v note_Destructable
+---@return table
+function _destructable(_v)
+    return _v
+end
+
+---@alias note_Doodad {InBeta,MMBlue,MMGreen,MMRed,Name,animInFog,canPlaceRandScale,category,code,comment,defScale,doodClass,file,fixedRot,floats,ignoreModelClick,maxPitch,maxRoll,maxScale,minScale,numVar,onCliffs,onWater,pathTex,selSize,shadow,showInFog,showInMM,soundLoop,tilesetSpecific,tilesets,useClickHelper,useMMColor,version,vertB01,vertB02,vertB03,vertB04,vertB05,vertB06,vertB07,vertB08,vertB09,vertB10,vertG01,vertG02,vertG03,vertG04,vertG05,vertG06,vertG07,vertG08,vertG09,vertG10,vertR01,vertR02,vertR03,vertR04,vertR05,vertR06,vertR07,vertR08,vertR09,vertR10,visRadius,walkable}
+---@param _v note_Doodad
+---@return table
+function _doodad(_v)
+    return _v
+end
+
 ---@alias note_Attr {disabled}|noteAttr
 ---@param _v note_Attr
 ---@return table

@@ -23,6 +23,8 @@ local idPrefix = {
     unit = "V",
     buff = "B",
     upgrade = "U",
+    destructable = "D",
+    doodad = "O",
 }
 
 local idLimit = 46655 -- zzz

@@ -287,8 +287,12 @@ function hevent.trigger(handle, key, triggerData)
     end
 end
 
+--[[
+    后续on方法，使用默认key："default"
+    覆盖式定义，如有需要请自行直接使用register方法注册
+]]
+
 --- 准备被攻击
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onBeAttackReadyData {triggerUnit:"被攻击单位",attackUnit:"攻击单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onBeAttackReadyData)
@@ -298,7 +302,6 @@ function hevent.onBeAttackReady(whichUnit, callFunc)
 end
 
 --- 造成攻击
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onAttackData {triggerUnit:"攻击单位",targetUnit:"被攻击单位",damage:"伤害"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onAttackData)
@@ -308,7 +311,6 @@ function hevent.onAttack(whichUnit, callFunc)
 end
 
 --- 承受攻击
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onBeAttackData {triggerUnit:"被攻击单位",attackUnit:"攻击单位",damage:"伤害"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onBeAttackData)
@@ -318,7 +320,6 @@ function hevent.onBeAttack(whichUnit, callFunc)
 end
 
 --- 学习技能
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillStudyData {triggerUnit:"学习单位",learnedSkill:"学习技能ID字符串"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillStudyData)
@@ -328,7 +329,6 @@ function hevent.onSkillStudy(whichUnit, callFunc)
 end
 
 --- 准备施放技能
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillReadyData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillReadyData)
@@ -338,7 +338,6 @@ function hevent.onSkillReady(whichUnit, callFunc)
 end
 
 --- 开始施放技能
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillCastData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillCastData)
@@ -348,7 +347,6 @@ function hevent.onSkillCast(whichUnit, callFunc)
 end
 
 --- 停止施放技能
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillStopData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillStopData)
@@ -358,7 +356,6 @@ function hevent.onSkillStop(whichUnit, callFunc)
 end
 
 --- 发动技能效果
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillEffectData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetItem:"获取目标物品",targetDestructable:"获取目标可破坏物",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillEffectData)
@@ -368,7 +365,6 @@ function hevent.onSkillEffect(whichUnit, callFunc)
 end
 
 --- 施放技能结束
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSkillFinishData {triggerUnit:"施放单位",triggerSkill:"施放技能ID字符串"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onSkillFinishData)
@@ -378,7 +374,6 @@ function hevent.onSkillFinish(whichUnit, callFunc)
 end
 
 --- 单位使用物品
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemUsedData {triggerUnit:"触发单位",triggerItem:"触发物品",triggerSkill:"施放技能ID字符串",targetUnit:"获取目标单位",targetX:"获取施放目标点X",targetY:"获取施放目标点Y",targetZ:"获取施放目标点Z"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onItemUsedData)
@@ -388,7 +383,6 @@ function hevent.onItemUsed(whichUnit, callFunc)
 end
 
 --- 丢弃(传递)物品
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemDropData {triggerUnit:"丢弃单位",targetUnit:"获得单位（如果有）",triggerItem:"触发物品"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onItemDropData)
@@ -398,7 +392,6 @@ function hevent.onItemDrop(whichUnit, callFunc)
 end
 
 --- 获得物品
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemGetData {triggerUnit:"触发单位",triggerItem:"触发物品"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onItemGetData)
@@ -408,7 +401,6 @@ function hevent.onItemGet(whichUnit, callFunc)
 end
 
 --- 抵押物品（玩家把物品扔给商店）
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemPawnData {triggerUnit:"触发单位",soldItem:"抵押物品",buyingUnit:"抵押商店",soldGold:"抵押获得黄金",soldLumber:"抵押获得木头"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onItemPawnData)
@@ -418,7 +410,6 @@ function hevent.onItemPawn(whichUnit, callFunc)
 end
 
 --- 出售物品(商店卖给玩家)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemSellData {triggerUnit:"售卖单位",soldItem:"售卖物品",buyingUnit:"购买单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onItemSellData)
@@ -428,7 +419,6 @@ function hevent.onItemSell(whichUnit, callFunc)
 end
 
 --- 出售单位(商店卖给玩家)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onUnitSellData {triggerUnit:"商店单位",soldUnit:"被售卖单位",buyingUnit:"购买单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onUnitSellData)
@@ -438,7 +428,6 @@ function hevent.onUnitSell(whichUnit, callFunc)
 end
 
 --- 物品被破坏
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onItemDestroyData {triggerUnit:"触发单位",triggerItem:"触发物品"}
 ---@param whichItem userdata
 ---@param callFunc nil|fun(evtData:onItemDestroyData)
@@ -451,7 +440,6 @@ function hevent.onItemDestroy(whichItem, callFunc)
 end
 
 --- 造成伤害
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onDamageData {triggerUnit:"伤害来自单位",targetUnit:"被伤害单位",damage:"伤害",damageSrc:"伤害来源"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onDamageData)
@@ -461,7 +449,6 @@ function hevent.onDamage(whichUnit, callFunc)
 end
 
 --- 承受伤害
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onBeDamageData {triggerUnit:"被伤害单位",sourceUnit:"伤害来自单位",damage:"伤害",damageSrc:"伤害来源"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onBeDamageData)
@@ -471,7 +458,6 @@ function hevent.onBeDamage(whichUnit, callFunc)
 end
 
 --- 死亡时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onDeadData {triggerUnit:"死亡单位",killUnit:"凶手单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onDeadData)
@@ -481,7 +467,6 @@ function hevent.onDead(whichUnit, callFunc)
 end
 
 --- 杀敌时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onKillData {triggerUnit:"凶手单位",targetUnit:"死亡单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onKillData)
@@ -491,7 +476,6 @@ function hevent.onKill(whichUnit, callFunc)
 end
 
 --- 复活时(必须使用 hunit.reborn 方法才能嵌入到事件系统)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onRebornData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onRebornData)
@@ -501,7 +485,6 @@ function hevent.onReborn(whichUnit, callFunc)
 end
 
 --- 获得经验时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onExpData {triggerUnit:"触发单位",value:"获取了多少经验值"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onExpData)
@@ -511,7 +494,6 @@ function hevent.onExp(whichUnit, callFunc)
 end
 
 --- 提升等级时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onLevelUpData {triggerUnit:"触发单位",value:"获取提升了多少级"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onLevelUpData)
@@ -521,7 +503,6 @@ function hevent.onLevelUp(whichUnit, callFunc)
 end
 
 --- 建筑升级开始时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeStartData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onUpgradeStartData)
@@ -531,7 +512,6 @@ function hevent.onUpgradeStart(whichUnit, callFunc)
 end
 
 --- 建筑升级取消时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeCancelData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onUpgradeCancelData)
@@ -541,7 +521,6 @@ function hevent.onUpgradeCancel(whichUnit, callFunc)
 end
 
 --- 建筑升级完成时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onUpgradeFinishData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onUpgradeFinishData)
@@ -551,7 +530,6 @@ function hevent.onUpgradeFinish(whichUnit, callFunc)
 end
 
 --- 进入某单位（whichUnit）半径范围内
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onEnterUnitRangeData {centerUnit:"被进入范围的中心单位",triggerUnit:"进入范围的单位",radius:"设定的半径范围"}
 ---@param whichUnit userdata
 ---@param radius number
@@ -561,7 +539,7 @@ function hevent.onEnterUnitRange(whichUnit, radius, callFunc)
     local key = CONST_EVENT.enterUnitRange
     local func = hcache.get(whichUnit, CONST_CACHE.EVENT_ON_ENTER_RANGE .. radius, nil)
     if (func == nil) then
-        function func()
+        func = function()
             hevent.trigger(whichUnit, key, {
                 centerUnit = whichUnit,
                 triggerUnit = cj.GetTriggerUnit(),
@@ -577,7 +555,6 @@ function hevent.onEnterUnitRange(whichUnit, radius, callFunc)
 end
 
 --- 进入某区域
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onEnterRectData {triggerRect:"被进入的矩形区域",triggerUnit:"进入矩形区域的单位"}
 ---@param whichRect userdata
 ---@param callFunc fun(evtData:onEnterRectData)
@@ -589,7 +566,7 @@ function hevent.onEnterRect(whichRect, callFunc)
     local key = CONST_EVENT.enterRect
     local onEnterRectAction = hcache.get(whichRect, CONST_CACHE.EVENT_ON_ENTER_RECT)
     if (onEnterRectAction == nil) then
-        function onEnterRectAction()
+        onEnterRectAction = function()
             hevent.trigger(whichRect, key, {
                 triggerRect = whichRect,
                 triggerUnit = cj.GetTriggerUnit()
@@ -606,7 +583,6 @@ function hevent.onEnterRect(whichRect, callFunc)
 end
 
 --- 离开某区域
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onLeaveRectData {triggerRect:"被离开的矩形区域",triggerUnit:"离开矩形区域的单位"}
 ---@param whichRect userdata
 ---@param callFunc fun(evtData:onLeaveRectData)
@@ -618,7 +594,7 @@ function hevent.onLeaveRect(whichRect, callFunc)
     local key = CONST_EVENT.leaveRect
     local onLeaveRectAction = hcache.get(whichRect, CONST_CACHE.EVENT_ON_LEAVE_RECT)
     if (onLeaveRectAction == nil) then
-        function onLeaveRectAction()
+        onLeaveRectAction = function()
             hevent.trigger(whichRect, key, {
                 triggerRect = whichRect,
                 triggerUnit = cj.GetTriggerUnit()
@@ -635,7 +611,6 @@ function hevent.onLeaveRect(whichRect, callFunc)
 end
 
 --- 任意建筑建造开始时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onConstructStartData {triggerUnit:"触发单位"}
 ---@param whichPlayer userdata
 ---@param callFunc fun(evtData:onConstructStartData)
@@ -645,7 +620,6 @@ function hevent.onConstructStart(whichPlayer, callFunc)
 end
 
 --- 任意建筑建造取消时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onConstructCancelData {triggerUnit:"触发单位"}
 ---@param whichPlayer userdata
 ---@param callFunc fun(evtData:onConstructCancelData)
@@ -655,7 +629,6 @@ function hevent.onConstructCancel(whichPlayer, callFunc)
 end
 
 --- 任意建筑建造完成时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onConstructFinishData {triggerUnit:"触发单位"}
 ---@param whichPlayer userdata
 ---@param callFunc fun(evtData:onConstructFinishData)
@@ -665,7 +638,6 @@ function hevent.onConstructFinish(whichPlayer, callFunc)
 end
 
 --- 当聊天时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onChatData {triggerPlayer:"聊天的玩家",chatString:"聊天的内容",matchedString:"匹配命中的内容"}
 ---@param whichPlayer userdata
 ---@param pattern string 支持正则
@@ -683,7 +655,6 @@ function hevent.onChat(whichPlayer, pattern, callFunc)
 end
 
 --- 按ESC
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onEscData {triggerPlayer:"触发玩家"}
 ---@param whichPlayer userdata
 ---@param callFunc fun(evtData:onEscData)
@@ -693,7 +664,6 @@ function hevent.onEsc(whichPlayer, callFunc)
 end
 
 --- 玩家选择单位(点击了qty次)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onSelectionData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
 ---@param whichPlayer userdata
 ---@param qty number
@@ -704,7 +674,6 @@ function hevent.onSelection(whichPlayer, qty, callFunc)
 end
 
 --- 玩家取消选择单位
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onDeSelectionData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
 ---@param whichPlayer userdata
 ---@param callFunc fun(evtData:onDeSelectionData)
@@ -714,7 +683,6 @@ function hevent.onDeSelection(whichPlayer, callFunc)
 end
 
 --- 玩家离开游戏事件(注意这是全局事件)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onPlayerLeaveData {triggerPlayer:"触发玩家"}
 ---@param callFunc nil|fun(evtData:onPlayerLeaveData)
 ---@return void
@@ -723,7 +691,6 @@ function hevent.onPlayerLeave(callFunc)
 end
 
 --- 玩家资源变动
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onPlayerResourceChangeData {triggerPlayer:"触发玩家",triggerUnit:"触发单位",type:"资源类型",value:"变化值"}
 ---@param callFunc nil|fun(evtData:onPlayerResourceChangeData)
 ---@return void
@@ -732,7 +699,6 @@ function hevent.onPlayerResourceChange(callFunc)
 end
 
 --- 任意单位经过hero方法被玩家所挑选为英雄时(注意这是全局事件)
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onPickHeroData {triggerPlayer:"触发玩家",triggerUnit:"触发单位"}
 ---@param callFunc nil|fun(evtData:onPickHeroData)
 ---@return void
@@ -741,7 +707,6 @@ function hevent.onPickHero(callFunc)
 end
 
 --- 可破坏物死亡
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onDestructableDestroyData {triggerDestructable:"被破坏的可破坏物"}
 ---@param whichDestructable userdata
 ---@param callFunc nil|fun(evtData:onDestructableDestroyData)
@@ -754,7 +719,6 @@ function hevent.onDestructableDestroy(whichDestructable, callFunc)
 end
 
 --- 全图当前可破坏物死亡
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onMapDestructableDestroyData {triggerDestructable:"被破坏的可破坏物"}
 ---@param callFunc nil|fun(evtData:onMapDestructableDestroyData)
 ---@return void
@@ -770,7 +734,6 @@ end
 
 --- 当单位发布驻扎(H)命令
 --- 只有真人玩家的单位有此事件
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onHoldOnData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onHoldOnData)
@@ -781,7 +744,6 @@ end
 
 --- 当单位发布停止(S)命令
 --- 只有真人玩家的单位有此事件
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onStopData {triggerUnit:"触发单位"}
 ---@param whichUnit userdata
 ---@param callFunc nil|fun(evtData:onStopData)
@@ -791,7 +753,6 @@ function hevent.onStop(whichUnit, callFunc)
 end
 
 --- 任意单位改变所有者时
---- !使用默认key[default]覆盖式定义，如有需要请自行直接使用register方法注册
 ---@alias onUnitChangeOwnerData {triggerUnit:"被改变所有者的单位",prevOwner:"原所有者"}
 ---@param whichPlayer userdata
 ---@param callFunc nil|fun(evtData:onUnitChangeOwnerData)

@@ -73,42 +73,18 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	// 初始化
 	projectName := sdkData.Args[2]
 	tableIni := sdkData.Temp + "/" + projectName + "/table"
-	itemIni := ini(tableIni + "/item.ini")
-	abilityIni := ini(tableIni + "/ability.ini")
-	unitIni := ini(tableIni + "/unit.ini")
-	buffIni := ini(tableIni + "/buff.ini")
-	upgradeIni := ini(tableIni + "/upgrade.ini")
+	iniKeys := []string{"item", "ability", "unit", "buff", "upgrade", "destructable", "doodad"}
+	iniF6 := make(map[string]string)
 	reg, _ := regexp.Compile("\\[[A-Za-z][A-Za-z0-9]{3}]")
-	itemIniMatches := reg.FindAllString(itemIni, -1)
-	abilityIniMatches := reg.FindAllString(abilityIni, -1)
-	unitIniMatches := reg.FindAllString(unitIni, -1)
-	buffIniMatches := reg.FindAllString(buffIni, -1)
-	upgradeIniMatches := reg.FindAllString(upgradeIni, -1)
-	var idIni []string
-	for _, v := range itemIniMatches {
-		v = strings.Replace(v, "[", "", 1)
-		v = strings.Replace(v, "]", "", 1)
-		idIni = append(idIni, v)
-	}
-	for _, v := range abilityIniMatches {
-		v = strings.Replace(v, "[", "", 1)
-		v = strings.Replace(v, "]", "", 1)
-		idIni = append(idIni, v)
-	}
-	for _, v := range unitIniMatches {
-		v = strings.Replace(v, "[", "", 1)
-		v = strings.Replace(v, "]", "", 1)
-		idIni = append(idIni, v)
-	}
-	for _, v := range buffIniMatches {
-		v = strings.Replace(v, "[", "", 1)
-		v = strings.Replace(v, "]", "", 1)
-		idIni = append(idIni, v)
-	}
-	for _, v := range upgradeIniMatches {
-		v = strings.Replace(v, "[", "", 1)
-		v = strings.Replace(v, "]", "", 1)
-		idIni = append(idIni, v)
+	idIni := []string{}
+	for _, k := range iniKeys {
+		iniF6[k] = ini(tableIni + "/" + k + ".ini")
+		matches := reg.FindAllString(iniF6[k], -1)
+		for _, v := range matches {
+			v = strings.Replace(v, "[", "", 1)
+			v = strings.Replace(v, "]", "", 1)
+			idIni = append(idIni, v)
+		}
 	}
 	idIniByte, _ := json.Marshal(idIni)
 	fn := L.GetGlobal("SLK_GO_INI")
@@ -155,19 +131,9 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 		lib.Panic(err)
 	}
 	// lni codes
-	var _sbrAbility strings.Builder
-	var _sbrDestructable strings.Builder
-	var _sbrUnit strings.Builder
-	var _sbrItem strings.Builder
-	var _sbrBuff strings.Builder
-	var _sbrUpgrade strings.Builder
-	_slkIniBuilder := map[string]*strings.Builder{
-		"ability":      &_sbrAbility,
-		"destructable": &_sbrDestructable,
-		"unit":         &_sbrUnit,
-		"item":         &_sbrItem,
-		"buff":         &_sbrBuff,
-		"upgrade":      &_sbrUpgrade,
+	slkIniBuilder := make(map[string]*strings.Builder)
+	for _, k := range iniKeys {
+		slkIniBuilder[k] = &strings.Builder{}
 	}
 	var idCli []string
 	for _, sda := range slData {
@@ -237,7 +203,7 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 		if _id != "" && _parent != "" && len(_slk) > 0 {
 			idCli = append(idCli, _id)
 			_class := _hash["_class"].(string)
-			sbr := _slkIniBuilder[_class]
+			sbr := slkIniBuilder[_class]
 			sbr.WriteString("[" + _id + "]")
 			sbr.WriteString("\n_parent=" + _parent)
 			for k, v := range _slk {
@@ -248,8 +214,13 @@ func Lua(sdkData lib.SdkData, createSrc string) {
 	}
 	// merge ini
 	csTableDir := sdkData.Temp + "/" + createSrc + "/table"
-	for k, v := range _slkIniBuilder {
-		err = lib.FilePutContents(csTableDir+"/"+k+".ini", v.String(), fs.ModePerm)
+	for k, v := range slkIniBuilder {
+		if iniF6[k] == "" {
+			err = lib.FilePutContents(csTableDir+"/"+k+".ini", v.String(), fs.ModePerm)
+
+		} else {
+			err = lib.FilePutContents(csTableDir+"/"+k+".ini", iniF6[k]+"\n\n"+v.String(), fs.ModePerm)
+		}
 		if err != nil {
 			lib.Panic(err)
 		}

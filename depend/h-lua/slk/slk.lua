@@ -49,6 +49,12 @@ function hslk_init()
             elseif (JassSlk.upgrade[id] ~= nil) then
                 HSLK_I2V[id]._class = HSLK_I2V[id]._class or "upgrade"
                 HSLK_I2V[id].slk = JassSlk.upgrade[id]
+            elseif (JassSlk.destructable[id] ~= nil) then
+                HSLK_I2V[id]._class = HSLK_I2V[id]._class or "destructable"
+                HSLK_I2V[id].slk = JassSlk.destructable[id]
+            elseif (JassSlk.doodad[id] ~= nil) then
+                HSLK_I2V[id]._class = HSLK_I2V[id]._class or "doodad"
+                HSLK_I2V[id].slk = JassSlk.doodad[id]
             end
             -- 处理_class
             if (HSLK_I2V[id]._class) then
@@ -140,4 +146,16 @@ end
 ---@return {_id}
 function hslk_upgrade(_v)
     return hslk_cli_set(F6V_UP(_v))
+end
+
+---@param _v note_Destructable
+---@return {_id}
+function hslk_destructable(_v)
+    return hslk_cli_set(F6V_DE(_v))
+end
+
+---@param _v note_Doodad
+---@return {_id}
+function hslk_doodad(_v)
+    return hslk_cli_set(F6V_DO(_v))
 end

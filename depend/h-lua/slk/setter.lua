@@ -75,3 +75,15 @@ function F6V_UP(v)
     v._type = v._type or "common"
     return v
 end
+
+function F6V_DE(v)
+    v._class = "destructable"
+    v._type = v._type or "common"
+    return v
+end
+
+function F6V_DO(v)
+    v._class = "doodad"
+    v._type = v._type or "common"
+    return v
+end
