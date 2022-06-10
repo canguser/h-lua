@@ -531,7 +531,7 @@ hevent_binder = {
             local damage = cj.GetEventDamage()
             hjapi.EXSetEventDamage(0)
             if (damage > 0.125) then
-                local isAttack = hjapi.isEventAttackDamage() or true
+                local isAttack = hjapi.IsEventAttackDamage() or true
                 htime.setTimeout(0, function()
                     local damageSrc = CONST_DAMAGE_SRC.attack
                     if (false == isAttack) then

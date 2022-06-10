@@ -2003,14 +2003,14 @@ end
 
 --- 获得游戏渲染的：离顶黑边高、离底黑边高、中间显示高、
 ---@return number,number,number
-function japi.GetFrameBorders()
-    return japi._cache["FrameBlackTop"], japi._cache["FrameBlackBottom"], japi._cache["FrameInnerHeight"]
+function hjapi.GetFrameBorders()
+    return hjapi._cache["FrameBlackTop"], hjapi._cache["FrameBlackBottom"], hjapi._cache["FrameInnerHeight"]
 end
 
 --- 是否宽屏模式
 ---@return boolean
-function japi.IsWideScreen()
-    return japi._cache["IsWideScreen"]
+function hjapi.IsWideScreen()
+    return hjapi._cache["IsWideScreen"]
 end
 
 --- 是物理伤害
