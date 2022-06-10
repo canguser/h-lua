@@ -8,7 +8,11 @@ hjapi = {
 hjapi._cache = hjapi._cache or {
     ["DzLoadToc"] = {},
     ["Z"] = {},
-    ["tagIdx"] = 0,
+    ["FrameTagIndex"] = 0,
+    ["IsWideScreen"] = false,
+    ["FrameBlackTop"] = 0.020,
+    ["FrameBlackBottom"] = 0.130,
+    ["FrameInnerHeight"] = 0.45,
 }
 
 ---@private
@@ -139,17 +143,6 @@ end
 ---@return number
 function hjapi.DzAPI_Map_GetPlatformVIP(whichPlayer)
     return hjapi.exec("DzAPI_Map_GetPlatformVIP", whichPlayer)
-end
-
---- 玩家是否平台VIP
----@param whichPlayer userdata
----@return boolean
-function hjapi.DzAPI_Map_IsPlatformVIP(whichPlayer)
-    local res = hjapi.DzAPI_Map_GetPlatformVIP(whichPlayer)
-    if (type(res) == "number") then
-        return math.floor(res) > 0
-    end
-    return false
 end
 
 --- 读取公共服务器存档组数据
@@ -380,15 +373,15 @@ end
 ---@param fdfType string frame类型 TEXT | BACKDROP等
 ---@param fdfName string frame名称
 ---@param parent number 父节点ID(def:GameUI)
----@param tag string 自定义tag名称(def:cache.tagIdx)
+---@param tag string 自定义tag名称(def:cache.FrameTagIndex)
 ---@param id number integer(def:0)
 ---@return number|nil
 function hjapi.FrameTag(fdfType, fdfName, parent)
     if (fdfType == nil or fdfName == nil) then
         return
     end
-    hjapi._cache["tagIdx"] = hjapi._cache["tagIdx"] + 1
-    local tag = "jft-" .. hjapi._cache["tagIdx"]
+    hjapi._cache["FrameTagIndex"] = hjapi._cache["FrameTagIndex"] + 1
+    local tag = "jft-" .. hjapi._cache["FrameTagIndex"]
     parent = parent or hjapi.DzGetGameUI()
     return hjapi.DzCreateFrameByTagName(fdfType, tag, parent, fdfName, 0)
 end
@@ -419,6 +412,7 @@ end
 --- 原生 - 使用宽屏模式
 ---@param enable boolean
 function hjapi.DzEnableWideScreen(enable)
+    hjapi._cache["IsWideScreen"] = enable
     return hjapi.exec("DzEnableWideScreen", enable)
 end
 
@@ -445,6 +439,9 @@ end
 ---@param upperHeight number floor(3)
 ---@param bottomHeight number floor(3)
 function hjapi.DzFrameEditBlackBorders(upperHeight, bottomHeight)
+    hjapi._cache["FrameBlackTop"] = topHeight
+    hjapi._cache["FrameBlackBottom"] = bottomHeight
+    hjapi._cache["FrameInnerHeight"] = 0.6 - topHeight - bottomHeight
     return hjapi.exec("DzFrameEditBlackBorders", upperHeight, bottomHeight)
 end
 
@@ -1461,51 +1458,6 @@ function hjapi.EXGetEventDamageData(eddType)
     return hjapi.exec("EXGetEventDamageData", eddType)
 end
 
---- 是物理伤害
---- 响应'受到伤害'单位事件,不能用在等待之后
----@return boolean
-function hjapi.isEventPhysicalDamage()
-    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_PHYSICAL)
-end
-
---- 是攻击伤害
---- 响应'受到伤害'单位事件,不能用在等待之后
----@return boolean
-function hjapi.isEventAttackDamage()
-    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_ATTACK)
-end
-
---- 是远程伤害
---- 响应'受到伤害'单位事件,不能用在等待之后
----@return boolean
-function hjapi.isEventRangedDamage()
-    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_RANGED)
-end
-
---- 单位所受伤害的伤害类型是 damageType
---- 响应'受到伤害'单位事件,不能用在等待之后
----@param damageType userdata 参考 blizzard:^DAMAGE_TYPE
----@return boolean
-function hjapi.isEventDamageType(damageType)
-    return damageType == cj.ConvertDamageType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_DAMAGE_TYPE))
-end
-
---- 单位所受伤害的武器类型是 是 weaponType
---- 响应'受到伤害'单位事件,不能用在等待之后
----@param weaponType userdata 参考 blizzard:^WEAPON_TYPE
----@return boolean
-function hjapi.isEventWeaponType(weaponType)
-    return weaponType == cj.ConvertWeaponType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_WEAPON_TYPE))
-end
-
---- 单位所受伤害的攻击类型是 是 attackType
---- 响应'受到伤害'单位事件,不能用在等待之后
----@param attackType userdata 参考 blizzard:^ATTACK_TYPE
----@return boolean
-function hjapi.isEventAttackType(attackType)
-    return attackType == cj.ConvertAttackType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_ATTACK_TYPE))
-end
-
 ---@param itemCode number integer
 ---@param dataType number integer
 ---@return string
@@ -1757,6 +1709,355 @@ function hjapi.SetUnitState(whichUnit, state, value)
     end
 end
 
+--------------------------------------------------------------------------
+
+--- 玩家是否平台VIP
+---@param whichPlayer userdata
+---@return boolean
+function hjapi.DzAPI_Map_IsPlatformVIP(whichPlayer)
+    local res = hjapi.DzAPI_Map_GetPlatformVIP(whichPlayer)
+    if (type(res) == "number") then
+        return res > 0
+    end
+    return false
+end
+
+--- 天梯提交玩家排名
+---@param whichPlayer number
+---@param value number
+function hjapi.DzAPI_Map_Ladder_SubmitPlayerRank(whichPlayer, value)
+    return hjapi.DzAPI_Map_Ladder_SetPlayerStat(whichPlayer, "RankIndex", math.floor(value))
+end
+
+--- 天梯提交获得称号
+---@param whichPlayer number
+---@param value string
+function hjapi.DzAPI_Map_Ladder_SubmitTitle(whichPlayer, value)
+    return hjapi.DzAPI_Map_Ladder_SetStat(whichPlayer, value, "1")
+end
+
+--- 设置玩家额外分
+---@param whichPlayer number
+---@param value string
+function hjapi.DzAPI_Map_Ladder_SubmitPlayerExtraExp(whichPlayer, value)
+    return hjapi.DzAPI_Map_Ladder_SetStat(whichPlayer, "ExtraExp", math.floor(value))
+end
+
+--- 注册实时购买商品事件
+--- 玩家在游戏中购买商城道具触发，可以配合打开商城界面使用，读取用实时购买玩家和实时购买商品
+function hjapi.DzTriggerRegisterMallItemSyncData(trig)
+    hjapi.DzTriggerRegisterSyncData(trig, "DZMIA", true)
+end
+
+--- 全局存档变化事件
+--- 本局游戏或其他游戏保存的全局存档都会触发这个事件，请使用[同步]分类下的获取同步数据来获得发生变化的全局存档KEY值
+function hjapi.DzAPI_Map_Global_ChangeMsg(trig)
+    hjapi.DzTriggerRegisterSyncData(trig, "DZGAU", true)
+end
+
+--- 判断是否是匹配模式
+--- 判断玩家是否是通过匹配模式进入游戏
+--- 具体模式ID使用 获取天梯和匹配的模式 获取
+---@return boolean
+function hjapi.DzAPI_Map_IsRPGQuickMatch()
+    return hjapi.RequestExtraBooleanData(40, nil, nil, nil, false, 0, 0, 0)
+end
+
+--- 获取商城道具数量
+--- 获取玩家 key 商品剩余库存次数
+--- 仅对次数消耗型商品有效
+---@param whichPlayer number
+---@param key string
+---@return number integer
+function hjapi.DzAPI_Map_GetMallItemCount(whichPlayer, key)
+    return hjapi.RequestExtraIntegerData(41, whichPlayer, key, nil, false, 0, 0, 0)
+end
+
+--- 使用商城道具（次数型）
+--- 使用玩家 key 商城道具 value 次
+--- 仅对次数消耗型商品有效，只能使用不能恢复，请谨慎使用
+---@param whichPlayer number
+---@param key string
+---@param value number integer
+---@return boolean
+function hjapi.DzAPI_Map_ConsumeMallItem(whichPlayer, key, value)
+    return hjapi.RequestExtraBooleanData(42, whichPlayer, key, nil, false, value, 0, 0)
+end
+
+--- 修改平台功能设置
+---@param whichPlayer number
+---@param option number integer;1为锁定镜头距离、2为显示血、蓝条、3为智能施法
+---@param enable boolean
+---@return boolean
+function hjapi.DzAPI_Map_EnablePlatformSettings(whichPlayer, option, enable)
+    return hjapi.RequestExtraBooleanData(43, whichPlayer, nil, nil, enable, option, 0, 0)
+end
+
+--- 玩家是否购买了重制版
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsBuyReforged(whichPlayer)
+    return hjapi.RequestExtraBooleanData(44, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 获取玩家中游戏局数
+---@param whichPlayer number
+---@return number
+function hjapi.DzAPI_Map_PlayedGames(whichPlayer)
+    return hjapi.RequestExtraIntegerData(45, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 获取玩家的评论次数
+--- 该功能已失效，始终返回1
+---@param whichPlayer number
+---@return number|1
+function hjapi.DzAPI_Map_CommentCount(whichPlayer)
+    return hjapi.RequestExtraIntegerData(46, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 获取玩家平台好友数量
+---@param whichPlayer number
+---@return number
+function hjapi.DzAPI_Map_FriendCount(whichPlayer)
+    return hjapi.RequestExtraIntegerData(47, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 玩家是鉴赏家
+--- 评论里的鉴赏家
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsConnoisseur(whichPlayer)
+    return hjapi.RequestExtraBooleanData(48, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 玩家登录的是战网账号
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsBattleNetAccount(whichPlayer)
+    return hjapi.RequestExtraBooleanData(49, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 玩家是地图作者
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsAuthor(whichPlayer)
+    return hjapi.RequestExtraBooleanData(50, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 地图评论次数
+--- 获取该图总评论次数
+---@return number integer
+function hjapi.DzAPI_Map_CommentTotalCount()
+    return hjapi.RequestExtraIntegerData(51, nil, nil, nil, false, 0, 0, 0)
+end
+
+--- 获取自定义排行榜玩家排名
+--- 100名以外的玩家排名为0
+--- 该功能适用于作者之家-服务器存档-自定义排行榜
+--- 等同 DzAPI_Map_CommentTotalCount1
+---@param whichPlayer number
+---@param id number integer
+---@return number integer
+function hjapi.DzAPI_Map_CustomRanking(whichPlayer, id)
+    return hjapi.RequestExtraIntegerData(52, whichPlayer, nil, nil, false, id, 0, 0)
+end
+
+--- 玩家当前是平台回流用户
+--- 超过7天未玩地图的用户再次登录被称为地图回流用户，地图回流BUFF会存在7天，7天后消失。平台回流用户的BUFF存在15天，15天后消失。建议设置奖励，鼓励玩家回来玩地图！
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsPlatformReturn(whichPlayer)
+    return hjapi.RequestExtraBooleanData(53, whichPlayer, nil, nil, false, 2, 0, 0)
+end
+
+--- 玩家当前是地图回流用户
+--- 超过7天未玩地图的用户再次登录被称为地图回流用户，地图回流BUFF会存在7天，7天后消失。平台回流用户的BUFF存在15天，15天后消失。建议设置奖励，鼓励玩家回来玩地图！
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsMapReturn(whichPlayer)
+    return hjapi.RequestExtraBooleanData(53, whichPlayer, nil, nil, false, 8, 0, 0)
+end
+
+--- 玩家曾经是平台回流用户
+--- 超过7天未玩地图的用户再次登录被称为地图回流用户，地图回流BUFF会存在7天，7天后消失。平台回流用户的BUFF存在15天，15天后消失。建议设置奖励，鼓励玩家回来玩地图！
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsPlatformReturnUsed(whichPlayer)
+    return hjapi.RequestExtraBooleanData(53, whichPlayer, nil, nil, false, 4, 0, 0)
+end
+
+--- 玩家曾经是地图回流用户
+--- 超过7天未玩地图的用户再次登录被称为地图回流用户，地图回流BUFF会存在7天，7天后消失。平台回流用户的BUFF存在15天，15天后消失。建议设置奖励，鼓励玩家回来玩地图！
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsMapReturnUsed(whichPlayer)
+    return hjapi.RequestExtraBooleanData(53, whichPlayer, nil, nil, false, 1, 0, 0)
+end
+
+--- 玩家收藏过地图
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsCollected(whichPlayer)
+    return hjapi.RequestExtraBooleanData(53, whichPlayer, nil, nil, false, 16, 0, 0)
+end
+
+--- 签到系统
+--- 玩家每天登录游戏后，自动签到
+---@param whichPlayer number
+---@return number integer
+function hjapi.DzAPI_Map_ContinuousCount(whichPlayer, id)
+    return hjapi.RequestExtraIntegerData(54, whichPlayer, nil, nil, false, id, 0, 0)
+end
+
+--- 玩家是真实玩家
+--- 用于区别平台AI玩家。现在平台已经添加虚拟电脑玩家，不用再担心匹配没人问题了！如果你的地图有AI，试试在作者之家开启这个功能吧！
+---@param whichPlayer number
+---@return boolean
+function hjapi.DzAPI_Map_IsPlayer(whichPlayer)
+    return hjapi.RequestExtraBooleanData(55, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 所有地图的总游戏时长
+---@param whichPlayer number
+---@return number
+function hjapi.DzAPI_Map_MapsTotalPlayed(whichPlayer)
+    return hjapi.RequestExtraIntegerData(56, whichPlayer, nil, nil, false, 0, 0, 0)
+end
+
+--- 指定地图的地图等级
+--- 可以在作者之家看到指定地图的id
+---@param whichPlayer number
+---@param mapId number integer
+---@return number
+function hjapi.DzAPI_Map_MapsLevel(whichPlayer, mapId)
+    return hjapi.RequestExtraIntegerData(57, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图的平台金币消耗
+--- 可以在作者之家看到指定地图的id
+---@param whichPlayer number
+---@param mapId number integer
+---@return number
+function hjapi.DzAPI_Map_MapsConsumeGold(whichPlayer, mapId)
+    return hjapi.RequestExtraIntegerData(58, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图的平台木头消耗
+--- 可以在作者之家看到指定地图的id
+---@param whichPlayer number
+---@param mapId number integer
+---@return number
+function hjapi.DzAPI_Map_MapsConsumeLumber(whichPlayer, mapId)
+    return hjapi.RequestExtraIntegerData(59, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图消费在（1~199）区间
+---@param whichPlayer number
+---@param mapId number
+---@return boolean
+function hjapi.DzAPI_Map_MapsConsume_1_199(whichPlayer, mapId)
+    return hjapi.RequestExtraBooleanData(60, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图消费在（200~499）区间
+---@param whichPlayer number
+---@param mapId number
+---@return boolean
+function hjapi.DzAPI_Map_MapsConsume_200_499(whichPlayer, mapId)
+    return hjapi.RequestExtraBooleanData(61, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图消费在（500~999）区间
+---@param whichPlayer number
+---@param mapId number
+---@return boolean
+function hjapi.DzAPI_Map_MapsConsume_500_999(whichPlayer, mapId)
+    return hjapi.RequestExtraBooleanData(62, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 指定地图消费在（1000+）以上
+---@param whichPlayer number
+---@param mapId number
+---@return boolean
+function hjapi.DzAPI_Map_MapsConsume_1000(whichPlayer, mapId)
+    return hjapi.RequestExtraBooleanData(63, whichPlayer, nil, nil, false, mapId, 0, 0)
+end
+
+--- 获取论坛数据
+--- 是否发过贴子,是否版主时，返回为1代表肯定
+---@param whichPlayer number
+---@param data number integer 0=累计获得赞数，1=精华帖数量，2=发表回复次数，3=收到的欢乐数，4=是否发过贴子，5=是否版主，6=主题数量
+---@return boolean
+function hjapi.DzAPI_Map_GetForumData(whichPlayer, data)
+    return hjapi.RequestExtraIntegerData(65, whichPlayer, nil, nil, false, data, 0, 0)
+end
+
+--- 游戏中弹出商城道具购买界面
+--- 可以在游戏里打开指定商城道具购买界面（包括下架商品）,商品购买之后，请配合实时购买触发功能使用
+---@param whichPlayer number
+---@param key string
+---@return boolean
+function hjapi.DzAPI_Map_OpenMall(whichPlayer, key)
+    return hjapi.RequestExtraIntegerData(66, whichPlayer, key, nil, false, 0, 0, 0)
+end
+
+--- 获得游戏渲染的：离顶黑边高、离底黑边高、中间显示高、
+---@return number,number,number
+function japi.GetFrameBorders()
+    return japi._cache["FrameBlackTop"], japi._cache["FrameBlackBottom"], japi._cache["FrameInnerHeight"]
+end
+
+--- 是否宽屏模式
+---@return boolean
+function japi.IsWideScreen()
+    return japi._cache["IsWideScreen"]
+end
+
+--- 是物理伤害
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@return boolean
+function hjapi.IsEventPhysicalDamage()
+    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_PHYSICAL)
+end
+
+--- 是攻击伤害
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@return boolean
+function hjapi.IsEventAttackDamage()
+    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_ATTACK)
+end
+
+--- 是远程伤害
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@return boolean
+function hjapi.IsEventRangedDamage()
+    return 0 ~= hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_IS_RANGED)
+end
+
+--- 单位所受伤害的伤害类型是 damageType
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@param damageType userdata 参考 blizzard:^DAMAGE_TYPE
+---@return boolean
+function hjapi.IsEventDamageType(damageType)
+    return damageType == cj.ConvertDamageType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_DAMAGE_TYPE))
+end
+
+--- 单位所受伤害的武器类型是 是 weaponType
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@param weaponType userdata 参考 blizzard:^WEAPON_TYPE
+---@return boolean
+function hjapi.IsEventWeaponType(weaponType)
+    return weaponType == cj.ConvertWeaponType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_WEAPON_TYPE))
+end
+
+--- 单位所受伤害的攻击类型是 是 attackType
+--- 响应'受到伤害'单位事件,不能用在等待之后
+---@param attackType userdata 参考 blizzard:^ATTACK_TYPE
+---@return boolean
+function hjapi.IsEventAttackType(attackType)
+    return attackType == cj.ConvertAttackType(hjapi.EXGetEventDamageData(EVENT_DAMAGE_DATA_ATTACK_TYPE))
+end
+
 --- 获取某个坐标的Z轴高度
 ---@type fun(x:number,y:number):number
 function hjapi.Z(x, y)
@@ -1780,6 +2081,7 @@ end
 function hjapi.PX(x)
     return hjapi.DzGetClientWidth() * x / 0.8
 end
+
 --- Y比例 转 像素
 ---@type fun(y:number):number
 function hjapi.PY(y)
@@ -1791,6 +2093,7 @@ end
 function hjapi.RX(x)
     return x / hjapi.DzGetClientWidth() * 0.8
 end
+
 --- Y像素 转 比例
 ---@type fun(y:number):number
 function hjapi.RY(y)
@@ -1802,6 +2105,7 @@ end
 function hjapi.MousePX()
     return hjapi.DzGetMouseXRelative()
 end
+
 --- 鼠标客户端内Y像素
 ---@type fun():number
 function hjapi.MousePY()
@@ -1813,6 +2117,7 @@ end
 function hjapi.MouseRX()
     return hjapi.RX(hjapi.MousePX())
 end
+
 --- 鼠标Y像素 转 比例
 ---@type fun():number
 function hjapi.MouseRY()
@@ -1824,6 +2129,7 @@ end
 function hjapi.InWindow(rx, ry)
     return rx > 0 and rx < 0.8 and ry > 0 and ry < 0.6
 end
+
 --- 判断鼠标是否在客户端内
 ---@type fun():boolean
 function hjapi.InWindowMouse()
