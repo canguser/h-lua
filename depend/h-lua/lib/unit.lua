@@ -732,9 +732,6 @@ function hunit.embed(u, options)
             str_white = "=" .. cj.GetHeroStr(u, false),
             agi_white = "=" .. cj.GetHeroAgi(u, false),
             int_white = "=" .. cj.GetHeroInt(u, false),
-            str = "=" .. cj.GetHeroStr(u, false),
-            agi = "=" .. cj.GetHeroAgi(u, false),
-            int = "=" .. cj.GetHeroInt(u, false),
         })
     end
     -- 属性 attr
