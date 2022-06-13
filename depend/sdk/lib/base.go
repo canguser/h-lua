@@ -2,9 +2,9 @@ package lib
 
 import (
 	"fmt"
+	"github.com/mitchellh/go-ps"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -52,18 +52,11 @@ func GetModTime(path string) int64 {
 }
 
 func ExeRunningQty(names []string) int {
-	cmd := exec.Command("cmd", "/C", "tasklist")
-	output, _ := cmd.Output()
-	n := strings.Index(string(output), "System")
-	if n == -1 {
-		return 0
-	}
 	qty := 0
-	sd := string(output)[n:]
-	fields := strings.Fields(sd)
-	for _, v := range fields {
+	pa, _ := ps.Processes()
+	for _, p := range pa {
 		for _, n := range names {
-			if v == n {
+			if strings.ToLower(p.Executable()) == strings.ToLower(n) {
 				qty += 1
 			}
 		}
