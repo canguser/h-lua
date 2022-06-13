@@ -317,19 +317,36 @@ function hplayer.victory(whichPlayer, tips)
     end
 end
 
---- 设置玩家镜头是否在震动
----@private
+--- 设置玩家镜头摇晃判断
+---@protected
 ---@param whichPlayer userdata
 ---@param b boolean
-function hplayer.setIsShocking(whichPlayer, b)
-    hcache.set(whichPlayer, CONST_CACHE.PLAYER_IS_SHOCKING, b)
+function hplayer.setCameraShaking(whichPlayer, n)
+    local ing = hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_SHAKING, 0)
+    hcache.set(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_SHAKING, ing + n)
+end
+
+--- 获取玩家镜头是否在摇晃
+---@param whichPlayer userdata
+---@return boolean
+function hplayer.isCameraShaking(whichPlayer)
+    return hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_SHAKING, 0) > 0
+end
+
+--- 设置玩家镜头震动判断
+---@protected
+---@param whichPlayer userdata
+---@param b boolean
+function hplayer.setCameraQuaking(whichPlayer, n)
+    local ing = hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_QUAKING, 0)
+    hcache.set(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_QUAKING, ing + n)
 end
 
 --- 获取玩家镜头是否在震动
 ---@param whichPlayer userdata
 ---@return boolean
-function hplayer.getIsShocking(whichPlayer)
-    return hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_SHOCKING, false)
+function hplayer.isCameraQuaking(whichPlayer)
+    return hcache.get(whichPlayer, CONST_CACHE.PLAYER_IS_CAMERA_QUAKING, 0) > 0
 end
 
 --- 获取玩家造成的总伤害

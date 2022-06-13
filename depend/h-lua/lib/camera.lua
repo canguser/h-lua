@@ -86,47 +86,62 @@ function hcamera.changeDistance(whichPlayer, diffDistance)
     end
 end
 
---- 玩家镜头震动，震动包括两种
+--- 镜头摇晃
 ---@param whichPlayer userdata 玩家
----@param whichType string | "'shake'" | "'quake'"
----@param during number 持续时间
----@param scale number 振幅
+---@param magnitude number 幅度
+---@param velocity number 速率
+---@param duration number 持续时间
 ---@return void
-function hcamera.shock(whichPlayer, whichType, during, scale)
-    if (whichPlayer == nil) then
+function hcamera.shake(whichPlayer, magnitude, velocity, duration)
+    magnitude = magnitude or 0
+    velocity = velocity or 0
+    duration = duration or 0
+    if (magnitude <= 0 or velocity <= 0 or duration <= 0) then
         return
     end
-    if (whichType ~= "shake" or whichType ~= "quake") then
-        return
+    hplayer.setCameraShaking(whichPlayer, 1)
+    if (hplayer.loc() == whichPlayer) then
+        cj.CameraSetTargetNoise(magnitude, velocity)
     end
-    if (during == nil) then
-        during = 0.10 -- 假如没有设置时间，默认0.10秒意思意思一下
-    end
-    if (scale == nil) then
-        scale = 5.00 -- 假如没有振幅，默认5.00意思意思一下
-    end
-    -- 镜头动作降噪
-    if (hplayer.getIsShocking(whichPlayer) == true) then
-        return
-    end
-    hplayer.setIsShocking(whichPlayer, true)
-    if (whichType == "shake") then
-        cj.CameraSetTargetNoiseForPlayer(whichPlayer, scale, 1.00)
-        htime.setTimeout(during, function(t)
-            t.destroy()
-            hplayer.setIsShocking(whichPlayer, false)
+    htime.setTimeout(duration, function()
+        hplayer.setCameraShaking(whichPlayer, -1)
+        if (false == hplayer.isCameraShaking(whichPlayer)) then
             if (hplayer.loc() == whichPlayer) then
                 cj.CameraSetTargetNoise(0, 0)
             end
-        end)
-    elseif (whichType == "quake") then
-        cj.CameraSetEQNoiseForPlayer(whichPlayer, scale)
-        htime.setTimeout(during, function(t)
-            t.destroy()
-            hplayer.setIsShocking(whichPlayer, false)
-            if (hplayer.loc() == whichPlayer) then
-                cj.CameraClearNoiseForPlayer(0, 0)
-            end
-        end)
+        end
+    end)
+end
+
+--- 镜头震动
+---@param magnitude number 幅度
+---@param duration number 持续时间
+---@return void
+function hcamera.quake(whichPlayer, magnitude, duration)
+    magnitude = magnitude or 0
+    duration = duration or 0
+    if (magnitude <= 0 or duration <= 0) then
+        return
     end
+    local richter = magnitude
+    if (richter > 5) then
+        richter = 5
+    end
+    if (richter < 2) then
+        richter = 2
+    end
+    hplayer.setCameraQuaking(whichPlayer, 1)
+    cj.CameraSetTargetNoiseEx(magnitude * 2, magnitude * (10 ^ richter), true)
+    cj.CameraSetSourceNoiseEx(magnitude * 2, magnitude * (10 ^ richter), true)
+    htime.setTimeout(duration, function()
+        hplayer.setCameraQuaking(whichPlayer, -1)
+        if (hplayer.loc() == whichPlayer) then
+            if (false == hplayer.isCameraQuaking(whichPlayer)) then
+                cj.CameraSetSourceNoise(0, 0)
+                if (false == hplayer.isCameraShaking(whichPlayer)) then
+                    cj.CameraSetTargetNoise(0, 0)
+                end
+            end
+        end
+    end)
 end
