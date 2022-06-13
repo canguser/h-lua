@@ -436,13 +436,13 @@ function hjapi.DzFrameClearAllPoints(frame)
 end
 
 --- 修改游戏渲染黑边: 上方高度:upperHeight,下方高度:bottomHeight
----@param upperHeight number floor(3)
+---@param topHeight number floor(3)
 ---@param bottomHeight number floor(3)
-function hjapi.DzFrameEditBlackBorders(upperHeight, bottomHeight)
+function hjapi.DzFrameEditBlackBorders(topHeight, bottomHeight)
     hjapi._cache["FrameBlackTop"] = topHeight
     hjapi._cache["FrameBlackBottom"] = bottomHeight
     hjapi._cache["FrameInnerHeight"] = 0.6 - topHeight - bottomHeight
-    return hjapi.exec("DzFrameEditBlackBorders", upperHeight, bottomHeight)
+    return hjapi.exec("DzFrameEditBlackBorders", topHeight, bottomHeight)
 end
 
 --- 获取名字为name的子FrameID:Id"
