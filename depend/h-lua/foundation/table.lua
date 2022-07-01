@@ -114,19 +114,19 @@ end
 ---@param org table
 ---@return table
 function table.clone(org)
-    local function copy(org1, res)
-        for _, v in ipairs(org1) do
-            if type(v) ~= "table" then
-                table.insert(res, v)
+    local function _cp(org1, res)
+        local max = #org1
+        for k = 1, max, 1 do
+            if type(org1[k]) ~= "table" then
+                res[k] = org1[k]
             else
-                local rl = #res + 1
-                res[rl] = {}
-                copy(v, res[rl])
+                res[k] = {}
+                _cp(org1[k], res[k])
             end
         end
     end
     local res = {}
-    copy(org, res)
+    _cp(org, res)
     return res
 end
 
@@ -217,4 +217,54 @@ function table.obj2arr(obj, keyMap)
         end
     end
     return arr
+end
+
+--- 计算数组平均数，如果某值不是number，会先强制转换，失败以0计算
+---@param arr number[]
+---@return number
+function table.average(arr)
+    if (arr == nil or type(arr) ~= "table" or #arr == 0) then
+        return 0
+    end
+    local avg = 0
+    local aci = 0
+    for _, v in ipairs(arr) do
+        if (type(v) ~= "number") then
+            v = tonumber(v, 10)
+            if (v == nil) then
+                v = 0
+            end
+        end
+        avg = avg + v
+        aci = aci + 1
+    end
+    return avg / aci
+end
+
+--- 数组轮偏
+---@param arr any[]
+---@param offset number
+---@return any[]
+function table.wheel(arr, offset)
+    offset = offset or 0
+    if (type(arr) ~= "table") then
+        return {}
+    end
+    local l = #arr
+    if (l == 0) then
+        return {}
+    end
+    local s = offset % l
+    if (s < 0) then
+        s = s + l
+    end
+    local new = {}
+    for i = 1, l do
+        s = s + 1
+        if (s > l) then
+            s = 1
+        end
+        new[i] = arr[s]
+    end
+    return new
 end
