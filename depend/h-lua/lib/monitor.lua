@@ -21,12 +21,12 @@ function hmonitor.create(key, frequency, action, ignoreFilter)
         return
     end
     local arr = Array()
-    local timer = htime.setInterval(frequency, function(_)
-        arr.forEach(function(o, _)
+    local timer = htime.setInterval(frequency, function(curTimer)
+        arr.forEach(function(k, o)
             if (ignoreFilter == nil or ignoreFilter(o) ~= true) then
                 action(o)
             else
-                arr.set(o, nil)
+                arr.set(k, nil)
             end
         end)
     end)
@@ -48,7 +48,7 @@ end
 ---@return boolean
 function hmonitor.isListening(key, obj)
     if (hmonitor._monitors[key] ~= nil) then
-        return hmonitor._monitors[key].arr.keyExists(obj)
+        return hmonitor._monitors[key].arr.keyExists(tostring(obj))
     end
     return false
 end
@@ -59,7 +59,7 @@ end
 function hmonitor.listen(key, obj)
     local monitor = hmonitor._monitors[key]
     if (monitor ~= nil) then
-        monitor.arr.set(obj, 1)
+        monitor.arr.set(tostring(obj), obj)
     end
 end
 
@@ -72,6 +72,6 @@ end
 function hmonitor.ignore(key, obj)
     local monitor = hmonitor._monitors[key]
     if (monitor ~= nil) then
-        monitor.arr.set(obj, nil)
+        monitor.arr.set(tostring(obj), nil)
     end
 end
