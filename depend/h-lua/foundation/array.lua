@@ -17,7 +17,6 @@ function Array()
         _d = {
             key = {},
             k2v = {},
-            v2k = {},
         }
     }
 
@@ -48,22 +47,16 @@ function Array()
             return
         end
         if (val == nil) then
-            local v = this._d.k2v[key]
-            if (v ~= nil) then
-                this._d.v2k[v] = nil
-                this._d.k2v[key] = nil
-                local idx = this.index(key)
-                if (idx > 0) then
-                    table.remove(this._d.key, idx)
-                end
+            local i = this.index(key)
+            if (i ~= -1) then
+                table.remove(this._d.key, i)
             end
         else
             if (this._d.k2v[key] == nil) then
-                table.insert(this._d.key, key)
+                this._d.key[#this._d.key + 1] = key
             end
-            this._d.k2v[key] = val
-            this._d.v2k[val] = key
         end
+        this._d.k2v[key] = val
     end
 
     --- 根据key获取数组value
@@ -86,7 +79,7 @@ function Array()
     this.values = function()
         local values = {}
         for _, key in ipairs(this._d.key) do
-            table.insert(values, this._d.k2v[key])
+            values[#values + 1] = this._d.k2v[key]
         end
         return values
     end
@@ -96,44 +89,60 @@ function Array()
         return key ~= nil and this._d.k2v[key] ~= nil
     end
 
-    --- 检查指定的值是否存在于数组中
-    this.valueExists = function(val)
-        return val ~= nil and this._d.v2k[val] ~= nil
-    end
-
     --- 遍历
     ---@alias noteArrayEach fun(key:"string",value:"string")
     ---@param callFunc noteArrayEach
-    this.forEach = function(callFunc)
+    ---@param safety boolean
+    this.forEach = function(callFunc, safety)
         if (type(callFunc) == "function") then
-            local keys = table.clone(this._d.key)
-            for _, key in ipairs(keys) do
-                if (this._d.k2v[key] ~= nil) then
-                    if (false == callFunc(key, this._d.k2v[key])) then
+            local keys
+            if safety == true then
+                keys = table.clone(this._d.key)
+            else
+                keys = this._d.key
+            end
+            local i = 1
+            while i <= #keys do
+                local key = keys[i]
+                local val = this._d.k2v[key]
+                if val == nil then
+                    table.remove(this._d.key, i)
+                    this._d.k2v[key] = nil
+                else
+                    if (false == callFunc(key, val)) then
                         break
                     end
+                    i = i + 1
                 end
             end
-            keys = nil
         end
     end
 
     --- 反向遍历
     ---@param callFunc noteArrayEach
+    ---@param safety boolean
     this.backEach = function(callFunc)
         if (type(callFunc) == "function") then
-            local keys = {}
-            for i = #this._d.key, 1, -1 do
-                table.insert(keys, this._d.key[i])
+            local keys
+            if safety == true then
+                keys = table.clone(this._d.key)
+            else
+                keys = this._d.key
             end
-            for _, key in ipairs(keys) do
-                if (this._d.k2v[key] ~= nil) then
-                    if (false == callFunc(key, this._d.k2v[key])) then
+            local i = #keys
+            while i >= 1 do
+                local key = keys[i]
+                local val = this._d.k2v[key]
+                if val == nil then
+                    table.remove(this._d.key, i)
+                    this._d.k2v[key] = nil
+                else
+                    if (false == callFunc(key, val)) then
                         break
                     end
                 end
+                i = i - 1
             end
-            keys = nil
         end
     end
 
@@ -168,10 +177,11 @@ function Array()
     end
 
     --- 键排序
-    ---@param
     ---@return Array
     this.sort = function()
-        table.sort(this._d.key)
+        local sa = this.clone()
+        table.sort(sa._d.key)
+        return sa
     end
 
     return this
