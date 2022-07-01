@@ -21,7 +21,7 @@ function hmonitor.create(key, frequency, action, ignoreFilter)
         return
     end
     local arr = Array()
-    local timer = htime.setInterval(frequency, function(curTimer)
+    local timer = htime.setInterval(frequency, function()
         arr.forEach(function(k, o)
             if (ignoreFilter == nil or ignoreFilter(o) ~= true) then
                 action(o)
