@@ -152,8 +152,11 @@ func Model(sdkData lib.SdkData) {
 		return
 	}
 	t1 := time.Now()
+	allPageNumber := int(math.Ceil(float64(count)/289))
 	allP := strconv.FormatFloat(math.Ceil(float64(count)/289), 'f', 0, 64)
 	fmt.Println("已处理 " + strconv.Itoa(id) + "[" + strconv.Itoa(page*289) + ":" + strconv.Itoa((page+1)*289-1) + "] 个模型，总共" + allP + "批")
+	// 输出最后一批的数量
+	fmt.Println("最后一批模型的数量：" + strconv.Itoa(count-((allPageNumber - 1)*289)))
 	err = lib.FilePutContents(unitIni, unitIniContent, fs.ModePerm)
 	if err != nil {
 		lib.Panic(err)
