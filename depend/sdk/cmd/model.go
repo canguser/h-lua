@@ -169,11 +169,11 @@ func Model(sdkData lib.SdkData) {
 	}
 	// 检查标志
 	fmt.Println("模型图已生成（" + time.Since(t2).String() + "）")
-	exes := []string{"worldeditydwe.exe", "YDWE.exe", "ydwe.exe"}
-	if lib.ExeRunningQty(exes) > 0 {
-		fmt.Println(">>>>>>> 请先处理并关闭当前YD编辑器!!! <<<<<<<")
-		return
-	}
+	// exes := []string{"worldeditydwe.exe", "YDWE.exe", "ydwe.exe"}
+	// if lib.ExeRunningQty(exes) > 0 {
+	// 	fmt.Println(">>>>>>> 请先处理并关闭当前YD编辑器!!! <<<<<<<")
+	// 	return
+	// }
 	cmd = exec.Command(sdkData.YDWE+"/YDWE.exe", "-loadfile", w3xFire)
 	_, err = cmd.Output()
 	if err != nil {

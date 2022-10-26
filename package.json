@@ -1,0 +1,6 @@
+{
+    "name": "test",
+    "scripts": {
+        "build-sdk":"cd ./depend/sdk && go build -o ../../sdk.exe ./main.go"
+    }
+}

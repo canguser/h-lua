@@ -35,11 +35,11 @@ func WE(sdkData lib.SdkData) {
 		lib.Panic(err)
 	}
 	lib.CopyFile(sdkData.Depend+"/lni/.ydwe", buoyFire)
-	exes := []string{"worldeditydwe.exe", "YDWE.exe", "ydwe.exe"}
-	if lib.ExeRunningQty(exes) > 0 {
-		fmt.Println(">>>>>>> 请先处理并关闭当前WE!!! <<<<<<<")
-		return
-	}
+	// exes := []string{"worldeditydwe.exe", "YDWE.exe", "ydwe.exe"}
+	// if lib.ExeRunningQty(exes) > 0 {
+	// 	fmt.Println(">>>>>>> 请先处理并关闭当前WE!!! <<<<<<<")
+	// 	return
+	// }
 	cmd = exec.Command(sdkData.YDWE+"/YDWE.exe", "-loadfile", w3xFire)
 	_, err = cmd.Output()
 	if err != nil {
